@@ -29,3 +29,24 @@ class-validator：验证
 class-transformer：数据格式转换
 
 ??? typescript type ModelType<T> = mongoose.Model<DocumentType<T>, {}> & T
+
+### Model
+
+#### article
+
+```json
+{
+    title: 标题,
+    content: 内容,
+    tag: 标签,
+    digest: 摘要,
+    imgUrl: 封面url,
+    createTime: 创建时间,
+    updataTime: 更新事件,
+    
+	category: 类型, // 关联构思
+    user: 用户,
+    comment：评论,
+}
+```
+
