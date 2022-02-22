@@ -1,12 +1,12 @@
 import { Controller, Get } from '@nestjs/common';
-import { AdminService } from './admin.service';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('默认')
 @Controller()
 export class AdminController {
-  constructor(private readonly adminService: AdminService) {}
-
+  @ApiOperation({ summary: '初始' })
   @Get()
-  getHello(): string {
-    return this.adminService.getHello();
+  index(): string {
+    return 'hellow!';
   }
 }
