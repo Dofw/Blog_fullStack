@@ -30,6 +30,8 @@ class-transformer：数据格式转换
 
 ### Model
 
+- 使用 nestjs-typegoose, 解耦。 同时创建的 class Model {}, nestjs-typegoose 内部实现为 Model, 也可以作为 interface 使用实现验证等功能。通过@injectModel 注入的 ts 类型使用 @typegoose/typegoose, ModelType<T>定义, 接口函数的参数 ts 类型 使用 class Model {} 作为类型。实践结果：使用 ModelType<T> 设置类型，swagger 显示不出参数信息。
+
 #### article
 
 ```json
@@ -47,3 +49,11 @@ class-transformer：数据格式转换
     comment：评论,
 }
 ```
+
+### 其他总结
+
+1. ctrl + . vscode 自动修复 import 补全问题。
+
+2. yarn upgrade-interactive --latest 用来更新 安装的包。
+
+3. 使用 nestjs-typegoose, 解耦。 同时创建的 class Model {}, nestjs-typegoose 内部实现为 Model, 也可以作为 interface 使用实现验证等功能。通过@injectModel 注入的 ts 类型使用 @typegoose/typegoose, ModelType<T>定义, 接口函数的参数 ts 类型 使用 class Model {} 作为类型。实践结果：使用 ModelType<T> 设置类型，swagger 显示不出参数信息。

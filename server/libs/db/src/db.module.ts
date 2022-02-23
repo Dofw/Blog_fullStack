@@ -1,17 +1,24 @@
 import { TypegooseConnectionOptions, TypegooseModule } from 'nestjs-typegoose';
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { DbService } from './db.service';
 
+// article 模型
+import Article from './models/article.model';
+
+// 注册所有的模型
+const Models = TypegooseModule.forFeature([Article]);
+@Global()
 @Module({
   imports: [
     TypegooseModule.forRoot('mongodb://localhost/blog', {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      useCreateIndex: true,
-      useFindAndModify: false,
+      // useNewUrlParser: true,
+      // useUnifiedTopology: true,
+      // useCreateIndex: true,
+      // useFindAndModify: false,
     } as TypegooseConnectionOptions),
+    Models,
   ],
   providers: [DbService],
-  exports: [DbService],
+  exports: [DbService, Models],
 })
 export class DbModule {}

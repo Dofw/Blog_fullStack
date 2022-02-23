@@ -2,8 +2,8 @@ import { DbModule } from './../../../libs/db/src/db.module'; // 数据库模块�
 import { Module } from '@nestjs/common';
 import { AdminController } from './admin.controller';
 import { AdminService } from './admin.service';
-import { ArticleController } from './article/article.controller';
-import { ArticleModule } from './article/article.module';
+import { ArticleModule } from './articles/articles.module';
+import { ArticleController } from './articles/articles.controller';
 
 @Module({
   imports: [ArticleModule, DbModule],
