@@ -97,3 +97,31 @@ class-transformer：数据格式转换
    - 了解
 
    我们还在开发 CLI 选项来启用 transpile-only TS 支持，这样你就可以切换到 vue-tsc 进行类型检查 （vue-tsc is a wrapper around tsc，it supports Vue SFCs in addition to TypeScript files）。vue-tsc 目前不支持 监听模式，已经在开发的路上了）。 同时，如果您希望将类型检查作为 dev 命令的一部分，请检查 vite-plugin-checker。
+
+### Vue3 中 eslint 配置
+
+1.依赖插件：
+
+prettier
+
+@vue/eslint-config-prettier
+
+@vue/eslint-config-typescript
+
+eslint-plugin-vue
+
+2.extends 与 plugin 的各自规则 及 区别：查看自己的 总结的笔记相当不错哈哈。
+
+3.通过 vite 生成的配置的最佳实践：
+
+```js
+"extends": [
+    "plugin:vue/vue3-essential",
+    "eslint:recommended",
+    "@vue/eslint-config-typescript/recommended",
+    "@vue/eslint-config-prettier"
+  ],
+  "env": {
+    "vue/setup-compiler-macros": true // 给vue插件，指定使用的环境
+  },
+```
