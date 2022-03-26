@@ -97,3 +97,9 @@ class-transformer：数据格式转换
    - 了解
 
    我们还在开发 CLI 选项来启用 transpile-only TS 支持，这样你就可以切换到 vue-tsc 进行类型检查 （vue-tsc is a wrapper around tsc，it supports Vue SFCs in addition to TypeScript files）。vue-tsc 目前不支持 监听模式，已经在开发的路上了）。 同时，如果您希望将类型检查作为 dev 命令的一部分，请检查 vite-plugin-checker。
+
+### 3-19 陌生知识点
+
+	1. oss云存储
+	1. Avue中有很多，后台管理相关的需求设计
+	1. vueUse，基于vue2和vue3的工具集
