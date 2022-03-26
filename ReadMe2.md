@@ -30,7 +30,7 @@ class-transformer：数据格式转换
 
 ### Model
 
-- 使用 nestjs-typegoose, 解耦。 同时创建的 class Model {}, nestjs-typegoose 内部实现为 Model, 也可以作为 interface 使用实现验证等功能。通过@injectModel 注入的 ts 类型使用 @typegoose/typegoose, ModelType<T>定义, 接口函数的参数 ts 类型 使用 class Model {} 作为类型。实践结果：使用 ModelType<T> 设置类型，swagger 显示不出参数信息。
+- 使用 nestjs-typegoose, 解耦。 同时创建的 class Model {}, nestjs-typegoose 内部实现为 Model, 也可以作为 interface 使用实现验证等功能。通过@injectModel 注入的 ts 类型使用 @typegoose/typegoose, ModelType<T>定义, 接口函数的参数 ts 类型 使用 class Model {} 作为类型。实践结果：使用 ModelType<T> 设置参数中 query 类型，swagger 显示不出参数信息。
 
 #### article
 
@@ -98,8 +98,38 @@ class-transformer：数据格式转换
 
    我们还在开发 CLI 选项来启用 transpile-only TS 支持，这样你就可以切换到 vue-tsc 进行类型检查 （vue-tsc is a wrapper around tsc，it supports Vue SFCs in addition to TypeScript files）。vue-tsc 目前不支持 监听模式，已经在开发的路上了）。 同时，如果您希望将类型检查作为 dev 命令的一部分，请检查 vite-plugin-checker。
 
+<<<<<<< HEAD
 ### 3-19 陌生知识点
 
 	1. oss云存储
 	1. Avue中有很多，后台管理相关的需求设计
 	1. vueUse，基于vue2和vue3的工具集
+=======
+### Vue3 中 eslint 配置
+
+1.依赖插件：
+
+prettier
+
+@vue/eslint-config-prettier
+
+@vue/eslint-config-typescript
+
+eslint-plugin-vue
+
+2.extends 与 plugin 的各自规则 及 区别：查看自己的 总结的笔记相当不错哈哈。
+
+3.通过 vite 生成的配置的最佳实践：
+
+```js
+"extends": [
+    "plugin:vue/vue3-essential",
+    "eslint:recommended",
+    "@vue/eslint-config-typescript/recommended",
+    "@vue/eslint-config-prettier"
+  ],
+  "env": {
+    "vue/setup-compiler-macros": true // 给vue插件，指定使用的环境
+  },
+```
+>>>>>>> 3dc0a030290f5b505c538ef4f28f09cc33793aa5

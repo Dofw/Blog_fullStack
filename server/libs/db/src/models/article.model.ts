@@ -11,9 +11,9 @@ export default class Article {
   @prop()
   title: string;
 
-  @ApiProperty({ description: '内容', example: 'nestjs很强...' })
+  @ApiProperty({ description: '标签', example: 'mongodb' })
   @prop()
-  content: string;
+  tag: string;
 
   @ApiProperty({ description: '摘要', example: 'nestjs is Nodejs framework!' })
   @prop()
@@ -23,11 +23,7 @@ export default class Article {
   @prop()
   imgUrl: string;
 
-  @ApiProperty({ description: '标签', example: 'mongodb' })
+  @ApiProperty({ description: '内容', example: 'nestjs很强...' })
   @prop()
-  tag: string;
+  content: string;
 }
-
-// category: "类型",// 关联构思
-//   user: "用户",
-//   comment："评论",
