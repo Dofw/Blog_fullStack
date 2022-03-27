@@ -44,7 +44,7 @@ class-transformer：数据格式转换
     createTime: 创建时间,
     updataTime: 更新事件,
 
-	category: 类型, // 关联构思
+	  category: 类型, // 关联构思
     user: 用户,
     comment：评论,
 }
@@ -98,13 +98,12 @@ class-transformer：数据格式转换
 
    我们还在开发 CLI 选项来启用 transpile-only TS 支持，这样你就可以切换到 vue-tsc 进行类型检查 （vue-tsc is a wrapper around tsc，it supports Vue SFCs in addition to TypeScript files）。vue-tsc 目前不支持 监听模式，已经在开发的路上了）。 同时，如果您希望将类型检查作为 dev 命令的一部分，请检查 vite-plugin-checker。
 
-<<<<<<< HEAD
 ### 3-19 陌生知识点
 
-	1. oss云存储
-	1. Avue中有很多，后台管理相关的需求设计
-	1. vueUse，基于vue2和vue3的工具集
-=======
+    1. oss云存储
+    1. Avue中有很多，后台管理相关的需求设计
+    1. vueUse，基于vue2和vue3的工具集
+
 ### Vue3 中 eslint 配置
 
 1.依赖插件：
@@ -132,4 +131,17 @@ eslint-plugin-vue
     "vue/setup-compiler-macros": true // 给vue插件，指定使用的环境
   },
 ```
->>>>>>> 3dc0a030290f5b505c538ef4f28f09cc33793aa5
+
+### 进度
+
+#### 327
+
+- Typescript
+
+基本使用：vuejs.org 官网。
+
+存在问题：typescript 官网，配置细节问题。
+
+- pinia
+
+官网地址：https://pinia.vuejs.org/
