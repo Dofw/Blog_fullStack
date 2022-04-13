@@ -145,3 +145,11 @@ eslint-plugin-vue
 - pinia
 
 官网地址：https://pinia.vuejs.org/
+
+#### 413
+
+- NaiveUi
+  作为后台管理页面的搭建。 学习 NaiveUi 的优秀代码(css、js)。
+
+- Quasar
+  风格比较好看的 Vue3 组件库。
