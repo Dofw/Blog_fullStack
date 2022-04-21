@@ -148,8 +148,17 @@ eslint-plugin-vue
 
 #### 413
 
-- NaiveUi
-  作为后台管理页面的搭建。 学习 NaiveUi 的优秀代码(css、js)。
+- NaiveUi 作为后台管理页面的搭建。 学习 NaiveUi 的优秀代码(css、js)。
 
-- Quasar
-  风格比较好看的 Vue3 组件库。
+- Quasar 风格比较好看的 Vue3 组件库。
+
+#### 414
+
+- theme 方案
+  1. 使用 css 预编译语言。
+  <!-- 2. css变量 -->
+- 主题元素
+
+```js
+
+```

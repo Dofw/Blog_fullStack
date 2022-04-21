@@ -1,1 +1,1 @@
-export { useCounterStoreForSetup, useTestStore } from "./test"
+export { useCounterStoreForSetup, useTestStore } from "./test.ts"
