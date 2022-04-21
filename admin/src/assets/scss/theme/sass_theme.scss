@@ -3,7 +3,7 @@
 // 利用scss方案实现, 对兼容性友好。
 // css变量，仅仅操作变量，而不会增加规则。
 $themes: (
-  dark: (
+  "dark": (
     vt-c-bg: map-get($variable, vt-c-black),
     vt-c-bg-soft: map-get($variable, vt-c-black-soft),
     vt-c-bg-mute: map-get($variable, vt-c-black-mute),
@@ -24,7 +24,7 @@ $themes: (
     vt-c-brand-light: map-get($variable, vt-c-green-dark),
     vt-c-brand-highlight: map-get($variable, vt-c-green-darker)
   ),
-  light: (
+  "light": (
     vt-c-bg: map-get($variable, vt-c-white),
     vt-c-bg-soft: map-get($variable, vt-c-white-soft),
     vt-c-bg-mute: map-get($variable, vt-c-white-mute),
@@ -47,14 +47,14 @@ $themes: (
   )
 );
 
-// 使用 @mixin font_color($color)，对应生成两套。
+// 使用 @mixin font_color($color)，对应生成两套。 [data-theme="#{$theme-name}"]
 @mixin generateThemesCode {
   @each $theme-name, $theme-map in $themes {
     //!global 把局部变量强升为全局变量, 原因，外部函数在用。
     $theme-map: $theme-map !global;
     //判断html的data-theme的属性值  #{}是sass的插值表达式
     //& sass嵌套里的父容器标识   @content是混合器插槽，像vue的slot
-    [data-theme="#{$theme-name}"] & {
+    .data-theme-#{$theme-name} & {
       @content;
     }
   }
@@ -65,16 +65,19 @@ $themes: (
   @return map-get($theme-map, $key);
 }
 
-@mixin font_color($color) {
-  @include generateThemesCode {
-    color: themed($color) !important;
-  }
-}
-
 @mixin bg_color($color) {
   @include generateThemesCode {
     background-color: themed($color) !important;
   }
+}
+
+$color: (
+  redcolor: yellow
+);
+
+body {
+  color: map-get($color, redcolor);
+  @include bg_color("vt-c-bg");
 }
 
 // sass 主题切换实现的核心代码，
