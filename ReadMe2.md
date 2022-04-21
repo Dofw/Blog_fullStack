@@ -134,19 +134,37 @@ eslint-plugin-vue
 
 ### 进度
 
-#### 327
-
 - Typescript
 
 基本使用：vuejs.org 官网。
 
 存在问题：typescript 官网，配置细节问题。
 
+1. 多数第三方库，一般都整好了类型声名文件，下载使用即可。一般都是使用 @types/xxx 来统一管理第三方库的声名文件。
+2. 当第三方库不提供声名文件时，可能在使用第三方库的时候使用了类型，但是因为项目中没有，导致找不到而报错。为了解决错误提示：
+
+```js
+  // 在声名文件中 xxx.d.ts 添加即可
+  declare module 'xxx包名'
+```
+
+3. 自定义的全局 类型共享方案，通过 export 的方式代码太繁琐。最优方案，在声明文件 xxx.d.ts 中添加 类型定义等。**最关键原因**，只要 tsconfig.json 中的配置包含了我们自定义的声明文件 _.d.ts，则声明文件中的类型定义都能被项目中的 _.ts 文件获取到。
+4. 命名空间：在代码量较大的情况下，为了避免各种变量名冲突, 可以将相同模块的函数、类、接口等都放置在命名空间内。见：[掘金](https://juejin.cn/post/7058868160706904078)
+
+5. import { type } from 'xxx', ts 会提示，在 tsconfig.json 中配置"preserveValueImports": true,"isolatedModules": true; 在 TypeScript 3.8 版本中，我们添加了一个仅仅导入/导出 声明语法来作为解决方式。
+
+**Ts 重要提示:**
+
+- 写 Typescript 配置项的笔记，多看 typescript 官网。
+
+```js
+import type { SomeThing } from "./some-module.js"
+export type { SomeThing }
+```
+
 - pinia
 
 官网地址：https://pinia.vuejs.org/
-
-#### 413
 
 - NaiveUi 作为后台管理页面的搭建。 学习 NaiveUi 的优秀代码(css、js)。
 

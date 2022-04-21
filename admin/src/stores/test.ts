@@ -21,6 +21,7 @@ export const useTestStore = defineStore("test", {
 
 // 使用setup模式定义
 import { ref } from "vue"
+
 export const useCounterStoreForSetup = defineStore("counterForSetup", () => {
   const count = ref<number>(1)
   function increment() {
