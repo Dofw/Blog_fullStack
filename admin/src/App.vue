@@ -23,18 +23,4 @@ const onClick = () => {
 </template>
 
 <style>
-@import './assets/scss/base.scss';
-@import './assets/scss/theme.scss';
-
-.wrapper {
-  width: 100px;
-  height: 100px;
-  border: 1px solid green;
-  background-color: var(--color-background);
-
-}
-
-.child {
-  background-color: var(--color-background);
-}
 </style>

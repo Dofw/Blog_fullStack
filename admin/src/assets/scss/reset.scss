@@ -1,0 +1,19 @@
+/* color palette from <https://github.com/vuejs/theme> */
+@import "./variable/sass_variable.scss";
+@import "./theme/sass_theme.scss";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  position: relative;
+  font-weight: normal;
+}
+
+body {
+  min-height: 100vh;
+  min-width: 100vh;
+  @include font_color("vt-c-purple");
+  @include bg_color("vt-c-purple");
+}
