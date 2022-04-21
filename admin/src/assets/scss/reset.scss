@@ -1,7 +1,4 @@
 /* color palette from <https://github.com/vuejs/theme> */
-@import "./variable/sass_variable.scss";
-@import "./theme/sass_theme.scss";
-
 *,
 *::before,
 *::after {
@@ -12,7 +9,11 @@
 }
 
 body {
+  color: map-get($map: $variable, $key: vt-c-green-light);
   min-height: 100vh;
   min-width: 100vh;
-  // @include bg_color("vt-c-bg");
+  @include bg_color("vt-c-bg");
+  #app {
+    color: inherit;
+  }
 }

@@ -170,11 +170,22 @@ export type { SomeThing }
 
 - Quasar 风格比较好看的 Vue3 组件库。
 
-#### 414
-
 - theme 方案
-  1. 使用 css 预编译语言。
-  <!-- 2. css变量 -->
+
+  1. css 变量
+  2. 使用 sass 预编译语言(为了兼容性)
+     1. vite 中配置全局 sass 变量、mixin 自动引入（在模块中导入 scss、style 中使用了 scss 内容。）
+
+```js
+css: {
+  preprocessorOptions: {
+    scss: {
+      additionalData: `@import '@/assets/scss/theme/sass_theme.scss';`
+    }
+  }
+}
+```
+
 - 主题元素
 
 ```js

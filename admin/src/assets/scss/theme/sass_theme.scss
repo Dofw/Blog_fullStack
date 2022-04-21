@@ -1,9 +1,9 @@
-@import "../variable/sass_variable.scss"; // 主题：背景、蒙层(正反色)、文本(正反色)、code、主题色(vue中的绿色，不同环境的亮度)
+@import "./sass_variable.scss"; // 主题：背景、蒙层(正反色)、文本(正反色)、code、主题色(vue中的绿色，不同环境的亮度)
 
 // 利用scss方案实现, 对兼容性友好。
 // css变量，仅仅操作变量，而不会增加规则。
 $themes: (
-  "dark": (
+  dark: (
     vt-c-bg: map-get($variable, vt-c-black),
     vt-c-bg-soft: map-get($variable, vt-c-black-soft),
     vt-c-bg-mute: map-get($variable, vt-c-black-mute),
@@ -24,7 +24,7 @@ $themes: (
     vt-c-brand-light: map-get($variable, vt-c-green-dark),
     vt-c-brand-highlight: map-get($variable, vt-c-green-darker)
   ),
-  "light": (
+  light: (
     vt-c-bg: map-get($variable, vt-c-white),
     vt-c-bg-soft: map-get($variable, vt-c-white-soft),
     vt-c-bg-mute: map-get($variable, vt-c-white-mute),
@@ -47,6 +47,7 @@ $themes: (
   )
 );
 
+// sass 主题切换实现的核心代码
 // 使用 @mixin font_color($color)，对应生成两套。 [data-theme="#{$theme-name}"]
 @mixin generateThemesCode {
   @each $theme-name, $theme-map in $themes {
@@ -57,6 +58,10 @@ $themes: (
     .data-theme-#{$theme-name} & {
       @content;
     }
+    // 该问题，编译之后 [data-theme=dark]，不带双引号。无效。
+    // [data-theme="#{$theme-name}"] & {
+    //   @content;
+    // }
   }
 }
 
@@ -71,60 +76,11 @@ $themes: (
   }
 }
 
-$color: (
-  redcolor: yellow
-);
-
-body {
-  color: map-get($color, redcolor);
-  @include bg_color("vt-c-bg");
+@mixin font_color($key) {
+  @include generateThemesCode {
+    color: themed($key) !important;
+  }
 }
-
-// sass 主题切换实现的核心代码，
-// $themes: (
-//   light: (
-//     //字体
-//     font_color1: #414141,
-//     font_color2: white,
-//     //背景
-//     background_color1: #fff,
-//     background_color2: #f0f2f5,
-//     background_color3: red,
-//     background_color4: #2674e7,
-//     //边框
-//     border_color1: #3d414a
-//   ),
-//   dark: (
-//     //字体
-//     font_color1: #a7a7a7,
-//     font_color2: white,
-//     //背景
-//     background_color1: #1b2531,
-//     background_color2: #283142,
-//     background_color3: #1e6ceb,
-//     background_color4: #323e4e,
-//     //边框
-//     border_color1: #3d414a
-//   )
-// );
-
-// @mixin themeify {
-//   @each $theme-name, $theme-map in $themes {
-//     //!global 把局部变量强升为全局变量
-//     $theme-map: $theme-map !global;
-//     //判断html的data-theme的属性值  #{}是sass的插值表达式
-//     //& sass嵌套里的父容器标识   @content是混合器插槽，像vue的slot
-//     [data-theme="#{$theme-name}"] & {
-//       @content;
-//     }
-//   }
-// }
-
-// @mixin font_color($color) {
-//   @include themeify {
-//     color: themed($color) !important;
-//   }
-// }
 
 // //声明一个根据Key获取颜色的function
 // @function themed($key) {

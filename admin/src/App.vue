@@ -18,9 +18,15 @@ const onClick = () => {
 <template>
 
   <div class="wrapper" @click="onClick">
-    <div class="child"></div>
+    <div class="child">1231232</div>
   </div>
 </template>
 
-<style>
+<style lang="scss" scoped>
+.child {
+  width: 200px;
+  height: 200px;
+  background-color: #000;
+  @include font_color(vt-c-text-inverse-1)
+}
 </style>
