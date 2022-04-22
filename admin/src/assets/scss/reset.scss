@@ -12,8 +12,5 @@ body {
   color: map-get($map: $variable, $key: vt-c-green-light);
   min-height: 100vh;
   min-width: 100vh;
-  @include bg_color("vt-c-bg");
-  #app {
-    color: inherit;
-  }
+  @include theme_bg_color("vt-c-bg");
 }

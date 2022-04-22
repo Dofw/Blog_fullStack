@@ -66,38 +66,23 @@ $themes: (
 }
 
 //声明一个根据Key获取颜色的function, 次里面的$theme-map 来之 !global。
-@function themed($key) {
+@function themed($theme-map, $key) {
   @return map-get($theme-map, $key);
 }
 
-@mixin bg_color($color) {
+@mixin theme_bg_color($color) {
   @include generateThemesCode {
-    background-color: themed($color) !important;
+    background-color: themed($theme-map, $color) !important;
   }
 }
 
-@mixin font_color($key) {
+@mixin theme_font_color($key) {
   @include generateThemesCode {
-    color: themed($key) !important;
+    color: themed($theme-map, $key) !important;
   }
 }
 
-// //声明一个根据Key获取颜色的function
-// @function themed($key) {
-//   @return map-get($variable,$theme-map, $key);
-// }
-
-// div {
-//   div {
-//     @include font_color("background_color3");
-//   }
-// }
-// p {
-//   font-size: 12px;
-//   @include font_color("background_color3");
-// }
-
-// // 这里有顺序， 在调用了@include font_color("background_color3"); 全局才有 $theme-map (global)
+// // 这里有顺序， 在调用了@include theme_font_color("background_color3"); 全局才有 $theme-map (global)
 // ul {
 //   color: map-get($variable,$theme-map, "background_color3");
 // }

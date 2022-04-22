@@ -27,6 +27,7 @@ const onClick = () => {
   width: 200px;
   height: 200px;
   background-color: #000;
-  @include font_color(vt-c-text-inverse-1)
+  @include theme_font_color(vt-c-text-inverse-1);
+  @include themed($shadowVar, "vt-shadow-6")
 }
 </style>
