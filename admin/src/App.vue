@@ -1,33 +1,34 @@
 <script setup lang="ts">
-const onClick = () => {
-  const bodyDom = document.body
-  const names = bodyDom.getAttribute('class')
-  console.log(names)
-
-  if (names && names.indexOf('dark') > -1) {
-    bodyDom.classList.remove('dark')
-
-  } else {
-
-    bodyDom.classList.add('dark')
-  }
-}
-
+import { triggerTheme } from '@/utils';
+import { onMounted } from 'vue'
+//初始设置[data-theme_light]
+onMounted(() => {
+  const htmlDom = document.documentElement
+  htmlDom.dataset.theme_light = ''
+})
 </script>
 
 <template>
-
-  <div class="wrapper" @click="onClick">
+  <div class="wrapper" @click="triggerTheme">
     <div class="child">1231232</div>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.child {
-  width: 200px;
-  height: 200px;
-  background-color: #000;
-  @include theme_font_color(vt-c-text-inverse-1);
-  @include themed($shadowVar, "vt-shadow-6")
+.wrapper {
+  width: 100vh;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .child {
+    width: 200px;
+    height: 200px;
+    @include theme-bg(vt-c-bg-mute);
+    @include theme-bShadow(vt-c-shadow-2);
+    @include theme-borderColor(vt-c-borderColor);
+    border: 1px solid;
+  }
 }
 </style>

@@ -22,7 +22,17 @@ $themes: (
     vt-c-text-inverse-4: map-get($variable, vt-c-text-light-4),
     vt-c-brand: map-get($variable, vt-c-green),
     vt-c-brand-light: map-get($variable, vt-c-green-dark),
-    vt-c-brand-highlight: map-get($variable, vt-c-green-darker)
+    vt-c-brand-highlight: map-get($variable, vt-c-green-darker),
+    //shadow
+    vt-c-shadow-1: map-get($shadowVar, vt-c-shadow-dark-1),
+    vt-c-shadow-2: map-get($shadowVar, vt-c-shadow-dark-2),
+    vt-c-shadow-3: map-get($shadowVar, vt-c-shadow-dark-3),
+    vt-c-shadow-4: map-get($shadowVar, vt-c-shadow-dark-4),
+    vt-c-shadow-5: map-get($shadowVar, vt-c-shadow-dark-5),
+    //borderColor
+    vt-c-borderColor: map-get($variable, vt-c-green),
+    vt-c-borderColor-light: map-get($variable, vt-c-green-dark),
+    vt-c-borderColor-highlight: map-get($variable, vt-c-green-darker)
   ),
   light: (
     vt-c-bg: map-get($variable, vt-c-white),
@@ -43,46 +53,63 @@ $themes: (
     vt-c-text-inverse-4: map-get($variable, vt-c-text-dark-4),
     vt-c-brand: map-get($variable, vt-c-green),
     vt-c-brand-light: map-get($variable, vt-c-green-light),
-    vt-c-brand-highlight: map-get($variable, vt-c-green-lighter)
+    vt-c-brand-highlight: map-get($variable, vt-c-green-lighter),
+    //shadow
+    vt-c-shadow-1: map-get($shadowVar, vt-c-shadow-light-1),
+    vt-c-shadow-2: map-get($shadowVar, vt-c-shadow-light-2),
+    vt-c-shadow-3: map-get($shadowVar, vt-c-shadow-light-3),
+    vt-c-shadow-4: map-get($shadowVar, vt-c-shadow-light-4),
+    vt-c-shadow-5: map-get($shadowVar, vt-c-shadow-light-5),
+    //borderColor
+    vt-c-borderColor: map-get($variable, vt-c-green),
+    vt-c-borderColor-light: map-get($variable, vt-c-green-light),
+    vt-c-borderColor-highlight: map-get($variable, vt-c-green-lighter)
   )
 );
 
 // sass 主题切换实现的核心代码
-// 使用 @mixin font_color($color)，对应生成两套。 [data-theme="#{$theme-name}"]
+// 使用 @include theme-xx($key)，对应生成两套。 [data-theme="#{$theme-name}"]
 @mixin generateThemesCode {
-  @each $theme-name, $theme-map in $themes {
+  @each $theme-name, $theme-var in $themes {
     //!global 把局部变量强升为全局变量, 原因，外部函数在用。
-    $theme-map: $theme-map !global;
+    $theme-var: $theme-var !global;
     //判断html的data-theme的属性值  #{}是sass的插值表达式
     //& sass嵌套里的父容器标识   @content是混合器插槽，像vue的slot
-    .data-theme-#{$theme-name} & {
-      @content;
-    }
-    // 该问题，编译之后 [data-theme=dark]，不带双引号。无效。
-    // [data-theme="#{$theme-name}"] & {
+    // .data-theme-#{$theme-name} & {
     //   @content;
     // }
+    // 该问题，编译之后 [data-theme=dark]，不带双引号。无效。
+    [data-theme_#{$theme-name}] & {
+      @content;
+    }
   }
 }
 
-//声明一个根据Key获取颜色的function, 次里面的$theme-map 来之 !global。
-@function themed($theme-map, $key) {
-  @return map-get($theme-map, $key);
-}
-
-@mixin theme_bg_color($color) {
+@mixin theme-bg($key) {
   @include generateThemesCode {
-    background-color: themed($theme-map, $color) !important;
+    background-color: map-get($theme-var, $key);
   }
 }
 
-@mixin theme_font_color($key) {
+@mixin theme-fc($key) {
   @include generateThemesCode {
-    color: themed($theme-map, $key) !important;
+    color: map-get($theme-var, $key);
   }
 }
 
-// // 这里有顺序， 在调用了@include theme_font_color("background_color3"); 全局才有 $theme-map (global)
+@mixin theme-bShadow($key) {
+  @include generateThemesCode {
+    box-shadow: map-get($map: $theme-var, $key: $key);
+  }
+}
+
+@mixin theme-borderColor($key) {
+  @include generateThemesCode {
+    border-color: map-get($map: $theme-var, $key: $key);
+  }
+}
+
+// // 这里有顺序， 在调用了@include theme_xxx(vt-c-bg); 全局才有 $theme-var (global)
 // ul {
-//   color: map-get($variable,$theme-map, "background_color3");
+//   color: map-get($theme-var, vt-c-bg);
 // }

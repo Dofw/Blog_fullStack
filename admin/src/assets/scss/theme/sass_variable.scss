@@ -1,5 +1,12 @@
 // 颜色
 $variable: (
+  //level
+  vt-c-primary: #42b883,
+  vt-c-danger: #c10015,
+  vt-c-info: #31ccec,
+  vt-c-success: #21ba45,
+  vt-c-warn: #f2c037,
+  //其他
   vt-c-white: #ffffff,
   vt-c-white-soft: #f9f9f9,
   vt-c-white-mute: #f1f1f1,
@@ -29,11 +36,11 @@ $variable: (
   vt-c-text-light-2: rgba(60, 60, 60, 0.7),
   vt-c-text-light-3: rgba(60, 60, 60, 0.33),
   vt-c-text-light-4: rgba(60, 60, 60, 0.18),
-  vt-c-text-light-code: #476582,
   vt-c-text-dark-1: rgba(255, 255, 255, 0.87),
   vt-c-text-dark-2: rgba(235, 235, 235, 0.6),
   vt-c-text-dark-3: rgba(235, 235, 235, 0.38),
   vt-c-text-dark-4: rgba(235, 235, 235, 0.18),
+  vt-c-text-light-code: #476582,
   vt-c-text-dark-code: #aac8e4,
   vt-c-green: #42b883,
   vt-c-green-light: #42d392,
@@ -63,14 +70,31 @@ $variable: (
 );
 
 //shadow 变量
+// light-shadow
+$shadow-light-1: 0 1px 2px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
+$shadow-light-2: 0 3px 12px rgba(0, 0, 0, 0.07), 0 1px 4px rgba(0, 0, 0, 0.07);
+$shadow-light-3: 0 12px 32px rgba(0, 0, 0, 0.1), 0 2px 6px rgba(0, 0, 0, 0.08);
+$shadow-light-4: 0 14px 44px rgba(0, 0, 0, 0.12), 0 3px 9px rgba(0, 0, 0, 0.12);
+$shadow-light-5: 0 18px 56px rgba(0, 0, 0, 0.16), 0 4px 12px rgba(0, 0, 0, 0.16);
+// dark-shadow
+$shadow-dark-1: 0 1px 2px rgba(255, 255, 255, 0.04), 0 1px 2px rgba(255, 255, 255, 0.06);
+$shadow-dark-2: 0 3px 12px rgba(255, 255, 255, 0.07), 0 1px 4px rgba(255, 255, 255, 0.07);
+$shadow-dark-3: 0 12px 32px rgba(255, 255, 255, 0.1), 0 2px 6px rgba(255, 255, 255, 0.08);
+$shadow-dark-4: 0 14px 44px rgba(255, 255, 255, 0.12), 0 3px 9px rgba(255, 255, 255, 0.12);
+$shadow-dark-5: 0 18px 56px rgba(255, 255, 255, 0.16), 0 4px 12px rgba(255, 255, 255, 0.16);
 $shadowVar: (
-  // shadow
-  vt-shadow-1: 0 1px 2px rgba(0, 0, 0, 0.04) s,
-  vt-shadow-2: 0 3px 12px rgba(0, 0, 0, 0.07),
-  vt-shadow-3: 0 12px 32px rgba(0, 0, 0, 0.1),
-  vt-shadow-4: 0 14px 44px rgba(0, 0, 0, 0.12),
-  vt-shadow-5: 0 18px 56px rgba(0, 0, 0, 0.16),
-  vt-shadow-6: 0 18px 56px #fff 0 18px 56px #fff
+  // dark-shadow
+  vt-c-shadow-dark-1: $shadow-dark-1,
+  vt-c-shadow-dark-2: $shadow-dark-2,
+  vt-c-shadow-dark-3: $shadow-dark-3,
+  vt-c-shadow-dark-4: $shadow-dark-4,
+  vt-c-shadow-dark-5: $shadow-dark-5,
+  // light-shadow
+  vt-c-shadow-light-1: $shadow-light-1,
+  vt-c-shadow-light-2: $shadow-light-2,
+  vt-c-shadow-light-3: $shadow-light-3,
+  vt-c-shadow-light-4: $shadow-light-4,
+  vt-c-shadow-light-5: $shadow-light-5
 );
 
 // docsearch 搜索变量

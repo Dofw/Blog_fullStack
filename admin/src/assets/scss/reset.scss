@@ -7,10 +7,9 @@
   position: relative;
   font-weight: normal;
 }
-
 body {
-  color: map-get($map: $variable, $key: vt-c-green-light);
   min-height: 100vh;
   min-width: 100vh;
-  @include theme_bg_color("vt-c-bg");
+  @include theme-fc(vt-c-text-1);
+  @include theme-bg(vt-c-bg-mute);
 }
