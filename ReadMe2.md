@@ -186,8 +186,15 @@ css: {
 }
 ```
 
-- 主题元素
+- 主题元素(变化颜色，不关注大小)
+
+  - text: theme-fc(vt-c-text-1 ... 4)
+  - backgroundColor: theme-bg(vt-c-bg,vt-c-bg-soft,vt-c-bg-mute)
+  - borderColor: theme-border(vt-c-brand, vt-c-brand-light, vt-c-brand-highlight)
+  - boxShadowColor: theme-bShadow(vt-c-shadow-1...5)
 
 ```js
 
 ```
+
+- unplugin-auto-import/vite 和 unplugin-vue-components/vite 插件， 实现 ui 组件的库的自动导入。具体看 github。
