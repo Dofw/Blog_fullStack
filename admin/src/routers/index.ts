@@ -1,10 +1,15 @@
 import { createRouter, createWebHistory } from "vue-router"
 import type { RouteRecordRaw } from "vue-router"
+import HomeLayout from "@/layouts/HomeLayout.vue"
 
 const routes: RouteRecordRaw[] = [
   {
     path: "/",
-    component: {}
+    redirect: "/home"
+  },
+  {
+    path: "/home",
+    component: HomeLayout
   }
 ]
 
