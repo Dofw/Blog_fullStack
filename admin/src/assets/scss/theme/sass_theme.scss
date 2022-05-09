@@ -78,7 +78,7 @@ $themes: (
     // .data-theme-#{$theme-name} & {
     //   @content;
     // }
-    // 该问题，编译之后 [data-theme=dark]，不带双引号。无效。
+    // 编译 [data-theme=dark] 后，不带双引号。无效。选择只定义key不赋值。
     [data-theme_#{$theme-name}] & {
       @content;
     }
