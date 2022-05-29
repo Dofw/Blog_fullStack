@@ -1,13 +1,28 @@
 <template>
-  <div>
-    homeLayout
-    <el-button type="primary">按钮</el-button>
-  </div>
+  <LayoutHome>
+    <template v-slot:aside>
+      <LeftMenu />
+    </template>
+
+    <template v-slot:header>
+      header
+    </template>
+
+    <template v-slot:main>
+      aside
+    </template>
+  </LayoutHome>
 </template>
 
 <script setup lang="ts">
-
+import LayoutHome from '@/components/LayoutHome/index.vue'
+import LeftMenu from './components/LeftMenu.vue'
+const a = 123
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+:global(#app) {
+  width: 100%;
+  height: 100%;
+}
 </style>

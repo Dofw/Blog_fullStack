@@ -162,6 +162,16 @@ import type { SomeThing } from "./some-module.js"
 export type { SomeThing }
 ```
 
+**Ts 接口定义:**
+
+```js
+type keys = keyof any 即：string | number | symbol, key总是其中的一种
+type Record<K extends keyof any, T> = {
+  //P可以视为 索引签名。P可以随便起名。
+  [P in K]: T
+}
+```
+
 - pinia
 
 官网地址：https://pinia.vuejs.org/
@@ -192,9 +202,30 @@ css: {
   - backgroundColor: theme-bg(vt-c-bg,vt-c-bg-soft,vt-c-bg-mute)
   - borderColor: theme-border(vt-c-brand, vt-c-brand-light, vt-c-brand-highlight)
   - boxShadowColor: theme-bShadow(vt-c-shadow-1...5)
+  - :hover: theme-hoverBg($start:vt-c-hover-bg-start, $end: vt-c-hover-bg-end), theme-hoverFc(vt-c-hover-fc)
 
 ```js
 
 ```
 
 - unplugin-auto-import/vite 和 unplugin-vue-components/vite 插件， 实现 ui 组件的库的自动导入。具体看 github。
+
+- Vue-Style 相关的知识点
+
+  - ::v-deep: 简写:deep, 不推荐该写法::v-deep .bar {} ; vue3 强烈推荐:deep(选择器) 调用的方式, 例如: ::v-deep(.bar) {} --> [v-data-xxxxxxx] .bar {}; 有了限制只影响该条件下面的 bar。场景修改 UI 组件库，不影响全局其他的。如果使用 deep 那麽后面都不加 scope 限制。
+  - ::v-slotted(): 简写:slotted(选择器), 解决只有父级可以修改插槽样式的问题。即在子组件中可以通过他修改插槽内容样式。
+  - ::v-global(): 简写:global(选择器), 定义为全局样式, 去除 scope 的作用, 如何确定为全局样式, 就应该放到同一的全局样式内管理并注释清除好维护。
+
+- 后台管理、菜单
+
+  - 说明: 西安国资的后台还不错。有更好的吸取。
+
+  1. 数据管理
+  2. 微服务管理
+  3. 用户管理
+  4. 角色权限管理
+  5. 权限管理
+     1. app 级权限
+     2. route 级权限
+     3. button 级权限(角色身份)
+  6. 登录功能(第三方)

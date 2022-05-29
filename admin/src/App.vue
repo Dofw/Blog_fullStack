@@ -4,6 +4,10 @@
 
 <script setup lang="ts">
 import { onMounted } from 'vue'
+const obj= {
+  a: 123,
+  c: '1321'
+}
 
 //初始设置[data-theme_light]
 onMounted(() => {
@@ -12,5 +16,9 @@ onMounted(() => {
 })
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+:global(#app){
+  width: 100%;
+  height: 100%;
+}
 </style>

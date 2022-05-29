@@ -8,8 +8,8 @@
   font-weight: normal;
 }
 body {
-  min-height: 100vh;
-  min-width: 100vh;
+  width: 100vw;
+  height: 100vh;
   @include theme-fc(vt-c-text-1);
   @include theme-bg(vt-c-bg-mute);
 }

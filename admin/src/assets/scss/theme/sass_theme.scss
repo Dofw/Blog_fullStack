@@ -32,7 +32,11 @@ $themes: (
     //borderColor
     vt-c-borderColor: map-get($variable, vt-c-green),
     vt-c-borderColor-light: map-get($variable, vt-c-green-dark),
-    vt-c-borderColor-highlight: map-get($variable, vt-c-green-darker)
+    vt-c-borderColor-highlight: map-get($variable, vt-c-green-darker),
+    //hover-bg and fonts
+    vt-c-hover-bg-start: map-get($hoverVar, vt-c-hover-dark-start),
+    vt-c-hover-bg-end: map-get($hoverVar, vt-c-hover-dark-end),
+    vt-c-hover-fc: map-get($hoverVar, vt-c-hover-dark-text)
   ),
   light: (
     vt-c-bg: map-get($variable, vt-c-white),
@@ -63,7 +67,11 @@ $themes: (
     //borderColor
     vt-c-borderColor: map-get($variable, vt-c-green),
     vt-c-borderColor-light: map-get($variable, vt-c-green-light),
-    vt-c-borderColor-highlight: map-get($variable, vt-c-green-lighter)
+    vt-c-borderColor-highlight: map-get($variable, vt-c-green-lighter),
+    //hover-bg and fonts
+    vt-c-hover-bg-start: map-get($hoverVar, vt-c-hover-light-start),
+    vt-c-hover-bg-end: map-get($hoverVar, vt-c-hover-light-end),
+    vt-c-hover-fc: map-get($hoverVar, vt-c-hover-light-text)
   )
 );
 
@@ -75,9 +83,6 @@ $themes: (
     $theme-var: $theme-var !global;
     //判断html的data-theme的属性值  #{}是sass的插值表达式
     //& sass嵌套里的父容器标识   @content是混合器插槽，像vue的slot
-    // .data-theme-#{$theme-name} & {
-    //   @content;
-    // }
     // 编译 [data-theme=dark] 后，不带双引号。无效。选择只定义key不赋值。
     [data-theme_#{$theme-name}] & {
       @content;
@@ -109,7 +114,18 @@ $themes: (
   }
 }
 
-// // 这里有顺序， 在调用了@include theme_xxx(vt-c-bg); 全局才有 $theme-var (global)
+@mixin theme-hoverBg($start, $end) {
+  @include generateThemesCode {
+    background-image: linear-gradient(to right, map-get($theme-var, $start), map-get($theme-var, $end));
+  }
+}
+@mixin theme-hoverFc($key) {
+  @include generateThemesCode {
+    color: map-get($theme-var, $key);
+  }
+}
+
+// // 这里有顺序， 在调用了@include theme-xxx(vt-c-bg); 全局才有 $theme-var (global)
 // ul {
 //   color: map-get($theme-var, vt-c-bg);
 // }

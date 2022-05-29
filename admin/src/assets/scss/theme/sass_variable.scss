@@ -45,8 +45,8 @@ $variable: (
   vt-c-green: #42b883,
   vt-c-green-light: #42d392,
   vt-c-green-lighter: #35eb9a,
-  vt-c-green-dark: #33a06f,
-  vt-c-green-darker: #155f3e,
+  vt-c-green-dark: #155f3e,
+  vt-c-green-darker: #33a06f,
   vt-c-blue: #3b8eed,
   vt-c-blue-light: #549ced,
   vt-c-blue-lighter: #50a2ff,
@@ -67,6 +67,16 @@ $variable: (
   vt-c-purple-lighter: #f616f8,
   vt-c-purple-dark: #823c83,
   vt-c-purple-darker: #602960
+);
+
+// hover 变量
+$hoverVar: (
+  vt-c-hover-light-start: map-get($variable, vt-c-blue-light),
+  vt-c-hover-light-end: map-get($variable, vt-c-green-light),
+  vt-c-hover-dark-start: map-get($variable, vt-c-blue-dark),
+  vt-c-hover-dark-end: map-get($variable, vt-c-green-dark),
+  vt-c-hover-light-text: map-get($variable, vt-c-green-lighter),
+  vt-c-hover-dark-text: map-get($variable, vt-c-green-darker)
 );
 
 //shadow 变量
