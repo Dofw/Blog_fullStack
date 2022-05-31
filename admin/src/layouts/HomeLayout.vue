@@ -9,7 +9,7 @@
     </template>
 
     <template v-slot:main>
-      aside
+      <router-view />
     </template>
   </LayoutHome>
 </template>
