@@ -2,12 +2,10 @@
   <div class="asideContent">
     <div class="title" @click="onClick"></div>
     <el-scrollbar>
-      <el-menu :default-openeds="['1', '3']">
+      <el-menu :default-openeds="['1']">
         <el-sub-menu index="1">
           <template #title>
-            <el-icon>
-              <message />
-            </el-icon>Navigator One
+            <el-icon> <message /> </el-icon>Navigator One
           </template>
           <el-menu-item-group>
             <template #title>Group 1</template>
@@ -24,9 +22,7 @@
         </el-sub-menu>
         <el-sub-menu index="2">
           <template #title>
-            <el-icon>
-              <icon-menu />
-            </el-icon>Navigator Two
+            <el-icon> <icon-menu /> </el-icon>Navigator Two
           </template>
           <el-menu-item-group>
             <template #title>Group 1</template>
@@ -43,9 +39,7 @@
         </el-sub-menu>
         <el-sub-menu index="3">
           <template #title>
-            <el-icon>
-              <setting />
-            </el-icon>Navigator Three
+            <el-icon> <setting /> </el-icon>Navigator Three
           </template>
           <el-menu-item-group>
             <template #title>Group 1</template>
@@ -63,24 +57,33 @@
       </el-menu>
     </el-scrollbar>
   </div>
-
-
 </template>
 
-
 <script lang="ts" setup>
-import { ref } from 'vue'
-import { Menu as IconMenu, Message, Setting } from '@element-plus/icons-vue'
-import { triggerTheme } from '@/utils'
+import { ref } from "vue";
+import type { ComputedRefImpl } from "vue";
+import { useRouter, useRoute } from "vue-router";
+import { Menu as IconMenu, Message, Setting } from "@element-plus/icons-vue";
+import { triggerTheme } from "@/utils";
+type MenuListRaw = {
+  path: string;
+  title?: string;
+  group?: string;
+  children?: MenuListRaw[];
+};
 
-const item = {
-  date: '2016-05-02',
-  name: 'Tom',
-  address: 'No. 189, Grove St, Los Angeles',
+const routes = useRouter().options.routes;
+
+console.log(routes);
+
+function routers2MenuList(routes: RouteRecordRaw): MenuListRaw {
+  const arr = [];
+  return arr;
 }
-const tableData = ref(Array.from({ length: 20 }).fill(item))
+
+//切换theme
 function onClick() {
-  triggerTheme()
+  triggerTheme();
 }
 </script>
 
@@ -103,7 +106,7 @@ function onClick() {
     @include theme-bg(vt-c-bg);
 
     .el-menu {
-      @include theme-bg(vt-c-bg)
+      @include theme-bg(vt-c-bg);
     }
 
     .el-sub-menu__title,
@@ -117,7 +120,7 @@ function onClick() {
       &:hover {
         background-color: transparent !important;
         @include theme-hoverBg($start: vt-c-hover-bg-start, $end: vt-c-hover-bg-end);
-        @include theme-hoverFc(vt-c-hover-fc)
+        @include theme-hoverFc(vt-c-hover-fc);
       }
     }
 
@@ -129,8 +132,6 @@ function onClick() {
     .el-menu {
       border: none;
     }
-
   }
-
 }
 </style>
