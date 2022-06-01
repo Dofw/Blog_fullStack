@@ -37,7 +37,7 @@ function bubbleSort(arr) {
   }
 }
 
-//2.选择排序：先找出 最大或最小, 然后和最后一个交换，下次循环和arr.lenght-1-i 交换。 个人分析：从时间度上 冒泡要高于选择排序，原因swap的执行次数，循环次数-1。
+//2.选择排序：先找出 最大或最小, 然后和最后一个交换，下次循环和arr.lenght-1-i 交换。
 function selectSort(arr) {
   for (let i = 0; i < arr.length; i++) {
     //每次循环 找符合条件的
