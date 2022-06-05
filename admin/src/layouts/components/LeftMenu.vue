@@ -2,64 +2,8 @@
   <div class="asideContent">
     <div class="title" @click="onClick"></div>
     <el-scrollbar>
-      <el-menu :default-openeds="['1']">
-        <el-sub-menu index="1">
-          <template #title>
-            <el-icon>
-              <message />
-            </el-icon>Navigator One
-          </template>
-          <el-menu-item-group>
-            <template #title>Group 1</template>
-            <el-menu-item index="1-1">Option 1</el-menu-item>
-            <el-menu-item index="1-2">Option 2</el-menu-item>
-          </el-menu-item-group>
-          <el-menu-item-group title="Group 2">
-            <el-menu-item index="1-3">Option 3</el-menu-item>
-          </el-menu-item-group>
-          <el-sub-menu index="1-4">
-            <template #title>Option4</template>
-            <el-menu-item index="1-4-1">Option 4-1</el-menu-item>
-          </el-sub-menu>
-        </el-sub-menu>
-        <el-sub-menu index="2">
-          <template #title>
-            <el-icon>
-              <icon-menu />
-            </el-icon>Navigator Two
-          </template>
-          <el-menu-item-group>
-            <template #title>Group 1</template>
-            <el-menu-item index="2-1">Option 1</el-menu-item>
-            <el-menu-item index="2-2">Option 2</el-menu-item>
-          </el-menu-item-group>
-          <el-menu-item-group title="Group 2">
-            <el-menu-item index="2-3">Option 3</el-menu-item>
-          </el-menu-item-group>
-          <el-sub-menu index="2-4">
-            <template #title>Option 4</template>
-            <el-menu-item index="2-4-1">Option 4-1</el-menu-item>
-          </el-sub-menu>
-        </el-sub-menu>
-        <el-sub-menu index="3">
-          <template #title>
-            <el-icon>
-              <setting />
-            </el-icon>Navigator Three
-          </template>
-          <el-menu-item-group>
-            <template #title>Group 1</template>
-            <el-menu-item index="3-1">Option 1</el-menu-item>
-            <el-menu-item index="3-2">Option 2</el-menu-item>
-          </el-menu-item-group>
-          <el-menu-item-group title="Group 2">
-            <el-menu-item index="3-3">Option 3</el-menu-item>
-          </el-menu-item-group>
-          <el-sub-menu index="3-4">
-            <template #title>Option 4</template>
-            <el-menu-item index="3-4-1">Option 4-1</el-menu-item>
-          </el-sub-menu>
-        </el-sub-menu>
+      <el-menu :default-openeds="['/home/1', '/home']">
+        <RecursionMenu :data="data" />
       </el-menu>
     </el-scrollbar>
   </div>
@@ -70,29 +14,39 @@ import type { RouteMeta, RouteRecordRaw } from 'vue-router'
 import { useRouter, useRoute } from "vue-router";
 import { Menu as IconMenu, Message, Setting } from "@element-plus/icons-vue";
 import { triggerTheme } from "@/utils";
+import RecursionMenu from './RecursionMenu.vue'
 
 type Record<K extends keyof any, T> = {
   [P in K]: T;
 };
 
-type MenuGroupRaw = {
-  group: string,
-  children: MenuItemRaw[]
+type MenuItemRaw = {
+  group?: string,
+  path?: string, //group中不需要，保持统一
+  title?: string,//group中不需要，保持统一
+  children?: MenuItemRaw[]
 }
 
-type MenuNoGroupRaw = {
-  path: string;
-  title: string;
-  children: MenuItemRaw[];
-};
-type MenuItemRaw = (MenuNoGroupRaw | MenuGroupRaw)
+type ResultType = {
+  tier: number,
+  group?: string,
+  path?: string;
+  title?: string;
+  children?: ResultType[];
+}
+
 type MenuListRaw = MenuItemRaw[]
-
 const routes = useRouter().options.routes;
+const result = routers2MenuList(routes)
+const data = addTier(result, null)
+console.log(data)
 
-console.log(routes);
-console.log(routers2MenuList(routes));
 
+
+/**
+ * 处理routes为特定数据结构
+ * @param routes 
+ */
 function routers2MenuList(routes: RouteRecordRaw[]): MenuListRaw {
   if (routes.length === 0) return []
 
@@ -111,9 +65,12 @@ function routers2MenuList(routes: RouteRecordRaw[]): MenuListRaw {
     }
 
     // 完成一项 重构属性
-    const item: Record<string | number | symbol, string | MenuItemRaw[]> = {}
+    const item: Record<string | number | symbol, string | number | MenuItemRaw[]> = {}
     item.path = routes[i].path as string
     item.title = metaItem.title as string
+
+    //这里放前面，是因为后面group条件中结构了。
+    //结构后，给item.children重新赋值已经不是同一个引用了。
     if (routes[i].children) {
       const result = routers2MenuList(routes[i].children as RouteRecordRaw[])
       item.children = result
@@ -123,8 +80,10 @@ function routers2MenuList(routes: RouteRecordRaw[]): MenuListRaw {
     if (isExist(metaItem, 'group')) {
       const Group = mapGroup.get(metaItem.group as string)
       if (Group) {
+
         Group.push(item)
       } else {
+
         mapGroup.set(metaItem.group, [item])
         //一个Group只执行一次
         arr.push({
@@ -133,13 +92,39 @@ function routers2MenuList(routes: RouteRecordRaw[]): MenuListRaw {
         })
       }
     } else {
-      arr.push(item as MenuNoGroupRaw)
+      arr.push(item)
     }
+
   }
   return arr;
 }
 
+/**
+ * 添加层级
+ */
+function addTier(resource: MenuListRaw, tier: number | null): ResultType[] {
+  if (!resource || resource.length === 0) {
+    return []
+  }
+  const arr: ResultType[] = []
+  let insideTier = tier || 0
 
+  for (let i = 0; i < resource.length; i++) {
+    const element = resource[i];
+    if (!element.children) {
+      arr.push({ ...element, tier: insideTier } as ResultType)
+    } else {
+      const newChildren = addTier(element.children, insideTier + 1)
+      arr.push({ ...element, tier: insideTier, children: newChildren })
+    }
+  }
+
+  return arr
+}
+
+/**
+ * 判断RouteMeta中是否包含指定属性
+ */
 function isExist(route: RouteMeta, key: string): boolean {
   const keys: string[] = Object.keys(route)
   return keys.includes(key)
@@ -171,17 +156,16 @@ function onClick() {
     @include theme-bg(vt-c-bg);
 
     .el-menu {
+      border: none;
       @include theme-bg(vt-c-bg);
     }
 
     .el-sub-menu__title,
-    .el-menu-item-group,
-    .el-menu-item {
+    .el-menu-item-group {
       @include theme-fc(vt-c-text-1);
     }
 
-    .el-sub-menu__title,
-    .el-menu-item {
+    .el-sub-menu__title {
       &:hover {
         background-color: transparent !important;
         @include theme-hoverBg($start: vt-c-hover-bg-start, $end: vt-c-hover-bg-end);
@@ -194,9 +178,6 @@ function onClick() {
       opacity: 0.7;
     }
 
-    .el-menu {
-      border: none;
-    }
   }
 }
 </style>

@@ -170,6 +170,19 @@ type Record<K extends keyof any, T> = {
   //P可以视为 索引签名。P可以随便起名。
   [P in K]: T
 }
+
+//infer
+//与 extends 和三元运算符组合使用，用于推断某个复杂类型的部分，简单的说，就是用来推导泛型参数。
+//inter 只能出现在 extends 关键字的右侧；
+//inter P 可以理解成数学上的未知数 x；
+//其中 extends 关键字的作用，是用来判断 右边的类型 是否兼容 左边的泛型 T，如果兼容则返回 ? 后面的内容，否则返回 : 后面的内容。
+type Parameters<T extends (...args: any) => any> = T extends (...args: infer P) => any ? P : never
+
+//matcher['addRoute']函数的参数...args, 此时 P 就为args。args有可能为1个、两个；因为router.addRoute函数有两个，参数数量不同。
+let parent: Parameters<typeof matcher['addRoute']>[1] | undefined
+
+
+
 ```
 
 - pinia
@@ -222,10 +235,11 @@ css: {
 
   1. 数据管理
   2. 微服务管理
-  3. 用户管理
-  4. 角色权限管理
-  5. 权限管理
+  3. tools(pdf、编辑器等。)
+  4. 用户管理
+  5. 角色权限管理
+  6. 权限管理
      1. app 级权限
      2. route 级权限
      3. button 级权限(角色身份)
-  6. 登录功能(第三方)
+  7. 登录功能(第三方)

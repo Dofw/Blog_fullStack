@@ -16,7 +16,33 @@ const dataEditorPage: RouteRecordRaw = {
       meta: {
         title: "首页1",
         group: "xxx"
-      }
+      },
+      children: [
+        {
+          path: "/home/1/1",
+          component: HomeOne,
+          meta: {
+            title: "首页1/1",
+            group: "xxxx"
+          }
+        },
+        {
+          path: "/home/1/2",
+          component: HomeOne,
+          meta: {
+            title: "首页1/2",
+            group: "xxxx"
+          }
+        },
+
+        {
+          path: "/home/1/3",
+          component: HomeOne,
+          meta: {
+            title: "首页1/3"
+          }
+        }
+      ]
     },
     {
       path: "/home/2",
@@ -26,18 +52,13 @@ const dataEditorPage: RouteRecordRaw = {
         group: "xxx"
       }
     },
-    {
-      path: "/home/3",
-      component: HomeOne,
-      meta: {
-        title: "首页3"
-      }
-    },
+
     {
       path: "/home/4",
       component: HomeOne,
       meta: {
-        title: "首页4"
+        title: "首页4",
+        group: "YYYY"
       },
       children: [
         {
