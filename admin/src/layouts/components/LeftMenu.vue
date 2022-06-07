@@ -19,29 +19,25 @@ import RecursionMenu from './RecursionMenu.vue'
 type Record<K extends keyof any, T> = {
   [P in K]: T;
 };
-
 type MenuItemRaw = {
   group?: string,
   path?: string, //group中不需要，保持统一
   title?: string,//group中不需要，保持统一
   children?: MenuItemRaw[]
 }
-
 type ResultType = {
   tier: number,
   group?: string,
-  path?: string;
-  title?: string;
-  children?: ResultType[];
+  path?: string,
+  title?: string,
+  children?: ResultType[],
 }
-
 type MenuListRaw = MenuItemRaw[]
+
 const routes = useRouter().options.routes;
 const result = routers2MenuList(routes)
 const data = addTier(result, null)
 console.log(data)
-
-
 
 /**
  * 处理routes为特定数据结构
@@ -168,8 +164,9 @@ function onClick() {
     .el-sub-menu__title {
       &:hover {
         background-color: transparent !important;
-        @include theme-hoverBg($start: vt-c-hover-bg-start, $end: vt-c-hover-bg-end);
         @include theme-hoverFc(vt-c-hover-fc);
+        // @include theme-hoverBg($start: vt-c-hover-bg-start, $end: vt-c-hover-bg-end);
+
       }
     }
 

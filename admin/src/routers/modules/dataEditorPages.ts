@@ -34,7 +34,6 @@ const dataEditorPage: RouteRecordRaw = {
             group: "xxxx"
           }
         },
-
         {
           path: "/home/1/3",
           component: HomeOne,
@@ -52,7 +51,6 @@ const dataEditorPage: RouteRecordRaw = {
         group: "xxx"
       }
     },
-
     {
       path: "/home/4",
       component: HomeOne,
