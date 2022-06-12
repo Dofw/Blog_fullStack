@@ -3,70 +3,28 @@ import HomeLayout from "@/layouts/HomeLayout.vue"
 import HomeOne from "@/pages/HomeOne.vue"
 
 const dataEditorPage: RouteRecordRaw = {
-  path: "/home",
+  path: "/dataeditor",
   component: HomeLayout,
-  redirect: "/home/1",
+  redirect: "/dataeditor/1",
   meta: {
-    title: "首页"
+    title: "数据编辑"
   },
   children: [
     {
-      path: "/home/1",
+      path: "/dataeditor/1",
       component: HomeOne,
       meta: {
-        title: "首页1",
-        group: "xxx"
-      },
-      children: [
-        {
-          path: "/home/1/1",
-          component: HomeOne,
-          meta: {
-            title: "首页1/1",
-            group: "xxxx"
-          }
-        },
-        {
-          path: "/home/1/2",
-          component: HomeOne,
-          meta: {
-            title: "首页1/2",
-            group: "xxxx"
-          }
-        },
-        {
-          path: "/home/1/3",
-          component: HomeOne,
-          meta: {
-            title: "首页1/3"
-          }
-        }
-      ]
-    },
-    {
-      path: "/home/2",
-      component: HomeOne,
-      meta: {
-        title: "首页2",
-        group: "xxx"
+        title: "编辑测试1",
+        group: "editor"
       }
     },
     {
-      path: "/home/4",
+      path: "/dataeditor/2",
       component: HomeOne,
       meta: {
-        title: "首页4",
-        group: "YYYY"
-      },
-      children: [
-        {
-          path: "/home/4-1",
-          component: HomeOne,
-          meta: {
-            title: "首页4-1"
-          }
-        }
-      ]
+        title: "编辑测试2",
+        group: "editor"
+      }
     }
   ]
 }

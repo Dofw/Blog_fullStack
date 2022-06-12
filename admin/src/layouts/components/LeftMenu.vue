@@ -16,9 +16,6 @@ import { Menu as IconMenu, Message, Setting } from "@element-plus/icons-vue";
 import { triggerTheme } from "@/utils";
 import RecursionMenu from './RecursionMenu.vue'
 
-type Record<K extends keyof any, T> = {
-  [P in K]: T;
-};
 type MenuItemRaw = {
   group?: string,
   path?: string, //group中不需要，保持统一
@@ -61,7 +58,7 @@ function routers2MenuList(routes: RouteRecordRaw[]): MenuListRaw {
     }
 
     // 完成一项 重构属性
-    const item: Record<string | number | symbol, string | number | MenuItemRaw[]> = {}
+    const item: MenuItemRaw = {}
     item.path = routes[i].path as string
     item.title = metaItem.title as string
 
@@ -76,10 +73,8 @@ function routers2MenuList(routes: RouteRecordRaw[]): MenuListRaw {
     if (isExist(metaItem, 'group')) {
       const Group = mapGroup.get(metaItem.group as string)
       if (Group) {
-
         Group.push(item)
       } else {
-
         mapGroup.set(metaItem.group, [item])
         //一个Group只执行一次
         arr.push({

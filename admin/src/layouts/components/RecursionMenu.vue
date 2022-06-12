@@ -1,13 +1,16 @@
 <template>
   <template v-for="(item, index) in data" :key="String(item)">
-    <!-- 将按钮归类 -->
+    <!-- 将按钮归分组 -->
     <el-menu-item-group class="recursion-menu" v-if="item.group">
       <template #title>{{ item.group }}</template>
       <RecursionMenuChild v-if="item.children" :data="item.children" />
     </el-menu-item-group>
 
     <!-- 按钮 -->
-    <el-sub-menu :class="{ menu_active: curRoutePath === item.path }" v-if="!item.group" :index="item.path">
+    <el-sub-menu :class="{
+      menu_active: curRoutePath === item.path,
+      noArrow: !item.children || item.children.length === 0
+    }" v-if="!item.group" :index="item.path">
       <template #title>
         <el-icon>
           <message />
@@ -64,6 +67,12 @@ const curRoutePath = computed(() => {
 }
 
 // active时的样式。
+.noArrow :deep() {
+  .el-sub-menu__icon-arrow {
+    display: none !important;
+  }
+}
+
 .menu_active :deep() {
   >.el-sub-menu__title {
 

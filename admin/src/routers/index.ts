@@ -6,7 +6,7 @@ import testPages from "./modules/testPages"
 const routes: RouteRecordRaw[] = [
   {
     path: "/",
-    redirect: "/home"
+    redirect: "/dataeditor"
   },
   dataEditorPages,
   testPages
