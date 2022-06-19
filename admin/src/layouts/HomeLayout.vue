@@ -17,7 +17,6 @@
 <script setup lang="ts">
 import LayoutHome from '@/components/LayoutHome/index.vue'
 import LeftMenu from './components/LeftMenu.vue'
-const a = 123
 </script>
 
 <style scoped lang="scss">

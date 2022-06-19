@@ -8,14 +8,15 @@
 
     <!-- 按钮 -->
     <el-sub-menu :class="{
-      menu_active: curRoutePath === item.path,
+      menu_active: curRoutePath.indexOf(item.path || '') > -1 && curRoutePath !== item.path,
+      menu_exact: curRoutePath === item.path,
       noArrow: !item.children || item.children.length === 0
-    }" v-if="!item.group" :index="item.path">
+    }" v-if="!item.group" :index="item.path || ''">
       <template #title>
         <el-icon>
           <message />
         </el-icon>
-        <router-link custom :to="item.path" v-slot="{ navigate, isExactActive }">
+        <router-link custom :to="item.path || ''" v-slot="{ navigate, isExactActive }">
           <span class="menu_text" @click="navigate">
             {{ item.title }}
           </span>
@@ -28,15 +29,14 @@
 
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import RecursionMenuChild from './RecursionMenu.vue'
-import { Menu as IconMenu, Message, Setting } from "@element-plus/icons-vue";
+import { Message } from "@element-plus/icons-vue";
 const props = defineProps<{
   data: ResultType[]
 }>()
 
-//123
 type ResultType = {
   tier: number,
   group?: string,
@@ -49,7 +49,6 @@ type ResultType = {
 const curRoute = useRoute()
 
 const curRoutePath = computed(() => {
-  console.log('路由变化，跟着变化')
   return curRoute.path
 })
 
@@ -70,6 +69,23 @@ const curRoutePath = computed(() => {
 .noArrow :deep() {
   .el-sub-menu__icon-arrow {
     display: none !important;
+  }
+}
+
+.menu_exact :deep() {
+  >.el-sub-menu__title {
+
+    >.el-icon {
+      @include theme-hoverFc(vt-c-hover-fc);
+    }
+
+    background-color: transparent !important;
+    @include theme-hoverFc(vt-c-hover-fc);
+
+    .menu_text {
+      //字体
+      @include theme-hoverFc(vt-c-hover-fc);
+    }
   }
 }
 

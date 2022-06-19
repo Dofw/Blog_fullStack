@@ -2,7 +2,7 @@
   <div class="asideContent">
     <div class="title" @click="onClick"></div>
     <el-scrollbar>
-      <el-menu :default-openeds="['/home/1', '/home']">
+      <el-menu :default-openeds="curRoutePath">
         <RecursionMenu :data="data" />
       </el-menu>
     </el-scrollbar>
@@ -10,11 +10,12 @@
 </template>
 
 <script lang="ts" setup>
-import type { RouteMeta, RouteRecordRaw } from 'vue-router'
+import { computed } from 'vue';
+import type { RouteMeta, RouteRecordRaw } from 'vue-router';
 import { useRouter, useRoute } from "vue-router";
 import { Menu as IconMenu, Message, Setting } from "@element-plus/icons-vue";
 import { triggerTheme } from "@/utils";
-import RecursionMenu from './RecursionMenu.vue'
+import RecursionMenu from './RecursionMenu.vue';
 
 type MenuItemRaw = {
   group?: string,
@@ -35,6 +36,14 @@ const routes = useRouter().options.routes;
 const result = routers2MenuList(routes)
 const data = addTier(result, null)
 console.log(data)
+
+const curRoute = useRoute()
+
+const curRoutePath = computed(() => {
+  return curRoute.matched.map((item) => {
+    return item.path
+  })
+})
 
 /**
  * 处理routes为特定数据结构
