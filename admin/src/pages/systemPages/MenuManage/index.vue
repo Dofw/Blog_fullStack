@@ -1,10 +1,9 @@
 <template>
   <div>
     <div>
-      系统页面-菜单管理页面
-    </div>
-    <div>
-      <el-button>创建</el-button>
+      <CreateForm type="add" #default="scope">
+        <el-button>{{ scope.type2name }}</el-button>
+      </CreateForm>
     </div>
 
     <el-table :data="tableData1" style="width: 100%" row-key="id" border
@@ -39,6 +38,7 @@
 import { watch, watchEffect } from 'vue'
 import { Message } from "@element-plus/icons-vue";
 import { useRouter } from 'vue-router'
+import CreateForm from './components/CreateForm.vue'
 
 interface Menu {
   id: number
