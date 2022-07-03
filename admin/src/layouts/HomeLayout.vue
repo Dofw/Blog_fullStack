@@ -1,27 +1,30 @@
 <template>
-  <LayoutHome>
-    <template v-slot:aside>
-      <LeftMenu />
-    </template>
-
-    <template v-slot:header>
-      header
-    </template>
-
-    <template v-slot:main>
-      <router-view />
-    </template>
-  </LayoutHome>
+  <el-container>
+    <el-aside width="auto">
+      <LeftMenu :isCollapse="isCollapse" />
+    </el-aside>
+    <el-container>
+      <el-header>
+        <el-radio-group v-model="isCollapse" style="margin-bottom: 20px">
+          <el-radio-button :label="false">展开</el-radio-button>
+          <el-radio-button :label="true">折叠</el-radio-button>
+        </el-radio-group>
+      </el-header>
+      <el-main>
+        <router-view />
+      </el-main>
+      <el-footer>Footer</el-footer>
+    </el-container>
+  </el-container>
 </template>
 
 <script setup lang="ts">
-import LayoutHome from '@/components/LayoutHome/index.vue'
+import { ref } from 'vue';
 import LeftMenu from './components/LeftMenu.vue'
+
+const isCollapse = ref(true)
+
 </script>
 
 <style scoped lang="scss">
-:global(#app) {
-  width: 100%;
-  height: 100%;
-}
 </style>

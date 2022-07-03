@@ -27,24 +27,16 @@
   </template>
 </template>
 
-
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import RecursionMenuChild from './RecursionMenu.vue'
 import { Message } from "@element-plus/icons-vue";
-const props = defineProps<{
+import type { ResultType } from '../utils'
+
+defineProps<{
   data: ResultType[]
 }>()
-
-type ResultType = {
-  tier: number,
-  group?: string,
-  path?: string;
-  title?: string;
-  children?: ResultType[];
-}
-
 
 const curRoute = useRoute()
 
