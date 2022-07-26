@@ -62,7 +62,6 @@ function onClick() {
 
     .el-menu:not(.el-menu--collapse) {
       width: 200px;
-      min-height: 400px;
     }
 
     .el-menu {

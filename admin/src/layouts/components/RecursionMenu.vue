@@ -66,13 +66,26 @@ const curRoutePath = computed(() => {
 
 .menu_exact :deep() {
   >.el-sub-menu__title {
+    >span {
+      position: relative;
+
+      &::before {
+        content: '';
+        display: block;
+        width: 5px;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: -49px;
+        border-left: 10px solid;
+        border-radius: 5px 0 0 5px;
+        @include theme-borderColor(vt-c-borderColor-light);
+      }
+    }
 
     >.el-icon {
       @include theme-hoverFc(vt-c-hover-fc);
     }
-
-    background-color: transparent !important;
-    @include theme-hoverFc(vt-c-hover-fc);
 
     .menu_text {
       //字体
@@ -83,14 +96,26 @@ const curRoutePath = computed(() => {
 
 .menu_active :deep() {
   >.el-sub-menu__title {
+    >span {
+      position: relative;
+
+      &::before {
+        content: '';
+        display: block;
+        width: 5px;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: -49px;
+        border-left: 10px solid;
+        border-radius: 5px 0 0 5px;
+        @include theme-borderColor(vt-c-borderColor-light);
+      }
+    }
 
     >.el-icon {
       @include theme-hoverFc(vt-c-hover-fc);
     }
-
-    background-color: transparent !important;
-    @include theme-hoverBg($start: vt-c-hover-bg-start, $end: vt-c-hover-bg-end);
-    @include theme-hoverFc(vt-c-hover-fc);
 
     .menu_text {
       //字体
