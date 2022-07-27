@@ -1,15 +1,13 @@
 import { createRouter, createWebHistory } from "vue-router"
 import type { RouteRecordRaw } from "vue-router"
-import dataEditorPages from "./modules/dataEditorPages"
-import systemPages from "./modules/systemPages"
+import examplePage from "./modules/examplePage"
 
 const routes: RouteRecordRaw[] = [
   {
     path: "/",
-    redirect: "/system"
+    redirect: "/example"
   },
-  systemPages
-  // dataEditorPages
+  examplePage
 ]
 
 export default createRouter({
