@@ -3,9 +3,13 @@
     vue-demo-2
   </div>
 </template>
+<script lang="ts">
+export default {
+  name: 'vue-demo-2'
+}
+</script>
 
-<script setup lang="ts">
-
+<script script setup lang = "ts" >
 </script>
 
 <style scoped>

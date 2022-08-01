@@ -70,16 +70,17 @@ function onClick() {
     }
 
     .el-sub-menu__title,
+    .el-menu-item,
     .el-menu-item-group {
       @include theme-fc(vt-c-text-1);
     }
 
-    .el-sub-menu__title {
+    .el-sub-menu__title,
+    .el-menu-item {
       &:hover {
         background-color: transparent !important;
         @include theme-hoverFc(vt-c-hover-fc);
         // @include theme-hoverBg($start: vt-c-hover-bg-start, $end: vt-c-hover-bg-end);
-
       }
     }
 

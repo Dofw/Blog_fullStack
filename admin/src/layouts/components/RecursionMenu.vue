@@ -6,12 +6,12 @@
       <RecursionMenuChild v-if="item.children" :data="item.children" />
     </el-menu-item-group>
 
-    <!-- 按钮 -->
+    <!-- 按钮存在children -->
+    <!-- noArrow: !item.children || item.children.length === 0 -->
     <el-sub-menu :class="{
       menu_active: curRoutePath.indexOf(item.path || '') > -1 && curRoutePath !== item.path,
       menu_exact: curRoutePath === item.path,
-      noArrow: !item.children || item.children.length === 0
-    }" v-if="!item.group" :index="item.path || ''">
+    }" v-if="!item.group && item.children" :index="item.path || ''">
       <template #title>
         <el-icon>
           <message />
@@ -24,6 +24,23 @@
       </template>
       <RecursionMenuChild v-if="item.children" :data="item.children" />
     </el-sub-menu>
+
+    <!-- 按钮下，不存在children -->
+    <el-menu-item :class="{
+      menu_item_active: curRoutePath.indexOf(item.path || '') > -1 && curRoutePath !== item.path,
+      menu_item_exact: curRoutePath === item.path,
+    }" v-if="!item.group && !item.children" :index="item.path || ''">
+      <template #title>
+        <el-icon>
+          <message />
+        </el-icon>
+        <router-link custom :to="item.path || ''" v-slot="{ navigate, isExactActive }">
+          <span class="menu_text" @click="navigate">
+            {{ item.title }}
+          </span>
+        </router-link>
+      </template>
+    </el-menu-item>
   </template>
 </template>
 
@@ -58,11 +75,11 @@ const curRoutePath = computed(() => {
 }
 
 // active时的样式。
-.noArrow :deep() {
-  .el-sub-menu__icon-arrow {
-    display: none !important;
-  }
-}
+// .noArrow :deep() {
+//   .el-sub-menu__icon-arrow {
+//     display: none !important;
+//   }
+// }
 
 .menu_exact :deep() {
   >.el-sub-menu__title {
@@ -91,6 +108,36 @@ const curRoutePath = computed(() => {
       //字体
       @include theme-hoverFc(vt-c-hover-fc);
     }
+  }
+
+}
+
+// el-menu-item, &.el-menu-item
+.menu_item_exact {
+  >span {
+    position: relative;
+
+    &::before {
+      content: '';
+      display: block;
+      width: 5px;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: -49px;
+      border-left: 10px solid;
+      border-radius: 5px 0 0 5px;
+      @include theme-borderColor(vt-c-borderColor-light);
+    }
+  }
+
+  >.el-icon {
+    @include theme-hoverFc(vt-c-hover-fc);
+  }
+
+  .menu_text {
+    //字体
+    @include theme-hoverFc(vt-c-hover-fc);
   }
 }
 
@@ -121,6 +168,35 @@ const curRoutePath = computed(() => {
       //字体
       @include theme-hoverFc(vt-c-hover-fc);
     }
+  }
+}
+
+// el-menu-item, &.el-menu-item
+.menu_item_active {
+  >span {
+    position: relative;
+
+    &::before {
+      content: '';
+      display: block;
+      width: 5px;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: -49px;
+      border-left: 10px solid;
+      border-radius: 5px 0 0 5px;
+      @include theme-borderColor(vt-c-borderColor-light);
+    }
+  }
+
+  >.el-icon {
+    @include theme-hoverFc(vt-c-hover-fc);
+  }
+
+  .menu_text {
+    //字体
+    @include theme-hoverFc(vt-c-hover-fc);
   }
 }
 </style>
