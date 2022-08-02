@@ -74,129 +74,21 @@ const curRoutePath = computed(() => {
   }
 }
 
-// active时的样式。
-// .noArrow :deep() {
-//   .el-sub-menu__icon-arrow {
-//     display: none !important;
-//   }
-// }
-
 .menu_exact :deep() {
-  >.el-sub-menu__title {
-    >span {
-      position: relative;
-
-      &::before {
-        content: '';
-        display: block;
-        width: 5px;
-        height: 100%;
-        position: absolute;
-        top: 0;
-        left: -49px;
-        border-left: 10px solid;
-        border-radius: 5px 0 0 5px;
-        @include theme-borderColor(vt-c-borderColor-light);
-      }
-    }
-
-    >.el-icon {
-      @include theme-hoverFc(vt-c-hover-fc);
-    }
-
-    .menu_text {
-      //字体
-      @include theme-hoverFc(vt-c-hover-fc);
-    }
-  }
-
-}
-
-// el-menu-item, &.el-menu-item
-.menu_item_exact {
-  >span {
-    position: relative;
-
-    &::before {
-      content: '';
-      display: block;
-      width: 5px;
-      height: 100%;
-      position: absolute;
-      top: 0;
-      left: -49px;
-      border-left: 10px solid;
-      border-radius: 5px 0 0 5px;
-      @include theme-borderColor(vt-c-borderColor-light);
-    }
-  }
-
-  >.el-icon {
-    @include theme-hoverFc(vt-c-hover-fc);
-  }
-
-  .menu_text {
-    //字体
-    @include theme-hoverFc(vt-c-hover-fc);
-  }
+  @include el-sub-menu__title
 }
 
 .menu_active :deep() {
-  >.el-sub-menu__title {
-    >span {
-      position: relative;
-
-      &::before {
-        content: '';
-        display: block;
-        width: 5px;
-        height: 100%;
-        position: absolute;
-        top: 0;
-        left: -49px;
-        border-left: 10px solid;
-        border-radius: 5px 0 0 5px;
-        @include theme-borderColor(vt-c-borderColor-light);
-      }
-    }
-
-    >.el-icon {
-      @include theme-hoverFc(vt-c-hover-fc);
-    }
-
-    .menu_text {
-      //字体
-      @include theme-hoverFc(vt-c-hover-fc);
-    }
-  }
+  @include el-sub-menu__title
 }
 
-// el-menu-item, &.el-menu-item
+// .menu_item_exact.el-menu-item
+.menu_item_exact {
+  @include el-menu-item;
+}
+
+// .menu_item_active.el-menu-item
 .menu_item_active {
-  >span {
-    position: relative;
-
-    &::before {
-      content: '';
-      display: block;
-      width: 5px;
-      height: 100%;
-      position: absolute;
-      top: 0;
-      left: -49px;
-      border-left: 10px solid;
-      border-radius: 5px 0 0 5px;
-      @include theme-borderColor(vt-c-borderColor-light);
-    }
-  }
-
-  >.el-icon {
-    @include theme-hoverFc(vt-c-hover-fc);
-  }
-
-  .menu_text {
-    //字体
-    @include theme-hoverFc(vt-c-hover-fc);
-  }
+  @include el-menu-item;
 }
 </style>

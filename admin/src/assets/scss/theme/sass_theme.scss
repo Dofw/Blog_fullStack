@@ -1,5 +1,5 @@
 @import "./sass_variable.scss"; // 主题：背景、蒙层(正反色)、文本(正反色)、code、主题色(vue中的绿色，不同环境的亮度)
-
+@import "../elementui/index.scss"; // elementui 主题修改定义的 @mixin
 // 利用scss方案实现, 对兼容性友好。
 // css变量，仅仅操作变量，而不会增加规则。
 $themes: (
@@ -110,7 +110,7 @@ $themes: (
 
 @mixin theme-borderColor($key) {
   @include generateThemesCode {
-    border-color: map-get($map: $theme-var, $key: $key);
+    border-color: map-get($map: $theme-var, $key: $key) !important;
   }
 }
 
