@@ -243,3 +243,24 @@ css: {
      2. route 级权限
      3. button 级权限(角色身份)
   7. 登录功能(第三方)
+
+### Sass
+
+1. @mixin中 的 @include 只有在该@mixin使用时被访问，如果被访问时，@include相对应的@mixin沒有定义。就会报错。
+
+
+
+### ★学习路线、新技能
+
+#### 1. menorepo、博客搭建
+
+#### 2. CLI搭建
+
+#### 3. webpack、vite、plugin学习
+
+#### 4. cavase、svg、threejs
+
+#### 5. 阅读设计模式、VUE、webkit技术内幕书
+
+#### 6. js、ts、浏览器api基础巩固。
+
