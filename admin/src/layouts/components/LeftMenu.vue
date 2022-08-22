@@ -26,7 +26,7 @@ withDefaults(defineProps<Props>(), {
 const routes = useRouter().options.routes;
 const result = routers2MenuList(routes)
 const data = addTier(result, null)
-console.log(data)
+// console.log(data)
 
 const curRoute = useRoute()
 

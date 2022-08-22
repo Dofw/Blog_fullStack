@@ -12,6 +12,15 @@ import { ElementPlusResolver } from "unplugin-vue-components/resolvers"
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  server: {
+    proxy: {
+      '/admin': {
+        target: 'http://localhost:3300',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/admin/, '')
+      },
+    },
+  },
   plugins: [
     vue({
       reactivityTransform: true
