@@ -1,8 +1,8 @@
-import Io from '@/utils/io';
+import Io from "@/utils/io";
 
 const io = new Io(
   {
-    baseURL: '/',
+    baseURL: "/",
   },
   {
     _isCancle: false,
@@ -12,19 +12,19 @@ const io = new Io(
 io.addReqInterceptor([
   (config) => {
     // config.url = 'taobao.com'
-    console.log(config, '拦截器1');
+    console.log(config, "拦截器1");
     return config;
   },
   (config) => {
     // config.url = 'jd.com'
-    console.log(config, '拦截器2');
+    console.log(config, "拦截器2");
     return config;
   },
 ]);
 
 io.addResInterceptor(
   (res) => {
-    console.log(res, '响应1');
+    console.log(res, "响应1");
     return res;
   },
   (erorr) => {
@@ -35,17 +35,17 @@ io.addResInterceptor(
 const request = io.instance;
 
 request({
-  url: '/admin/0',
+  url: "/admin/0",
   _isCancle: true,
 });
 
 request({
-  url: '/admin/1',
+  url: "/admin/1",
   _isCancle: true,
 });
 
 request({
-  url: '/admin/2',
+  url: "/admin/2",
   _isCancle: true,
 }).then(() => {
   io.removeAllCancel();
