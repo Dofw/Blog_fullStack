@@ -10,11 +10,11 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, withDefaults } from 'vue';
-import { useRouter, useRoute } from "vue-router";
-import { triggerTheme } from "@/utils";
-import RecursionMenu from './RecursionMenu.vue';
-import { routers2MenuList, addTier } from '../utils/index'
+import { computed, withDefaults } from "vue"
+import { useRouter, useRoute } from "vue-router"
+import { triggerTheme } from "@/utils"
+import RecursionMenu from "./RecursionMenu.vue"
+import { routers2MenuList, addTier } from "../utils/index"
 
 interface Props {
   isCollapse: boolean
@@ -23,7 +23,7 @@ withDefaults(defineProps<Props>(), {
   isCollapse: true
 })
 
-const routes = useRouter().options.routes;
+const routes = useRouter().options.routes
 const result = routers2MenuList(routes)
 const data = addTier(result, null)
 // console.log(data)
@@ -38,7 +38,7 @@ const curRoutePath = computed(() => {
 
 //切换theme
 function onClick() {
-  triggerTheme();
+  triggerTheme()
 }
 </script>
 
@@ -64,7 +64,7 @@ function onClick() {
       width: 200px;
     }
 
-    @include elMenu
+    @include elMenu;
   }
 }
 </style>
