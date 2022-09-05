@@ -31,7 +31,7 @@ function importMetaGlobEager(modules: any) {
   const Comps = []
   for (const key in modules) {
     const paths = key.split("/")
-    let fileType = paths[paths.length - 2] // 分类Vue、React
+    const fileType = paths[paths.length - 2] // 分类Vue、React
     let endName = paths[paths.length - 1] // xxx.vue
     endName = endName.substring(0, endName.length - 4)
     // route 格式
