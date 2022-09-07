@@ -1,43 +1,41 @@
 <template>
-  <div ref="test" style="height: 800px"></div>
+  <div @click="onCompiler">点击编译</div>
+  <div class="monaco-editor-container">
+    <div class="editor-wrapper">
+      <div ref="test" class="instance"></div>
+    </div>
+    <div class="preview-wrapper">
+      <div id="example-app"></div>
+    </div>
+  </div>
 </template>
 
 <script setup>
 import { onMounted, ref } from "vue"
-import * as monaco from "monaco-editor"
-import editorWorker from "monaco-editor/esm/vs/editor/editor.worker?worker"
-import jsonWorker from "monaco-editor/esm/vs/language/json/json.worker?worker"
-import cssWorker from "monaco-editor/esm/vs/language/css/css.worker?worker"
-import htmlWorker from "monaco-editor/esm/vs/language/html/html.worker?worker"
-import tsWorker from "monaco-editor/esm/vs/language/typescript/ts.worker?worker"
-
-self.MonacoEnvironment = {
-  getWorker(_, label) {
-    if (label === "json") {
-      return new jsonWorker()
-    }
-    if (label === "css" || label === "scss" || label === "less") {
-      return new cssWorker()
-    }
-    if (label === "html" || label === "handlebars" || label === "razor") {
-      return new htmlWorker()
-    }
-    if (label === "typescript" || label === "javascript") {
-      return new tsWorker()
-    }
-    return new editorWorker()
-  }
-}
+import monaco from "./monaco"
 
 const test = ref(null)
+const instance = ref(null)
+
+const onCompiler = () => {
+  // console.log(1232131, instance.value)
+  // instance.value.setValue("123")
+  // const template = instance.value.getValue()
+  // console.log(111, template)
+}
+
 onMounted(() => {
-  monaco.editor.create(test.value, {
-    value: "// First line\nfunction hello() {\n\talert('Hello world!');\n}\n// Last line",
+  instance.value = monaco.editor.create(test.value, {
+    value: `
+    <template>
+      <div>测试代码</div>
+    </template>
+`,
     language: "javascript",
     lineNumbers: "on", // 行数
     roundedSelection: true, // ?
     scrollBeyondLastLine: false, //滚动到最后一行
-    readOnly: true,
+    readOnly: false,
     minimap: {
       // 关闭小地图
       enabled: false
@@ -46,3 +44,34 @@ onMounted(() => {
   })
 })
 </script>
+
+<style lang="scss" scoped>
+.monaco-editor-container {
+  display: flex;
+  height: 100%;
+  height: 800px;
+  > div {
+    width: 50%;
+    height: 100%;
+    &.editor-wrapper {
+      border: 1px solid orange;
+      .instance {
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    &.preview-wrapper {
+      border: 1px solid green;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      #example-app {
+        width: 50%;
+        height: 50%;
+        border: 1px solid red;
+      }
+    }
+  }
+}
+</style>

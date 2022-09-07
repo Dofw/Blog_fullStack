@@ -1,12 +1,12 @@
 <template>
   <div>
-    vue-demo-1
+    <h1>monaco-editor</h1>
     <MonacoEditor />
   </div>
 </template>
 <script lang="ts">
 export default {
-  name: "vue-demo-1"
+  name: "monaco-editor"
 }
 </script>
 <script setup lang="ts">
