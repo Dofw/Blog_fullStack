@@ -11,9 +11,8 @@
 </template>
 
 <script setup>
-import { onMounted, ref, createApp, toDisplayString as _toDisplayString, resolveComponent as _resolveComponent, createVNode as _createVNode } from "vue"
+import { ref, createApp, onMounted } from "vue"
 import { parse, compileTemplate, compileScript, compileStyle } from "vue/compiler-sfc"
-import { ElButton } from "element-plus"
 import monaco from "./monaco"
 
 const test = ref(null)

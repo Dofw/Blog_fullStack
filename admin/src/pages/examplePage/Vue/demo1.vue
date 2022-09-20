@@ -4,11 +4,6 @@
     <MonacoEditor />
   </div>
 </template>
-<script lang="ts">
-export default {
-  name: "monaco-editor"
-}
-</script>
 <script setup lang="ts">
 import MonacoEditor from "@/components/MonacoEditor/index.vue"
 </script>
