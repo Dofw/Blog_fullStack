@@ -12,9 +12,9 @@
 
 <script setup>
 import { ref, createApp, onMounted } from "vue"
-import { parse, compileTemplate, compileScript, compileStyle } from "vue/compiler-sfc"
+import { parse, compileTemplate, compileScript } from "vue/compiler-sfc"
 import monaco from "./monaco"
-
+import { compilerJS, compilerTemp } from "./util"
 const test = ref(null)
 let instance = ref(null)
 const unwarp = (obj) => {
@@ -28,39 +28,26 @@ const onCompiler = () => {
   const result = parse(template)
   console.log(result)
 
+  //Template编译为render
   const templateObj = compileTemplate({
     id: "Demo",
     filename: "Demo.vue",
     source: result.descriptor.template.content
   })
+  console.log("temp", templateObj)
+  const render = compilerTemp(templateObj.code)
+  console.log(render)
 
+  //JS作用域全局变量引入Vue
   const scriptObj = compileScript(result.descriptor, {
     id: "Demo",
     filename: "Demo.vue"
   })
-
-  //js作用域
-  console.log("js", scriptObj.content)
-  let componentScript = {}
-  let scriptContent = scriptObj.content.replace(/export\s+default/, "componentScript =")
-  scriptContent = scriptContent.replace(/import { ref } from 'vue'/, "")
-  scriptContent = scriptContent.replace(/import { ElButton } from "element-plus"/, "")
+  const scriptContent = compilerJS(scriptObj.content)
   console.log(scriptContent)
-  eval(scriptContent)
-  console.log(componentScript)
-
-  //render函数
-  let render
-  let tempContent = templateObj.code.replace(/export /, "render =")
-  tempContent = tempContent.replace(/import { toDisplayString as _toDisplayString, openBlock as _openBlock, createElementBlock as _createElementBlock } from "vue"/, "")
-  console.log(tempContent)
-  eval(tempContent)
-  console.log(render)
-
-  console.log("aaaa", templateObj, "xxxx", scriptObj)
 
   createApp({
-    setup: componentScript.setup,
+    setup: scriptContent.setup,
     render: render
   }).mount("#example-app")
 }
