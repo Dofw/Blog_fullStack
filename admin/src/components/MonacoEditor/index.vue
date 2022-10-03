@@ -11,7 +11,7 @@
 </template>
 
 <script setup>
-import { ref, createApp, onMounted } from "vue"
+import { ref, onMounted } from "vue"
 import { parse, compileTemplate, compileScript } from "vue/compiler-sfc"
 import monaco from "./monaco"
 import { compilerJS, compilerTemp } from "./util"
@@ -22,7 +22,15 @@ const unwarp = (obj) => {
   return obj && (obj.__v_raw || obj.valueOf() || obj)
 }
 
+// Todo: 这里必须统一用全局的Vue。
+// Todo: 这里必须统一用全局的ElementPlus。
 const onCompiler = () => {
+  const unMountTemp = `
+    console.log(window.appInstance)
+    if(window.appInstance) {window.appInstance.unmount()}
+  `
+  eval(unMountTemp)
+
   const newInstance = unwarp(instance.value)
   const template = newInstance.getValue()
   const result = parse(template)
@@ -34,22 +42,31 @@ const onCompiler = () => {
     filename: "Demo.vue",
     source: result.descriptor.template.content
   })
-  console.log("temp", templateObj)
+  console.log(templateObj.code)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const render = compilerTemp(templateObj.code)
-  console.log(render)
 
   //JS作用域全局变量引入Vue
   const scriptObj = compileScript(result.descriptor, {
     id: "Demo",
     filename: "Demo.vue"
   })
+  console.log(scriptObj.content)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const scriptContent = compilerJS(scriptObj.content)
-  console.log(scriptContent)
 
-  createApp({
-    setup: scriptContent.setup,
-    render: render
-  }).mount("#example-app")
+  const mountTemp = `
+    const createApp = Vue.createApp
+    window.appInstance = createApp({
+      setup: scriptContent.setup,
+      render: render
+    })
+
+    window.appInstance
+      .use(ElementPlus)
+      .mount("#example-app")
+  `
+  eval(mountTemp)
 }
 
 onMounted(() => {

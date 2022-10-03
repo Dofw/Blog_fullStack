@@ -4,6 +4,5 @@ import router from "@/routers"
 import App from "./App.vue"
 import "@/assets/scss/reset.scss"
 import "element-plus/dist/index.css"
-console.log(App)
 
 createApp(App).use(router).use(createPinia()).mount("#app")

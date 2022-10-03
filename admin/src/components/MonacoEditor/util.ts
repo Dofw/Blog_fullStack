@@ -25,24 +25,36 @@ const options = {
 export default options
 
 export function compilerJS(tempJS: any) {
+  let result = ""
+
   //import-Reg
   const reg = /\bimport\s*\{([^{]*)\}\s*from\s*("|')vue\2/g
   //将import，编译成const ...
-  const newTemp = tempJS.replace(reg, function ($: string, $1: string) {
+  result = tempJS.replace(reg, function ($: string, $1: string) {
     let str = ""
     if ($1) {
       str = `const {${$1}} = Vue`
     }
     return str
   })
-  console.log(newTemp)
+
+  //import-Reg-Element-plus
+  const reg2 = /\bimport\s*\{([^{]*)\}\s*from\s*("|')element-plus\2/g
+  //将import，编译成const ...
+  result = result.replace(reg2, function ($: string, $1: string) {
+    let str = ""
+    if ($1) {
+      str = `const {${$1}} = ElementPlus`
+    }
+    return str
+  })
 
   //替换export default, 执行eval
   let scriptContent
-  const temp = newTemp.replace(/export\s+default/, "scriptContent =")
-  eval(temp)
+  const temp = result.replace(/export\s+default/, "scriptContent =")
+  console.log(111, temp)
 
-  console.log(temp)
+  eval(temp)
 
   return scriptContent || {}
 }
@@ -65,7 +77,6 @@ export function compilerTemp(temp: any) {
   const temp2 = newTemp.replace(/export /, "render =")
   eval(temp2)
 
-  console.log("temp", temp2)
-
+  // console.log("temp", temp2)
   return render
 }
