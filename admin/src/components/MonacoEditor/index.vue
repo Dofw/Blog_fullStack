@@ -24,6 +24,7 @@ const unwarp = (obj) => {
 
 // Todo: 这里必须统一用全局的Vue。
 // Todo: 这里必须统一用全局的ElementPlus。
+// 1. html 全局引入， 2. 修改app.use(xxx) eval, 3. 修改compilerJS 正则。如何实现运行时完成这一系列操作？？？
 const onCompiler = () => {
   const unMountTemp = `
     console.log(window.appInstance)
