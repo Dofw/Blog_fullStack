@@ -7,58 +7,58 @@
 </template>
 
 <script setup>
-import Echart from "@/components/Echart";
-import useAutoPlay from "@/components/Echart/composable/useAutoPlay";
-import { onMounted, ref, computed } from "vue";
+import Echart from "@/components/Echart"
+import useAutoPlay from "@/components/Echart/composable/useAutoPlay"
+import { onMounted, ref, computed } from "vue"
 
-const myChart = ref(null); // Echart组件ref实例
-const data1 = ref([]); // 请求数据
+const myChart = ref(null) // Echart组件ref实例
+const data1 = ref([]) // 请求数据
 onMounted(() => {
   setTimeout(() => {
     data1.value = [
       {
         name: "测试1",
-        value: 10,
+        value: 10
       },
       {
         name: "测试2",
-        value: 20,
+        value: 20
       },
       {
         name: "测试3",
-        value: 15,
-      },
-    ];
-  }, 5000);
-});
+        value: 15
+      }
+    ]
+  }, 5000)
+})
 
 // 计算options
 const options = computed(() => {
-  const data = data1.value;
-  console.log("第二次");
-  let colorList = ["red", "blue", "green"];
+  const data = data1.value
+  console.log("第二次")
+  let colorList = ["red", "blue", "green"]
   // 公用调整
   let itemStyle = {
     borderColor: "rgba(12, 22, 58, 1)",
     borderWidth: 5,
     shadowBlur: 1,
     color: function (params) {
-      return colorList[params.dataIndex];
-    },
-  };
+      return colorList[params.dataIndex]
+    }
+  }
 
   let options = {
     backgroundColor: "#000",
     tooltip: {
       trigger: "item",
       axisPointer: {
-        type: "shadow",
+        type: "shadow"
       },
       backgroundColor: "RGBA(0,10,54,.8)", // borderColor: '#228DC9',
       borderWidth: 0, // appendToBody: true,
       formatter(e) {
-        let str;
-        let unit = "个";
+        let str
+        let unit = "个"
 
         str = `
             <div style='display: flex; align-items: center'>
@@ -72,10 +72,10 @@ const options = computed(() => {
              <span style="flex-grow:1;text-align:right;color:#96D5FF;font-family:Microsoft YaHei;line-height:25px;font-size:22px">
              ${e.value}&nbsp${unit}<br /></span>
             </div>
-            `;
+            `
 
-        return str;
-      },
+        return str
+      }
     },
     title: {
       show: true,
@@ -98,9 +98,9 @@ const options = computed(() => {
           unit: {
             color: "rgba(15, 207, 255, 0.7)",
             padding: [5, 0, 0, 0],
-            fontSize: 20,
-          },
-        },
+            fontSize: 20
+          }
+        }
       },
       left: "48%",
       top: "29%",
@@ -116,9 +116,9 @@ const options = computed(() => {
 
         align: "center",
         overflow: "truncate",
-        ellipsis: "...",
+        ellipsis: "..."
       },
-      zlevel: 100,
+      zlevel: 100
     },
     series: [
       {
@@ -135,23 +135,23 @@ const options = computed(() => {
           length: 5,
           length2: 0,
           lineStyle: {
-            color: "transparent",
-          },
+            color: "transparent"
+          }
         },
         emphasis: {
           scale: true,
-          scaleSize: 10,
+          scaleSize: 10
         },
         label: {
-          show: false,
+          show: false
         },
-        data: data,
-      },
-    ],
-  };
+        data: data
+      }
+    ]
+  }
 
-  return options;
-});
+  return options
+})
 
 // 开启动画
 useAutoPlay(myChart, {
@@ -159,8 +159,8 @@ useAutoPlay(myChart, {
   duration: 1000, // 间隔
   index: 0, // 从第几项开始轮播
   // $seriesIndex: 1, // 默认 0 启动第一个serie, 例如: bar(0)、line(1), 启动line
-  cb: customFunc, // 扩展功能(选填)
-});
+  cb: customFunc // 扩展功能(选填)
+})
 
 /**
  * 自动播放,添加额外功能
@@ -170,7 +170,7 @@ useAutoPlay(myChart, {
  * @param {*} preIndex 前一个index
  */
 function customFunc(instance, data, curIndex, preIndex) {
-  console.log(preIndex);
+  console.log(preIndex)
   // preIndex、curIndex 由传入data决定。
   instance.setOption(
     {
@@ -183,14 +183,14 @@ function customFunc(instance, data, curIndex, preIndex) {
             unit: {
               color: "rgba(15, 207, 255, 0.7)",
               padding: [5, 0, 0, 0],
-              fontSize: 20,
-            },
-          },
-        },
-      },
+              fontSize: 20
+            }
+          }
+        }
+      }
     },
-    false, //merge
-  );
+    false //merge
+  )
   // 实例给你了, 可以做好多事
 }
 </script>

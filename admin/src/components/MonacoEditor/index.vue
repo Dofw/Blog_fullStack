@@ -1,22 +1,51 @@
 <template>
-  <div @click="onCompiler">点击编译</div>
-  <div class="monaco-editor-container">
-    <div class="editor-wrapper">
-      <div ref="test" class="instance"></div>
+  <div class="monaco-editor-container" v-bind="$attrs" :style="{ width, height }">
+    <!-- 布局一 -->
+    <div class="editor-wrapper" ref="resizeDom">
+      <div ref="instanceDom" class="instance"></div>
     </div>
+    <!-- 布局二 -->
     <div class="preview-wrapper">
-      <div id="example-app" style="color: red"></div>
+      <el-tabs v-model="activeName" class="demo-tabs">
+        <el-tab-pane label="编辑预览" name="first">
+          <!-- editor-preview-dom -->
+          <div ref="previewDom" class="preview"></div>
+        </el-tab-pane>
+        <el-tab-pane label="示例效果" name="second">
+          <!-- example -->
+          <slot name="example">添加示例...</slot>
+        </el-tab-pane>
+      </el-tabs>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue"
+import { defineProps, ref, onMounted, onUnmounted } from "vue"
 import { parse, compileTemplate, compileScript } from "vue/compiler-sfc"
 import monaco from "./monaco"
 import { compilerJS, compilerTemp } from "./util"
-const test = ref(null)
-let instance = ref(null)
+// import { debounce } from "@/utils"
+
+const props = defineProps({
+  width: {
+    type: String,
+    default: "100%"
+  },
+  height: {
+    type: String,
+    default: "100%"
+  },
+  tempCode: {
+    type: String,
+    default: ""
+  }
+})
+const activeName = ref("first") // 默认
+const resizeDom = ref(null)
+const instanceDom = ref(null)
+const previewDom = ref(null)
+const instance = ref(null)
 const unwarp = (obj) => {
   // __v_raw在v3中，取原始对象的作用。
   return obj && (obj.__v_raw || obj.valueOf() || obj)
@@ -35,7 +64,7 @@ const onCompiler = () => {
   const newInstance = unwarp(instance.value)
   const template = newInstance.getValue()
   const result = parse(template)
-  console.log(result)
+  // console.log(result)
 
   //Template编译为render
   const templateObj = compileTemplate({
@@ -43,7 +72,7 @@ const onCompiler = () => {
     filename: "Demo.vue",
     source: result.descriptor.template.content
   })
-  console.log(templateObj.code)
+  // console.log(templateObj.code)
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const render = compilerTemp(templateObj.code)
 
@@ -52,7 +81,7 @@ const onCompiler = () => {
     id: "Demo",
     filename: "Demo.vue"
   })
-  console.log(scriptObj.content)
+  // console.log(scriptObj.content)
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const scriptContent = compilerJS(scriptObj.content)
 
@@ -65,14 +94,26 @@ const onCompiler = () => {
 
     window.appInstance
       .use(ElementPlus)
-      .mount("#example-app")
+      .mount(previewDom.value)
   `
   eval(mountTemp)
 }
 
+// const resizeFunc = debounce((e) => {
+//   init()
+// }, 200)
 onMounted(() => {
-  instance.value = monaco.editor.create(test.value, {
-    value: "",
+  // window.addEventListener("resize", resizeFunc)
+  init()
+})
+
+onUnmounted(() => {
+  // window.removeEventListener("resize", resizeFunc)
+})
+
+function init() {
+  instance.value = monaco.editor.create(instanceDom.value, {
+    value: props.tempCode,
     language: "html",
     lineNumbers: "on", // 行数
     roundedSelection: true, // ?
@@ -84,19 +125,20 @@ onMounted(() => {
     },
     theme: "vs-light"
   })
-})
+  onCompiler()
+}
 </script>
 
 <style lang="scss" scoped>
 .monaco-editor-container {
   display: flex;
+  width: 100%;
   height: 100%;
-  height: 800px;
   > div {
     width: 50%;
     height: 100%;
     &.editor-wrapper {
-      border: 1px solid orange;
+      @include theme-bShadow(vt-c-shadow-5);
       .instance {
         width: 100%;
         height: 100%;
@@ -104,15 +146,31 @@ onMounted(() => {
     }
 
     &.preview-wrapper {
-      border: 1px solid green;
+      margin-left: 5px;
+      @include theme-bShadow(vt-c-shadow-5);
+      .preview {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+}
+
+//tabs标签页
+.demo-tabs {
+  width: 100%;
+  height: 100%;
+  padding: 0 10px;
+
+  :deep(.el-tabs__content) {
+    height: 91%;
+
+    .el-tab-pane {
+      width: 100%;
+      height: 100%;
       display: flex;
       justify-content: center;
       align-items: center;
-      #example-app {
-        width: 50%;
-        height: 50%;
-        border: 1px solid red;
-      }
     }
   }
 }

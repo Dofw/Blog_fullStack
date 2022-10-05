@@ -52,7 +52,7 @@ export function compilerJS(tempJS: any) {
   //替换export default, 执行eval
   let scriptContent
   const temp = result.replace(/export\s+default/, "scriptContent =")
-  console.log(111, temp)
+  // console.log(111, temp)
 
   eval(temp)
 

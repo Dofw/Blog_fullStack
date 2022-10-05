@@ -3,7 +3,7 @@ import HomeLayout from "@/layouts/HomeLayout.vue"
 
 const modules = import.meta.globEager("/src/pages/examplePage/Vue/*.vue")
 const VueRoutes = importMetaGlobEager(modules)
-console.log(modules, VueRoutes)
+// console.log(modules, VueRoutes)
 
 const examplePage: RouteRecordRaw = {
   path: "/example",
