@@ -64,7 +64,6 @@ const onCompiler = () => {
   const newInstance = unwarp(instance.value)
   const template = newInstance.getValue()
   const result = parse(template)
-  // console.log(result)
 
   //Template编译为render
   const templateObj = compileTemplate({
@@ -72,7 +71,7 @@ const onCompiler = () => {
     filename: "Demo.vue",
     source: result.descriptor.template.content
   })
-  // console.log(templateObj.code)
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const render = compilerTemp(templateObj.code)
 
@@ -81,7 +80,7 @@ const onCompiler = () => {
     id: "Demo",
     filename: "Demo.vue"
   })
-  // console.log(scriptObj.content)
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const scriptContent = compilerJS(scriptObj.content)
 
@@ -138,6 +137,7 @@ function init() {
     width: 50%;
     height: 100%;
     &.editor-wrapper {
+      border: 2px solid green;
       @include theme-bShadow(vt-c-shadow-5);
       .instance {
         width: 100%;

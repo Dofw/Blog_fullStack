@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "axios"
 
 /**
  * 1. 前后台约定，返回格式
@@ -35,7 +35,7 @@ import axios from "axios";
 /**
  * 3.1 保存所有url:cancleFunc
  */
-const cancelMaps = new Map();
+const cancelMaps = new Map()
 
 /**
  * 3. 功能设计
@@ -46,7 +46,7 @@ const cancelMaps = new Map();
 export default class Io {
   constructor(baseConf, customConf) {
     // 实例
-    this.instance = axios.create({ baseConf, ...customConf });
+    this.instance = axios.create({ baseConf, ...customConf })
     /**
      * 控制内置功能开启 - interceptor
      * 1. req: 机制导致它优先级最高。
@@ -54,40 +54,40 @@ export default class Io {
      */
     this.instance.interceptors.request.use((config) => {
       // 是否开启, 取消请求功能。
-      this.addCancelFunctional(config);
-      return config;
-    });
+      this.addCancelFunctional(config)
+      return config
+    })
     this.instance.interceptors.response.use(
       (response) => {
         // 取消请求功能。
-        this.removeCancelFunctional(response.config);
-        return response;
+        this.removeCancelFunctional(response.config)
+        return response
       },
       (error) => {
-        return error;
-      },
-    );
+        return error
+      }
+    )
   }
 
   addCancelFunctional(config) {
     if (config._isCancle) {
       // 取消上一次
-      this.removeCancel(config);
-      const controller = new AbortController();
+      this.removeCancel(config)
+      const controller = new AbortController()
       cancelMaps.set(config.url, () => {
-        controller.abort();
-      });
-      config.signal = controller.signal;
+        controller.abort()
+      })
+      config.signal = controller.signal
     }
-    return config;
+    return config
   }
 
   removeCancelFunctional(config) {
     if (config._isCancle) {
-      const preCancel = cancelMaps.get(config.url);
+      const preCancel = cancelMaps.get(config.url)
       if (preCancel) {
-        preCancel();
-        cancelMaps.delete(config.url);
+        preCancel()
+        cancelMaps.delete(config.url)
       }
     }
   }
@@ -95,42 +95,42 @@ export default class Io {
   // cancel&clear cancelMaps
   removeAllCancel() {
     for (const [key, preCancel] of cancelMaps) {
-      preCancel();
+      preCancel()
     }
-    cancelMaps.clear();
+    cancelMaps.clear()
   }
 
   // add req Interceptor(separate module interceptor)
   addReqInterceptor(reqInterceptor) {
-    const arrReq = this.handlerInterceptorParams(reqInterceptor);
+    const arrReq = this.handlerInterceptorParams(reqInterceptor)
     // install revser arrReq
-    arrReq.reverse();
+    arrReq.reverse()
     arrReq.forEach((fn) => {
-      this.instance.interceptors.request.use(fn);
-    });
+      this.instance.interceptors.request.use(fn)
+    })
   }
 
   // add res Interceptor(only one)
   addResInterceptor(successFunc, errorFunc) {
     if (typeof successFunc !== "function") {
-      throw "the first param type is function";
+      throw "the first param type is function"
     }
     if (errorFunc && typeof successFunc !== "function") {
-      throw "the first param type is function";
+      throw "the first param type is function"
     }
-    this.instance.interceptors.response.use(successFunc, errorFunc);
+    this.instance.interceptors.response.use(successFunc, errorFunc)
   }
 
   // tools
   handlerInterceptorParams(params) {
-    let arr;
+    let arr
     if (typeof arr === "function") {
-      arr = [params];
+      arr = [params]
     } else if (Array.isArray(params)) {
-      arr = params;
+      arr = params
     } else {
-      throw "parameter type is function or [func, func, ...]";
+      throw "parameter type is function or [func, func, ...]"
     }
-    return arr;
+    return arr
   }
 }
