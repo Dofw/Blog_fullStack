@@ -26,13 +26,13 @@ export function routers2MenuList(routes: RouteRecordRaw[]): MenuListRaw {
   const mapGroup = new Map()
   for (let i = 0; i < routes.length; i++) {
     if (!routes[i].meta) {
-      // 没有meta，也就没有收集的必要
+      // 没有meta，没有收集的必要
       continue
     }
 
     const metaItem: RouteMeta = routes[i].meta as RouteMeta
     if (!isExist(metaItem, "title")) {
-      // 父级没有title，子路由就没有必要继续了
+      // 没有title，子路由就没有必要继续了
       continue
     }
 
@@ -76,7 +76,7 @@ export function addTier(resource: MenuListRaw, tier: number | null): ResultType[
     return []
   }
   const arr: ResultType[] = []
-  let insideTier = tier || 0
+  const insideTier = tier || 0
 
   for (let i = 0; i < resource.length; i++) {
     const element = resource[i]

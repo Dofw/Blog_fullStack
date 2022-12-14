@@ -19,7 +19,7 @@ export default {
 </script>
 <script setup lang="ts">
 import MonacoEditor from "@/components/MonacoEditor/index.vue"
-import { tempCode } from "@/pages/examplePage/_sourceCode/demo1"
+import { tempCode } from "./code"
 </script>
 
 <style scoped lang="scss">
