@@ -138,6 +138,8 @@ function init() {
     height: 100%;
     &.editor-wrapper {
       border: 2px solid green;
+      border-radius: 10px;
+      overflow: hidden;
       @include theme-bShadow(vt-c-shadow-5);
       .instance {
         width: 100%;

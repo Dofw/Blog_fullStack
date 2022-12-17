@@ -2,7 +2,7 @@
   <div class="asideContent">
     <div class="title" @click="onClick"></div>
     <el-scrollbar>
-      <el-menu :default-openeds="curRoutePath" :collapse="isCollapse">
+      <el-menu :default-openeds="curRoutePath" :collapse="globalStore.isCollapse">
         <RecursionMenu :data="data" />
       </el-menu>
     </el-scrollbar>
@@ -10,18 +10,14 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, withDefaults } from "vue"
+import { computed } from "vue"
 import { useRouter, useRoute } from "vue-router"
 import { triggerTheme } from "@/utils"
 import RecursionMenu from "./RecursionMenu.vue"
 import { routers2MenuList, addTier } from "../utils/index"
+import useGlobalStore from "@/stores/useGlobalStore"
 
-interface Props {
-  isCollapse: boolean
-}
-withDefaults(defineProps<Props>(), {
-  isCollapse: true
-})
+const globalStore = useGlobalStore()
 
 const routes = useRouter().options.routes
 const result = routers2MenuList(routes)

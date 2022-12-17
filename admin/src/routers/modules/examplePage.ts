@@ -1,5 +1,5 @@
 import type { RouteRecordRaw } from "vue-router"
-import HomeLayout from "@/layouts/HomeLayout.vue"
+import ExampleLayout from "@/layouts/ExampleLayout.vue"
 
 const modules = import.meta.globEager("/src/pages/examplePage/Vue/**/*.vue")
 const VueRoutes = parseModules(modules)
@@ -7,7 +7,7 @@ console.log(modules, VueRoutes)
 
 const examplePage: RouteRecordRaw = {
   path: "/example",
-  component: HomeLayout,
+  component: ExampleLayout,
   meta: {
     title: "Examples"
   },
