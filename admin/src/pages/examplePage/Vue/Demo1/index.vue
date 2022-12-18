@@ -74,6 +74,10 @@ const previewDom = ref(null)
 
       &.view {
         .view-dome__wrapper {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
           height: 100%;
           // 新拟态
           border-radius: 10px;
