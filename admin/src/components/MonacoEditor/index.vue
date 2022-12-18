@@ -101,7 +101,7 @@ function init(previweDom) {
   instance.value = monaco.editor.create(instanceDom.value, {
     value: props.tempCode,
     language: "html",
-    lineNumbers: "off", // 行数
+    lineNumbers: "on", // 行数
     roundedSelection: true, // ?
     scrollBeyondLastLine: false, //滚动到最后一行
     readOnly: false,

@@ -7,7 +7,7 @@
       <el-header style="padding: 0">
         <Header />
       </el-header>
-      <el-main style="padding: 0 15px">
+      <el-main style="padding: 0">
         <div class="main-wrapper">
           <router-view />
         </div>
@@ -24,7 +24,6 @@ import Header from "@/layouts/components/Header.vue"
 <style scoped lang="scss">
 .main-wrapper {
   height: 100%;
-  border: $border;
 
   width: 1500px;
   margin: 0 auto;

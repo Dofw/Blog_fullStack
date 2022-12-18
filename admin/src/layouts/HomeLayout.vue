@@ -1,27 +1,32 @@
 <template>
   <el-container>
     <el-aside width="auto">
-      <LeftMenu :isCollapse="isCollapse" />
+      <LeftMenu />
     </el-aside>
     <el-container>
-      <el-header>
-        <el-radio-group v-model="isCollapse">
-          <el-radio-button :label="false">展开</el-radio-button>
-          <el-radio-button :label="true">折叠</el-radio-button>
-        </el-radio-group>
+      <el-header style="padding: 0">
+        <Header />
       </el-header>
       <el-main style="padding: 0 15px">
-        <router-view />
+        <div class="main-wrapper">
+          <router-view />
+        </div>
       </el-main>
     </el-container>
   </el-container>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue"
 import LeftMenu from "./components/LeftMenu.vue"
-
-const isCollapse = ref(true)
+import Header from "@/layouts/components/Header.vue"
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.main-wrapper {
+  height: 100%;
+  border: $border;
+
+  width: 1500px;
+  margin: 0 auto;
+}
+</style>
