@@ -1,14 +1,17 @@
 <template>
   <div class="demo1-container">
     <!-- 描述 -->
-    <div class="description">
-      <el-descriptions title="vue-compiler-xxx" size="small">
-        <el-descriptions-item class-name="my-content" label="简介:">1.基于compiler-sfc，实现Vue模板编译例子。2. 了解monaco-editor的基本使用。</el-descriptions-item>
-      </el-descriptions>
-    </div>
-    <!-- 编辑-预览-示例 -->
-    <div style="margin-top: 5px; width: 100%; height: calc(100% - 60px)">
-      <MonacoEditor :tempCode="tempCode"></MonacoEditor>
+    <div class="description">vue-compiler-sfc 实现编译效果</div>
+    <!-- 预览-示例 -->
+    <div class="preview-wrapper">
+      <MonacoEditor class="code" :tempCode="tempCode" :previewDom="previewDom"></MonacoEditor>
+
+      <el-tabs class="view" type="border-card">
+        <el-tab-pane label="demo">
+          <div ref="previewDom" class="view-dom"></div>
+        </el-tab-pane>
+        <el-tab-pane label="summary"> 总结： 1.基于compiler-sfc，实现Vue模板编译例子。2. 了解monaco-editor的基本使用。 </el-tab-pane>
+      </el-tabs>
     </div>
   </div>
 </template>
@@ -18,22 +21,44 @@ export default {
 }
 </script>
 <script setup lang="ts">
+import { ref } from "vue"
 import MonacoEditor from "@/components/MonacoEditor/index.vue"
 import { tempCode } from "./code"
+
+const previewDom = ref(null)
 </script>
 
 <style scoped lang="scss">
-.my-content {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
 .demo1-container {
   width: 100%;
-  height: 99%;
+  height: 100%;
   overflow: hidden;
   .description {
     height: 60px;
+    background-color: teal;
+  }
+
+  .preview-wrapper {
+    display: flex;
+    height: 100%;
+    > div {
+      width: 50% !important;
+      &.code {
+        height: 100%;
+      }
+
+      &.view {
+        border: $border;
+        margin-left: 15px;
+        height: 100%;
+        flex: none;
+        .view-dom {
+          width: 100%;
+          height: 100%;
+          background-color: goldenrod;
+        }
+      }
+    }
   }
 }
 </style>

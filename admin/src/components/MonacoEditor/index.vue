@@ -1,50 +1,28 @@
 <template>
-  <div class="monaco-editor-container" v-bind="$attrs" :style="{ width, height }">
-    <!-- 布局一 -->
-    <div class="editor-wrapper" ref="resizeDom">
-      <div ref="instanceDom" class="instance"></div>
-    </div>
-    <!-- 布局二 -->
-    <div class="preview-wrapper">
-      <el-tabs v-model="activeName" class="demo-tabs">
-        <el-tab-pane label="编辑预览" name="first">
-          <!-- editor-preview-dom -->
-          <div ref="previewDom" class="preview"></div>
-        </el-tab-pane>
-        <el-tab-pane label="示例效果" name="second">
-          <!-- example -->
-          <slot name="example">添加示例...</slot>
-        </el-tab-pane>
-      </el-tabs>
-    </div>
-  </div>
+  <div class="monaco-editor-container" ref="instanceDom"></div>
 </template>
 
 <script setup>
-import { defineProps, ref, onMounted, onUnmounted } from "vue"
+import { useEventListener } from "@vueuse/core"
+import { defineProps, ref, onMounted, watch } from "vue"
 import { parse, compileTemplate, compileScript } from "vue/compiler-sfc"
 import monaco from "./monaco"
 import { compilerJS, compilerTemp } from "./util"
-// import { debounce } from "@/utils"
+import { debounce } from "@/utils"
 
 const props = defineProps({
-  width: {
-    type: String,
-    default: "100%"
-  },
-  height: {
-    type: String,
-    default: "100%"
-  },
   tempCode: {
     type: String,
     default: ""
+  },
+  previewDom: {
+    type: [Object],
+    default() {
+      return null
+    }
   }
 })
-const activeName = ref("first") // 默认
-const resizeDom = ref(null)
 const instanceDom = ref(null)
-const previewDom = ref(null)
 const instance = ref(null)
 const unwarp = (obj) => {
   // __v_raw在v3中，取原始对象的作用。
@@ -56,7 +34,6 @@ const unwarp = (obj) => {
 // 1. html 全局引入， 2. 修改app.use(xxx) eval, 3. 修改compilerJS 正则。如何实现运行时完成这一系列操作？？？
 const onCompiler = () => {
   const unMountTemp = `
-    console.log(window.appInstance)
     if(window.appInstance) {window.appInstance.unmount()}
   `
   eval(unMountTemp)
@@ -93,28 +70,38 @@ const onCompiler = () => {
 
     window.appInstance
       .use(ElementPlus)
-      .mount(previewDom.value)
+      .mount(props.previewDom)
   `
   eval(mountTemp)
 }
 
-// const resizeFunc = debounce((e) => {
-//   init()
-// }, 200)
 onMounted(() => {
-  // window.addEventListener("resize", resizeFunc)
-  init()
+  init(props.previweDom)
 })
 
-onUnmounted(() => {
-  // window.removeEventListener("resize", resizeFunc)
-})
+// 初始阶段，dom 为 null
+watch(
+  () => props.previewDom,
+  () => {
+    onCompiler()
+  },
+  { deep: true }
+)
 
-function init() {
+// AnthonyFu:事件监听-销毁
+useEventListener(
+  window,
+  "resize",
+  debounce(() => {
+    onCompiler()
+  }, 200)
+)
+
+function init(previweDom) {
   instance.value = monaco.editor.create(instanceDom.value, {
     value: props.tempCode,
     language: "html",
-    lineNumbers: "on", // 行数
+    lineNumbers: "off", // 行数
     roundedSelection: true, // ?
     scrollBeyondLastLine: false, //滚动到最后一行
     readOnly: false,
@@ -122,58 +109,21 @@ function init() {
       // 关闭小地图
       enabled: false
     },
-    theme: "vs-light"
+    theme: "vs-dark"
   })
-  onCompiler()
+
+  if (previweDom) {
+    onCompiler()
+  }
 }
 </script>
 
 <style lang="scss" scoped>
 .monaco-editor-container {
-  display: flex;
   width: 100%;
   height: 100%;
-  > div {
-    width: 50%;
-    height: 100%;
-    &.editor-wrapper {
-      border: 2px solid green;
-      border-radius: 10px;
-      overflow: hidden;
-      @include theme-bShadow(vt-c-shadow-5);
-      .instance {
-        width: 100%;
-        height: 100%;
-      }
-    }
-
-    &.preview-wrapper {
-      margin-left: 5px;
-      @include theme-bShadow(vt-c-shadow-5);
-      .preview {
-        width: 100%;
-        height: 100%;
-      }
-    }
-  }
-}
-
-//tabs标签页
-.demo-tabs {
-  width: 100%;
-  height: 100%;
-  padding: 0 10px;
-
-  :deep(.el-tabs__content) {
-    height: 91%;
-
-    .el-tab-pane {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-  }
+  border-radius: 10px;
+  overflow: hidden;
+  @include theme-bShadow(vt-c-shadow-5);
 }
 </style>

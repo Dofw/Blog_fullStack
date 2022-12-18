@@ -8,7 +8,6 @@ export const tempCode = `
 import {ElButton} from 'element-plus'
     import { ref, onMounted } from 'vue'
       onMounted(() => {
-          console.log(123)
       })
     const text = ref('init')
     let i = 1

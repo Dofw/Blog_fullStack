@@ -7,6 +7,7 @@ console.log(modules, VueRoutes)
 
 const examplePage: RouteRecordRaw = {
   path: "/example",
+  redirect: "/example/vue/Demo1",
   component: ExampleLayout,
   meta: {
     title: "Examples"

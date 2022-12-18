@@ -25,7 +25,6 @@ import Header from "@/layouts/components/Header.vue"
 .main-wrapper {
   height: 100%;
   border: $border;
-  border-radius: 15px;
 
   width: 1500px;
   margin: 0 auto;
