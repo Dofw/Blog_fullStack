@@ -1,29 +1,20 @@
 import type { RouteRecordRaw } from "vue-router"
 import ExampleLayout from "@/layouts/ExampleLayout.vue"
 
-const modules = import.meta.globEager("/src/pages/examplePage/Vue/**/*.vue")
+const modules = import.meta.globEager("/src/pages/examplePage/**/*.vue")
 const VueRoutes = parseModules(modules)
 console.log(modules, VueRoutes)
 
 const examplePage: RouteRecordRaw = {
   path: "/example",
-  redirect: "/example/vue/Demo1",
+  redirect: "/example/Dofw/Demo1",
   component: ExampleLayout,
   meta: {
     title: "Examples"
   },
   children: [
     // Vue
-    ...VueRoutes,
-    // React
-    {
-      path: "/example/React/1",
-      component: () => import("@/pages/examplePage/Vue/demo1.vue"),
-      meta: {
-        group: "React",
-        title: "react-demo1"
-      }
-    }
+    ...VueRoutes
   ]
 }
 
@@ -32,12 +23,19 @@ function parseModules(modules: any) {
   const Comps = []
   for (const key in modules) {
     const paths = key.split("/")
+
+    // 过滤掉examplePage/*.vue, examplePage/*/*.vue
+    if (paths.length === 5 || paths.length === 6) continue
+
+    // componnets 下的vue过滤掉
+    if (paths.includes("componnets")) continue
+
     const fileType = paths[paths.length - 3] // xxx/Demo1/index.vue
     const endName = paths[paths.length - 2] // xxx/index.vue
 
     // route 格式
     Comps.push({
-      path: `/example/vue/${endName}`,
+      path: `/example/${fileType}/${endName}`,
       component: modules[key].default,
       meta: {
         group: fileType,
