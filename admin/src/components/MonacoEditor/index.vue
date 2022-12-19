@@ -1,5 +1,7 @@
 <template>
-  <div class="monaco-editor-container" ref="instanceDom"></div>
+  <div class="monaco-editor-container">
+    <div class="monaco-editor-wrapper" ref="instanceDom"></div>
+  </div>
 </template>
 
 <script setup>
@@ -75,6 +77,10 @@ const onCompiler = () => {
   eval(mountTemp)
 }
 
+const handler = () => {
+  onCompiler()
+}
+
 onMounted(() => {
   init(props.previweDom)
 })
@@ -125,5 +131,9 @@ function init(previweDom) {
   border-radius: 10px;
   overflow: hidden;
   @include theme-bShadow(vt-c-shadow-5);
+  .monaco-editor-wrapper {
+    width: 100%;
+    height: 100%;
+  }
 }
 </style>

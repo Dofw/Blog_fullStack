@@ -3,7 +3,7 @@ import { ref } from "vue"
 
 export default defineStore("globalStore", () => {
   // menu 缩放
-  const isCollapse = ref(true)
+  const isCollapse = ref(false)
 
   return {
     isCollapse

@@ -4,11 +4,8 @@
     <div class="preview-wrapper">
       <!-- 组件集合 -->
       <el-tabs class="view" type="border-card">
-        <el-tab-pane lazy label="index.vue">
-          <MonacoEditor :tempCode="tempCode"></MonacoEditor>
-        </el-tab-pane>
-        <el-tab-pane lazy label="index2.vue">
-          <MonacoEditor :tempCode="tempCode"></MonacoEditor>
+        <el-tab-pane lazy :label="itemCode.componentName" v-for="itemCode in codeOptions" :key="itemCode.componentName">
+          <MonacoEditor :tempCode="itemCode.code"></MonacoEditor>
         </el-tab-pane>
       </el-tabs>
 
@@ -29,7 +26,7 @@ export default {
 </script>
 <script setup lang="ts">
 import MonacoEditor from "@/components/MonacoEditor/index.vue"
-import { tempCode } from "./code"
+import { codeOptions } from "./codes/_code"
 </script>
 
 <style scoped lang="scss">
