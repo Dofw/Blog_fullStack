@@ -1,5 +1,5 @@
 <template>
-  <el-form ref="ruleFormRef" :model="ruleForm" status-icon :rules="rules" label-width="120px" class="demo-ruleForm">
+  <el-form ref="ruleFormRef" :model="ruleForm" status-icon :rules="rules" label-width="100px" class="demo-ruleForm">
     <el-form-item label="Password" prop="pass">
       <el-input v-model="ruleForm.pass" type="password" autocomplete="off" />
     </el-form-item>
@@ -20,9 +20,9 @@
 import { reactive, ref } from "vue"
 import type { FormInstance } from "element-plus"
 
-const ruleFormRef = ref<FormInstance>({})
+const ruleFormRef = ref<FormInstance>({} as FormInstance)
 const ruleForm = reactive({
-  pass: "",
+  pass: "123",
   checkPass: "",
   age: ""
 })
@@ -35,8 +35,12 @@ const rules = reactive({
 })
 
 // 提交、撤销
-const submit = (instance: FormInstance): void => {}
-const cancle = (instance: FormInstance): void => {}
+const submit = (instance: FormInstance): void => {
+  instance.clearValidate()
+}
+const cancle = (instance: FormInstance): void => {
+  instance.resetFields()
+}
 </script>
 
 <style scoped></style>
