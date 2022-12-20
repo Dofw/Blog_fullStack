@@ -12,7 +12,9 @@
       <!-- 效果及总结 -->
       <el-tabs class="view" type="border-card">
         <el-tab-pane label="demo">
-          <div class="view-dome__wrapper"></div>
+          <div class="view-dome__wrapper">
+            <Example />
+          </div>
         </el-tab-pane>
         <el-tab-pane label="summary"> 总结： 1.基于compiler-sfc，实现Vue模板编译例子。2. 了解monaco-editor的基本使用。 </el-tab-pane>
       </el-tabs>
@@ -21,11 +23,12 @@
 </template>
 <script lang="ts">
 export default {
-  name: "vue-demo-2"
+  name: "Form-add-edit"
 }
 </script>
 <script setup lang="ts">
 import MonacoEditor from "@/components/MonacoEditor/index.vue"
+import Example from "./components/index.vue"
 import { codeOptions } from "./codes/_code"
 </script>
 

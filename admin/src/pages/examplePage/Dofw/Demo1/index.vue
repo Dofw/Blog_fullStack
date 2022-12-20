@@ -17,7 +17,7 @@
 </template>
 <script lang="ts">
 export default {
-  name: "vue-demo-1"
+  name: "compiler-demo"
 }
 </script>
 <script setup lang="ts">

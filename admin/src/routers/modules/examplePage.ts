@@ -28,7 +28,7 @@ function parseModules(modules: any) {
     if (paths.length === 5 || paths.length === 6) continue
 
     // componnets 下的vue过滤掉
-    if (paths.includes("componnets")) continue
+    if (paths.includes("components")) continue
 
     const fileType = paths[paths.length - 3] // xxx/Demo1/index.vue
     const endName = paths[paths.length - 2] // xxx/index.vue
