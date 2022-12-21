@@ -3,15 +3,9 @@
 </template>
 
 <script setup lang="ts">
-import type { FormData } from "./type"
-import type { FormInstance } from "element-plus"
-import type { Ref } from "vue"
+import type { FormData, BaseFormInstance } from "./type"
 import BaseForm from "@/pages/examplePage/Dofw/Demo2/components/BaseForm.vue"
 import { ref, onMounted, watchEffect, defineExpose } from "vue"
-
-interface BaseFormInstance extends Ref {
-  formInstance: FormInstance // BaseForm组件抛出的form实例。
-}
 
 const formData = ref<FormData>({
   pass: "default", //该属性由接口数据回填
@@ -42,13 +36,16 @@ const onCancle = (data: FormData) => {
 const baseForm = ref<BaseFormInstance>({} as BaseFormInstance)
 const reset = () => {
   baseForm.value.formInstance.clearValidate()
+  // baseForm.value.formInstance.resetFields()
+  // formData.value.pass = passData.value
+
   formData.value = {
     ...formData.value,
     pass: passData.value // 获取数据后的值。
   }
 }
 
-// 取消功能暴露
+// 取消功能暴露, 为dialog x 提供。
 defineExpose({
   reset
 })

@@ -45,7 +45,7 @@ const props = withDefaults(defineProps<Props>(), {
   }
 })
 
-// 表单数据
+// 表单数据，// 维持自己的状态。不影响外界
 const ruleForm = ref<FormData>({
   pass: "",
   checkPass: "",
@@ -54,7 +54,7 @@ const ruleForm = ref<FormData>({
 
 watchEffect(() => {
   // 深克隆一下。
-  ruleForm.value = props.formData
+  ruleForm.value = JSON.parse(JSON.stringify(props.formData))
 })
 
 // 验证规则：async-validator
@@ -66,10 +66,10 @@ const rules = reactive({
 
 // 提交、撤销
 const submit = (): void => {
-  $emits("submit", ruleForm)
+  $emits("submit", ruleForm.value)
 }
 const cancle = (): void => {
-  $emits("cancle", ruleForm)
+  $emits("cancle")
 }
 </script>
 
