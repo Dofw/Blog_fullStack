@@ -4,6 +4,7 @@ import { defineConfig } from "vite"
 import vue from "@vitejs/plugin-vue"
 import vueJsx from "@vitejs/plugin-vue-jsx"
 import checker from "vite-plugin-checker"
+import prismjs from "vite-plugin-prismjs"
 
 // Element-plus自动导入
 import AutoImport from "unplugin-auto-import/vite"
@@ -39,6 +40,9 @@ export default defineConfig({
           names: ["RouterLink", "RouterView"]
         }
       ]
+    }),
+    prismjs({
+      languages: ["json", "md"]
     })
   ],
   resolve: {
