@@ -1,6 +1,6 @@
 <template>
   <div class="demo1-container">
-    <div class="description">简介: vue-compiler-sfc 实现编译效果。全局引入ElementPlus、Vue3的CDN。</div>
+    <div class="description">简介: Form表单实现 视图、逻辑分离。</div>
     <div class="preview-wrapper">
       <!-- 组件集合 -->
       <el-tabs class="view" type="border-card">
@@ -65,7 +65,7 @@ const mdCode = ref(`
 
 5. 提供两个 $emit 外界的事件处理，submit、 cancle
 
-::: details
+::: tip
 const reset = () => {
   baseForm.value.formInstance.clearValidate()
   // 方式1
