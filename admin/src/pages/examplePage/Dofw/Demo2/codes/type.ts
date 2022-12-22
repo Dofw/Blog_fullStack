@@ -13,4 +13,8 @@ export interface BaseFormInstance extends Ref {
   formInstance: FormInstance // BaseForm组件抛出的form实例。
 }
 
+// AddForm、EditForm 添加reset方法
+export interface ComponentsAddRest extends Ref {
+  reset: () => void
+}
 `
