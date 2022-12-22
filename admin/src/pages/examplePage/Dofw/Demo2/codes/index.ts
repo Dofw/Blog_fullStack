@@ -1,21 +1,27 @@
 export const code = `
-  <template>
-    <div class="container" > 
-      <el-button @click="onChangeText">Default</el-button>
-      <div>block</div>
-    </div>
-  </template>
-  
-  <script setup>
-    import {ElButton} from 'element-plus'
-    import { ref, onMounted } from 'vue'
-      onMounted(() => {
-      })
-    const text = ref('测试, style为添加')
-    let i = 1
-    const onChangeText = () => {
-      text.value = text.value + i++
-    }
-  </script>
+<template>
+<div class="form-container">
+  <AddForm ref="addForm"></AddForm>
+  <EditForm ref="editForm" :formData="formData"></EditForm>
+</div>
+</template>
 
+<script setup lang="ts">
+import type { FormData, BaseFormInstance } from "./type"
+import AddForm from "@/pages/examplePage/Dofw/Demo2/components/AddForm.vue"
+import EditForm from "@/pages/examplePage/Dofw/Demo2/components/EditForm.vue"
+
+import { ref } from "vue"
+
+const addForm = ref<BaseFormInstance>({} as BaseFormInstance)
+const editForm = ref<BaseFormInstance>({} as BaseFormInstance)
+
+const formData = ref<FormData>({
+pass: "edit",
+checkPass: "edit",
+age: "edit"
+})
+</script>
+
+<style scoped></style>
   `

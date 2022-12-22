@@ -1,3 +1,4 @@
+export const code = `
 <template>
   <BaseForm ref="baseForm" :formData="_formData" @submit="onSubmit" @cancle="onCancle" />
 </template>
@@ -55,3 +56,5 @@ defineExpose({
 </script>
 
 <style scoped></style>
+
+`
