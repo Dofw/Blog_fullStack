@@ -158,8 +158,8 @@ eslint-plugin-vue
 - 写 Typescript 配置项的笔记，多看 typescript 官网。
 
 ```js
-import type { SomeThing } from "./some-module.js"
-export type { SomeThing }
+import type { SomeThing } from "./some-module.js";
+export type { SomeThing };
 ```
 
 **Ts 接口定义:**
@@ -181,7 +181,26 @@ type Parameters<T extends (...args: any) => any> = T extends (...args: infer P) 
 //matcher['addRoute']函数的参数...args, 此时 P 就为args。args有可能为1个、两个；因为router.addRoute函数有两个，参数数量不同。
 let parent: Parameters<typeof matcher['addRoute']>[1] | undefined
 
+Readonly<T>和 Partial<T>用处不小，因此它们与 Pick和 Record一同被包含进了TypeScript的标准库里：
 
+type Pick<T, K extends keyof T> = {
+    [P in K]: T[P];
+}
+type Record<K extends string, T> = {
+    [P in K]: T;
+}
+
+type Readonly<T> = {
+    readonly [P in keyof T]: T[P];
+}
+type Partial<T> = {
+    [P in keyof T]?: T[P];
+}
+
+Readonly， Partial和 Pick是同态的，但 Record不是。 因为 Record并不需要输入类型来拷贝属性，所以它不属于同态：
+
+type ThreeStringProps = Record<'prop1' | 'prop2' | 'prop3', string>
+非同态类型本质上会创建新的属性，因此它们不会从它处拷贝属性修饰符。
 
 ```
 
@@ -203,7 +222,7 @@ let parent: Parameters<typeof matcher['addRoute']>[1] | undefined
 css: {
   preprocessorOptions: {
     scss: {
-      additionalData: `@import '@/assets/scss/theme/sass_theme.scss';`
+      additionalData: `@import '@/assets/scss/theme/sass_theme.scss';`;
     }
   }
 }
@@ -246,23 +265,21 @@ css: {
 
 ### Sass
 
-1. @mixin中 的 @include 只有在该@mixin使用时被访问，如果被访问时，@include相对应的@mixin沒有定义。就会报错。
+1. @mixin 中 的 @include 只有在该@mixin 使用时被访问，如果被访问时，@include 相对应的@mixin 沒有定义。就会报错。
 
-
-
-### ★学习路线、新技能
+### ★ 学习路线、新技能
 
 #### 1. menorepo、博客搭建
 
-#### 2. CLI搭建
+#### 2. CLI 搭建
 
-#### 3. webpack、vite、plugin学习
+#### 3. webpack、vite、plugin 学习
 
 #### 4. cavase、svg、threejs
 
-#### 5. 阅读设计模式、VUE、webkit技术内幕书（不知道干啥的时候，看看）
+#### 5. 阅读设计模式、VUE、webkit 技术内幕书（不知道干啥的时候，看看）
 
-#### 6. js、ts、浏览器api基础巩固。
+#### 6. js、ts、浏览器 api 基础巩固。
 
 #### 7. Go、java、数据库学习
 
