@@ -2,10 +2,10 @@ export const code = `
 <template>
   <el-form ref="ruleFormRef" :model="ruleForm" status-icon :rules="rules" label-width="100px">
     <el-form-item label="Password" prop="pass">
-      <el-input v-model="ruleForm.pass" autocomplete="off" />
+      <el-input v-model="ruleForm.pass" />
     </el-form-item>
     <el-form-item label="Confirm" prop="checkPass">
-      <el-input v-model="ruleForm.checkPass" autocomplete="off" />
+      <el-input v-model="ruleForm.checkPass" />
     </el-form-item>
     <el-form-item label="Age" prop="age">
       <el-input v-model.number="ruleForm.age" />
@@ -19,7 +19,7 @@ export const code = `
 
 <script setup lang="ts">
 import { ref, reactive, defineProps, defineEmits, withDefaults, watchEffect, defineExpose } from "vue"
-import type { FormInstance } from "element-plus"
+import type { FormInstance, FormRules } from "element-plus"
 import type { FormData } from "./type"
 
 export interface Props {
@@ -59,14 +59,15 @@ watchEffect(() => {
 })
 
 // 验证规则：async-validator
-const rules = reactive({
-  pass: [{ require: true, trigger: "blur" }],
-  checkPass: [{ require: true, trigger: "blur" }],
-  age: [{ require: true, trigger: "blur" }]
+const rules = reactive<FormRules>({
+  pass: [{ required: true, trigger: "blur", message: "pass错误" }],
+  checkPass: [{ required: true, trigger: "blur", message: "checkPass错误" }],
+  age: [{ required: true, type: "number", trigger: "blur", message: "age错误" }]
 })
 
 // 提交、撤销
-const submit = (): void => {
+const submit = async (): Promise<void> => {
+  await ruleFormRef.value.validate()
   $emits("submit", ruleForm.value)
 }
 const cancle = (): void => {
@@ -75,4 +76,5 @@ const cancle = (): void => {
 </script>
 
 <style scoped></style>
+
 `

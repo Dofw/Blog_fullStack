@@ -4,7 +4,7 @@
     <div class="description">简介: vue-compiler-sfc 实现编译效果。全局引入ElementPlus、Vue3的CDN。</div>
     <!-- code-preview -->
     <div class="preview-wrapper">
-      <MonacoEditor class="code" :tempCode="tempCode" :previewDom="previewDom"></MonacoEditor>
+      <MonacoEditor class="code" :tempCode="tempCode" :previewDom="previewDom" :showBtn="true"></MonacoEditor>
 
       <el-tabs class="view" type="border-card">
         <el-tab-pane label="demo">

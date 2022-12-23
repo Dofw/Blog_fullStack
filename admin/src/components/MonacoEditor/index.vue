@@ -1,16 +1,19 @@
 <template>
   <div class="monaco-editor-container">
+    <div v-if="showBtn" class="btns">
+      <el-button @click="run">运行</el-button>
+    </div>
     <div class="monaco-editor-wrapper" ref="instanceDom"></div>
   </div>
 </template>
 
 <script setup>
-import { useEventListener } from "@vueuse/core"
+// import { useEventListener } from "@vueuse/core"
 import { defineProps, ref, onMounted, watch } from "vue"
 import { parse, compileTemplate, compileScript } from "vue/compiler-sfc"
 import monaco from "./monaco"
 import { compilerJS, compilerTemp } from "./util"
-import { debounce } from "@/utils"
+// import { debounce } from "@/utils"
 
 const props = defineProps({
   tempCode: {
@@ -22,6 +25,11 @@ const props = defineProps({
     default() {
       return null
     }
+  },
+
+  showBtn: {
+    type: Boolean,
+    default: false
   }
 })
 const instanceDom = ref(null)
@@ -77,33 +85,39 @@ const onCompiler = () => {
   eval(mountTemp)
 }
 
-const handler = () => {
-  onCompiler()
+const handler = (previewDom) => {
+  if (previewDom) {
+    onCompiler()
+  }
+}
+
+const run = () => {
+  handler(props.previewDom)
 }
 
 onMounted(() => {
-  init(props.previweDom)
+  init(props.previewDom)
 })
 
 // 初始阶段，dom 为 null
 watch(
   () => props.previewDom,
   () => {
-    onCompiler()
+    handler(props.previewDom)
   },
   { deep: true }
 )
 
 // AnthonyFu:事件监听-销毁
-useEventListener(
-  window,
-  "resize",
-  debounce(() => {
-    onCompiler()
-  }, 200)
-)
+// useEventListener(
+//   window,
+//   "resize",
+//   debounce(() => {
+//     //重新创建实例，适配容器变化。
+//   }, 200)
+// )
 
-function init(previweDom) {
+function init(previewDom) {
   instance.value = monaco.editor.create(instanceDom.value, {
     value: props.tempCode,
     language: "html",
@@ -118,14 +132,13 @@ function init(previweDom) {
     theme: "vs-dark"
   })
 
-  if (previweDom) {
-    onCompiler()
-  }
+  handler(previewDom)
 }
 </script>
 
 <style lang="scss" scoped>
 .monaco-editor-container {
+  position: relative;
   width: 100%;
   height: 100%;
   border-radius: 10px;
@@ -134,6 +147,15 @@ function init(previweDom) {
   .monaco-editor-wrapper {
     width: 100%;
     height: 100%;
+  }
+
+  .btns {
+    position: absolute;
+    z-index: 10;
+    right: 10px;
+    top: 10px;
+
+    display: flex;
   }
 }
 </style>
