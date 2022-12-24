@@ -27,7 +27,7 @@
 </template>
 <script lang="ts">
 export default {
-  name: "pagination-demo"
+  name: "vue-directive"
 }
 </script>
 <script setup lang="ts">
