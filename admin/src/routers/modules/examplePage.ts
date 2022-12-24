@@ -2,8 +2,9 @@ import type { RouteRecordRaw } from "vue-router"
 import ExampleLayout from "@/layouts/ExampleLayout.vue"
 
 const modules = import.meta.globEager("/src/pages/examplePage/**/*.vue")
+// const modules = import.meta.glob("/src/pages/examplePage/**/*.vue")
+console.log(modules)
 const VueRoutes = parseModules(modules)
-console.log(modules, VueRoutes)
 
 const examplePage: RouteRecordRaw = {
   path: "/example",
@@ -37,9 +38,10 @@ function parseModules(modules: any) {
     Comps.push({
       path: `/example/${fileType}/${endName}`,
       component: modules[key].default,
+      // component: modules[key], // 懒加载
       meta: {
         group: fileType,
-        title: modules[key].default.name // 组件名称
+        title: modules[key].default?.name || "demo" // 组件名称
       }
       // childre: null
     })

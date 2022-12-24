@@ -7,3 +7,7 @@ declare module "@kangc/v-md-editor"
 declare module "@kangc/v-md-editor/lib/theme/github.js"
 declare module "@kangc/v-md-editor/lib/theme/vuepress.js"
 declare module "prismjs"
+
+// 自己模块
+declare module "@dofw/**/*.ts"
+// declare module "@dofw/Demo4/components/directive"

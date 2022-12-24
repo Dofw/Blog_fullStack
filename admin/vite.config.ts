@@ -47,7 +47,10 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      "@": fileURLToPath(new URL("./src", import.meta.url))
+      "@": fileURLToPath(new URL("./src", import.meta.url)),
+      "@dofw": fileURLToPath(new URL("./src/pages/examplePage/Dofw", import.meta.url)),
+      "@yf": fileURLToPath(new URL("./src/pages/examplePage/Yf", import.meta.url)),
+      "@zx": fileURLToPath(new URL("./src/pages/examplePage/ZxDecent", import.meta.url))
     }
   },
   css: {

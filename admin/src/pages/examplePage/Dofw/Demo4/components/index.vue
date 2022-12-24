@@ -1,5 +1,6 @@
 <template>
-  <div>指令</div>
+  <h1>指令</h1>
+  <el-button>组件</el-button>
 </template>
 
 <script setup lang="ts"></script>
