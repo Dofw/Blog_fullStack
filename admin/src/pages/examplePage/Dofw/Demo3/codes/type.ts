@@ -1,3 +1,4 @@
+export const code = `
 import type { Ref } from "vue"
 
 // 参数类型
@@ -26,3 +27,6 @@ export interface ExposeType {
   list: Ref<ArrListType>
   total: Ref<number>
 }
+
+
+`

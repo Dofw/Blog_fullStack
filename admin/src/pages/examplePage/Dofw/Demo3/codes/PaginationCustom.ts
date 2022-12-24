@@ -1,3 +1,4 @@
+export const code = `
 <template>
   <div class="custom-pagination-container">
     <div class="content-wrapper" :style="contentStyle" v-loading="loading" element-loading-text="Loading..." element-loading-spinner="el-icon-loading">
@@ -145,3 +146,7 @@ function _sizeChange(value: number) {
   }
 }
 </style>
+
+
+
+`

@@ -1,3 +1,4 @@
+export const code = `
 <template>
   <CustomPagination :conditions="conditions" :getList="getList">
     <template v-slot:content="{ data }">
@@ -32,22 +33,22 @@ async function getList(params: Params, exposed: ExposeType) {
   setTimeout(() => {
     exposed.list.value = [
       {
-        field1: `${params.noPage}数据1`,
-        field2: `${params.noPage}功能1-1`,
-        field3: `${params.noPage}功能1-2`,
-        field4: `${params.noPage}功能1-`
+        field1: \`\${params.noPage}数据1\`,
+        field2: \`\${params.noPage}功能1-1\`,
+        field3: \`\${params.noPage}功能1-2\`,
+        field4: \`\${params.noPage}功能1\`
       },
       {
-        field1: `${params.noPage}数据2`,
-        field2: `${params.noPage}功能2-1`,
-        field3: `${params.noPage}功能2-2`,
-        field4: `${params.noPage}功能2-`
+        field1: \`\${params.noPage}数据2\`,
+        field2: \`\${params.noPage}功能2-1\`,
+        field3: \`\${params.noPage}功能2-2\`,
+        field4: \`\${params.noPage}功能2\`
       },
       {
-        field1: `${params.noPage}数据3`,
-        field2: `${params.noPage}功能3-1`,
-        field3: `${params.noPage}功能3-2`,
-        field4: `${params.noPage}功能3-`
+        field1: \`\${params.noPage}数据3\`,
+        field2: \`\${params.noPage}功能3-1\`,
+        field3: \`\${params.noPage}功能3-2\`,
+        field4: \`\${params.noPage}功能3\`
       }
     ]
     exposed.total.value = 50
@@ -57,3 +58,6 @@ async function getList(params: Params, exposed: ExposeType) {
 </script>
 
 <style lang="scss" scoped></style>
+
+
+`
