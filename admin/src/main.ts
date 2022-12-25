@@ -16,12 +16,10 @@ import "@kangc/v-md-editor/lib/theme/style/vuepress.css"
 import Prism from "prismjs"
 
 // 指令
-import testDir from "@dofw/Demo4/components/directive"
-
-console.log(testDir)
+import myLoading from "@dofw/Demo4/components/directive"
 
 VMdEditor.use(vuepressTheme, {
   Hljs: Prism
 })
 
-createApp(App).use(router).use(createPinia()).use(VMdEditor).directive("test", testDir).mount("#app")
+createApp(App).use(router).use(createPinia()).use(VMdEditor).directive("myloading", myLoading).mount("#app")
