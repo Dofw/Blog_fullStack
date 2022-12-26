@@ -1,3 +1,4 @@
+export const code = `
 <template>
   <div class="my-loading-container">
     <el-icon class="is-loading" :size="25" color="rgb(21, 95, 62)">
@@ -34,3 +35,6 @@ import { Loading } from "@element-plus/icons-vue"
   }
 }
 </style>
+
+
+`

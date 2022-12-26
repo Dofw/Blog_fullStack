@@ -1,3 +1,5 @@
+export const code = `
+<script> //高亮用script包起来
 import type { ObjectDirective } from "vue"
 import { createApp } from "vue"
 import Loading from "./Loading.vue"
@@ -54,3 +56,6 @@ function createLoading() {
 }
 
 export default vLoading
+</script>
+
+`

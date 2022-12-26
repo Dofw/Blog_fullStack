@@ -37,54 +37,82 @@ import { codeOptions } from "./codes/_code"
 import { ref } from "vue"
 
 const mdCode = ref(`
-## 总结分页业务
+## 指令应用
 
-### 解决的问题
+### 为什么 当同一个组件中多次使用了同一个 v-myloading="diffValue", 改变其中一个值 updated 钩子函数执行两次。
 
-1. 重复的组合 pagination、和数据区的布局样式问题。
+::: details
+  // vue/core 源码提取
+ 
+  ... ... 
 
-- 分析：共性是渲染一对数据、加分页。从布局上来看，整个应用应该保持统一。
+  const patchElement = (
+    n1: VNode,
+    n2: VNode,
+    parentComponent: ComponentInternalInstance | null,
+    parentSuspense: SuspenseBoundary | null,
+    isSVG: boolean,
+    slotScopeIds: string[] | null,
+    optimized: boolean
+  ) => {
 
-2. 重复的监听，pageParams、conditions 触发 getList 的逻辑组合。
+    ... ... 
 
-- 分析：pageParams 一般是相同风格属于共性，conditions 可能有变化设计为用户输入，getList 接口也应该是用户提供。
+    const el = (n2.el = n1.el!)
+    let { patchFlag, dynamicChildren, dirs } = n2
 
-### 需要做到的点
+    patchFlag |= n1.patchFlag & PatchFlags.FULL_PROPS
+    const oldProps = n1.props || EMPTY_OBJ
+    const newProps = n2.props || EMPTY_OBJ
+    let vnodeHook: VNodeHook | undefined | null // 另外的功能
 
-1. 使用用户提供的 getList 是在父组件，这里就需要解决子组件调用的过程中，传递{pageParams、conditions}合并参数 1、子组件需要暴露的响应式数据 exposed,包含内部 list、loading、total(均为 ref)。
+    ... ... 
 
-::: tip
+    if ((vnodeHook = newProps.onVnodeUpdated) || dirs) {
+      queuePostRenderEffect(() => {
+        vnodeHook && invokeVNodeHook(vnodeHook, parentComponent, n2, n1)
+        dirs && invokeDirectiveHook(n2, n1, parentComponent, 'updated')
+      }, parentSuspense)
+    }
+  }
 
-// 见接口类型
-export interface ExposeType {
-  loading: Ref<boolean>
-  list: Ref<ArrListType>
-  total: Ref<number>
-}
+  // 即只要触发组件 render 那么diff更新的过程中，每个 绑定v-myloading的 VNode 都会被patchElement到，只要dirs存在就会执行invokeDirectiveHook。
+
+  ... ... 
 
 :::
 
-2. 空数据展示，设置为外部使用者提供，均插入到插槽 content 的位置。空数据的分页展示在封装组件内部控制。
+处理方法:
 
-### 解决的重复的工作
+::: tip
+// 第一个改变，调用该函数，传入自己的的参数。即oldValue !== value
+// patchElement到第二个 v-myloading 时，传入自己的值。由于oldValue === value。故不做操作。element-plus中也是这样做的。
+if (binding.oldValue !== binding.value) {
+  ... ...
+}
+:::
 
-1. 深度监听 conoditions、深度监听 pageParams
+### 技巧
 
-2. onMounted 初始调用
+1. 使用 vue 的 createApp()
 
-3. 定义对应的响应式数据 list、total、loading
+::: tip
+const _root: HTMLElement = document.createElement("div")
+const app = createApp(Loading) // app应用，使用unmount
+const vm = app.mount(_root) // 获取vm.$el loading domTree
+_root.remove() //保持纯净环境
+:::
 
-4. 分页改变事件的逻辑编写。
+2. mounted 中 生成一个 loading-instance, 将 app、vm 绑定到该指令下的全局上下文中 el 上, 供整个声明周期使用。 使用 Symbol, 解决不覆盖 el 已有属性。
 
-### props 属性
+::: tip
+el[LOADING_INSTANCE] = {
+  vm: instance.vm,
+  app: instance.app
+}
+:::
 
-conditions：外界传递
-
-getList： 接口函数外界传递
-
-pagaStyle： 分页容器的样式对象
-
-contentStyle： 内容容器的样式对象
+3. VUE 官网 directive 使用中，提到：除了 el 外，其他参数都是只读的，不要更改它们。若你需要在不同的钩子间共享信息，推荐通过元素的 dataset attribute 实现。
 
 `)
 </script>

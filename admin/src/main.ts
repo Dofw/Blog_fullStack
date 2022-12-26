@@ -22,4 +22,4 @@ VMdEditor.use(vuepressTheme, {
   Hljs: Prism
 })
 
-createApp(App).use(router).use(createPinia()).use(VMdEditor).directive("myloading", myLoading).mount("#app")
+createApp(App).use(router).use(createPinia()).use(VMdEditor).directive("myLoading", myLoading).mount("#app")

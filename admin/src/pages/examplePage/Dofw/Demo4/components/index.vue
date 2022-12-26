@@ -1,10 +1,24 @@
 <template>
   <div class="directive-container">
-    <el-button v-myloading:foo.isShow="true">组件</el-button>
+    <el-button @click="onChange">改变</el-button>
+    <div class="test" v-myLoading="loading1"></div>
+    <div class="test" v-myLoading="loading2"></div>
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { ref } from "vue"
+
+const loading1 = ref(true)
+const loading2 = ref(true)
+
+const onChange = () => {
+  loading1.value = !loading1.value
+  setTimeout(() => {
+    loading2.value = !loading2.value
+  }, 3000)
+}
+</script>
 
 <style lang="scss" scoped>
 .directive-container {
@@ -12,21 +26,14 @@
 
   width: 400px;
   height: 300px;
-  border: 1px solid olivedrab;
 
-  .my-loading-container {
-    position: absolute;
-    left: 0;
-    top: 0;
+  display: flex;
 
-    width: 100%;
-    height: 100%;
-
-    border: 1px solid orange;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  .test {
+    z-index: 100;
+    width: 200px;
+    height: 150px;
+    border: 1px solid green;
   }
 }
 </style>
