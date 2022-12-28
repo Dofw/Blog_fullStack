@@ -3,14 +3,14 @@
     <div class="description">简介: canvas 练习</div>
     <div class="preview-wrapper">
       <!-- 组件集合 -->
-      <el-tabs class="view" type="border-card">
+      <!-- <el-tabs class="view" type="border-card">
         <el-tab-pane lazy :label="itemCode.componentName" v-for="itemCode in codeOptions" :key="itemCode.componentName">
           <MonacoEditor :tempCode="itemCode.code"></MonacoEditor>
         </el-tab-pane>
-      </el-tabs>
+      </el-tabs> -->
 
       <!-- 效果及总结 -->
-      <el-tabs class="view" type="border-card">
+      <el-tabs class="view" style="width: 100%" type="border-card">
         <el-tab-pane label="demo">
           <div class="view-dome__wrapper">
             <Example />
@@ -31,9 +31,9 @@ export default {
 }
 </script>
 <script setup lang="ts">
-import MonacoEditor from "@/components/MonacoEditor/index.vue"
+// import MonacoEditor from "@/components/MonacoEditor/index.vue"
 import Example from "./components/index.vue"
-import { codeOptions } from "./codes/_code"
+// import { codeOptions } from "./codes/_code"
 import { ref } from "vue"
 
 const mdCode = ref(`
@@ -81,7 +81,7 @@ const mdCode = ref(`
     > div {
       border-radius: $radius;
       height: 100%;
-      width: 50% !important;
+      // width: 50% !important;
 
       &.view {
         .view-dome__wrapper {
