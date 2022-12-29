@@ -2,25 +2,29 @@
   <div class="canvas-container">
     <canvas id="canvas-instance" width="739" height="335" style="width: 739px; height: 335px"></canvas>
     <canvas id="canvas-instance2" width="739" height="335" style="width: 739px; height: 335px; background-color: #000"></canvas>
+
+    <canvas id="canvas-instance3" width="739" height="335" style="width: 739px; height: 335px; background-color: #000"></canvas>
+    <canvas id="canvas-instance4" width="739" height="335" style="width: 739px; height: 335px; background-color: #000"></canvas>
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { onMounted } from "vue"
 import imgUrl from "@/assets/vue_bg.jpeg"
-import snowUrl from "@/assets/snow.png"
+// import snowUrl from "@/assets/snow.png"
 
 onMounted(() => {
   initBg()
   snow()
+  motion()
 })
 
 /**
  *  背景轮播效果
  */
 function initBg() {
-  const cs: HTMLCanvasElement = document.getElementById("canvas-instance") as HTMLCanvasElement
-  const ctx: CanvasRenderingContext2D = cs.getContext("2d") as CanvasRenderingContext2D
+  const cs = document.getElementById("canvas-instance")
+  const ctx = cs.getContext("2d")
 
   const img = new Image()
   let imgW = 0
@@ -29,7 +33,7 @@ function initBg() {
   let clearW = 0
   let clearH = 0
 
-  img.onload = function (e: any) {
+  img.onload = function (e) {
     imgW = e.path[0].naturalWidth
     imgH = e.path[0].naturalHeight
 
@@ -82,8 +86,8 @@ function initBg() {
  * snow
  */
 function snow() {
-  const canvas: HTMLCanvasElement = document.getElementById("canvas-instance2") as HTMLCanvasElement
-  const ctx: CanvasRenderingContext2D = canvas.getContext("2d") as CanvasRenderingContext2D
+  const canvas = document.getElementById("canvas-instance2")
+  const ctx = canvas.getContext("2d")
 
   // Set the canvas dimensions to match the window size
   canvas.width = window.innerWidth
@@ -136,6 +140,151 @@ function snow() {
   // Start the animation
   animate()
 }
+
+/**
+ * 单个球的运用
+ */
+function motion() {
+  const canvas = document.getElementById("canvas-instance3")
+  const ctx = canvas.getContext("2d")
+
+  // 所有小球配置对样、ctx、速度v、时间t、
+  const itemsOption = [] // 记录options
+  const itemNums = 1 // 模型个数
+  const itemSize = 30 // 单个模型的大小
+
+  for (let i = 0; i < itemNums; i++) {
+    itemsOption.push({
+      // 样式相关
+      size: itemSize,
+      color: "#fff",
+
+      // 拥有自己的速度、运动方向
+      speed: 10,
+      tangent: Math.random() * 2, // 切线y/x的值
+
+      // 记录前一个点
+      sx: Math.random() * (canvas.width - 2 * itemSize) + itemSize,
+      sy: Math.random() * (canvas.height - 2 * itemSize) + itemSize,
+      sTime: 0,
+
+      // 目标点
+      x: Math.random() * (canvas.width - 2 * itemSize) + itemSize,
+      y: Math.random() * (canvas.height - 2 * itemSize) + itemSize,
+      time: 0
+    })
+  }
+
+  function run() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+    for (let i = 0; i < itemsOption.length; i++) {
+      const option = itemsOption[i]
+
+      ctx.beginPath()
+      ctx.arc(option.x, option.y, option.size, 0, Math.PI * 2)
+      ctx.fillStyle = option.color
+      ctx.fill()
+
+      // 跟新当前坐标
+      option.sx = option.x
+      option.sy = option.y
+
+      // update目标点
+      if (option.sx > canvas.width - option.size) {
+        // 当前切线
+        let curAngle = Math.atan(option.tangent)
+        curAngle = (curAngle * 180) / Math.PI
+
+        let resultAngle
+        // 计算发射角度,
+        if (curAngle <= 0) {
+          resultAngle = 180 - curAngle
+        } else {
+          resultAngle = 180 - curAngle
+        }
+
+        option.tangent = (resultAngle * Math.PI) / 180
+      }
+
+      if (option.sx < option.size) {
+        // 当前切线
+        let curAngle = Math.atan(option.tangent)
+        curAngle = (curAngle * 180) / Math.PI
+
+        let resultAngle
+        // 计算发射角度
+        if (curAngle < 0) {
+          resultAngle = -curAngle
+        } else {
+          resultAngle = -curAngle
+        }
+        option.tangent = (resultAngle * Math.PI) / 180
+      }
+
+      if (option.sy > canvas.height - option.size) {
+        // 当前切线
+        let curAngle = Math.atan(option.tangent)
+        curAngle = (curAngle * 180) / Math.PI
+
+        let resultAngle
+        console.log("下", curAngle)
+
+        // 计算发射角度
+        if (curAngle <= 0) {
+          resultAngle = -curAngle
+        } else {
+          resultAngle = 180 - curAngle
+        }
+
+        option.tangent = (resultAngle * Math.PI) / 180
+      }
+
+      if (option.sy <= option.size) {
+        // 当前切线
+        let curAngle = Math.atan(option.tangent)
+        curAngle = (curAngle * 180) / Math.PI
+
+        let resultAngle
+        console.log("上", curAngle)
+        // 计算发射角度
+        if (curAngle <= 0) {
+          resultAngle = 180 - curAngle
+        } else {
+          resultAngle = -curAngle
+        }
+
+        option.tangent = (resultAngle * Math.PI) / 180
+      }
+
+      // 时间间隔
+      const curTime = Date.now()
+      // const spaceTime = curTime - option.sTime
+      const spaceTime = 0.2
+      option.sTime = curTime
+
+      // 根据运动函数，起点、运动间隔、速度、加速度等，计算出下一个点。
+      const end = uniformMotion(option.sx, option.sy, spaceTime, option.speed, option.tangent)
+      option.x = end.x
+      option.y = end.y
+    }
+
+    requestAnimationFrame(run)
+  }
+
+  run()
+}
+
+function uniformMotion(sx, sy, spaceTime, v, angle) {
+  // 时间按照ms
+  const offsetX = spaceTime * v * Math.cos(angle)
+  const offsetY = -(spaceTime * v * Math.sin(angle))
+
+  return {
+    x: sx + offsetX,
+    y: sy + offsetY
+  }
+}
 </script>
 
 <style lang="scss" scoped>
@@ -151,6 +300,13 @@ function snow() {
     position: absolute;
     height: 100%;
     &:nth-of-type(2) {
+      left: 740px;
+    }
+    &:nth-of-type(3) {
+      top: 330px;
+    }
+    &:nth-of-type(4) {
+      top: 330px;
       left: 740px;
     }
   }
