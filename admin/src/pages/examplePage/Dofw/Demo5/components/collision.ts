@@ -18,7 +18,7 @@ export default function collision() {
   const ctx: CanvasRenderingContext2D = canvas.getContext("2d") as CanvasRenderingContext2D
 
   const allBalls: BallInstance[] = []
-  const num = 4
+  const num = 100
   const colors = ["#67C23A", "#E6A23C", "#F56C6C", "#409EFF"]
 
   // 小球模型
@@ -77,11 +77,9 @@ export default function collision() {
     for (let i = 0; i < allBalls.length; i++) {
       const ballInstance = allBalls[i]
 
-      // 去除重叠小球
-
       ballInstance.update()
     }
-    requestAnimationFrame(animation)
+    // requestAnimationFrame(animation)
   }
 
   /**
@@ -90,14 +88,31 @@ export default function collision() {
   function init() {
     for (let i = 0; i < num; i++) {
       const radius = _random(30)
+
       const option: BallOption = {
         radius,
         x: _randomRange(canvas.width, radius),
         y: _randomRange(canvas.height, radius),
+
         dx: _random(5),
         dy: _random(5),
         color: colors[i % colors.length]
       }
+
+      // 重叠，就更新参数
+      for (let j = 0; j < allBalls.length; j++) {
+        const element = allBalls[j]
+        if (doublication(option.x, option.y, option.radius, element.x, element.y, element.radius)) {
+          // 重复，在重新生成
+          const newRadius = _random(30)
+          option.radius = newRadius
+          option.x = _randomRange(canvas.width, newRadius)
+          option.y = _randomRange(canvas.height, newRadius)
+
+          j = -1
+        }
+      }
+
       allBalls.push(new Ball(option))
     }
   }
@@ -121,4 +136,22 @@ function _random(num: number) {
  */
 function _randomRange(num: number, padding: number) {
   return _random(num - 2 * padding) + padding
+}
+
+/**
+ * 小球的间距
+ * @param ball
+ * @param ball1
+ */
+function doublication(x: number, y: number, radius: number, x1: number, y1: number, radius1: number) {
+  const dx = x - x1
+  const dy = y - y1
+  const space = Math.sqrt(dx * dx + dy * dy)
+  const spaceRadius = Math.abs(radius + radius1)
+
+  if (space < spaceRadius) {
+    return true
+  } else {
+    return false
+  }
 }
