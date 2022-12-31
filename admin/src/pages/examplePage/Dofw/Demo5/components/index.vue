@@ -11,12 +11,14 @@
 <script setup>
 import { onMounted } from "vue"
 import imgUrl from "@/assets/vue_bg.jpeg"
+import collision from "@dofw/Demo5/components/collision"
 // import snowUrl from "@/assets/snow.png"
 
 onMounted(() => {
   initBg()
   snow()
-  motion()
+
+  collision()
 })
 
 /**
@@ -105,7 +107,23 @@ function snow() {
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
       radius: Math.random() * snowflakeSize,
-      speed: snowflakeSpeed + Math.random()
+      speed: snowflakeSpeed + Math.random(),
+
+      draw: function () {
+        // Update the snowflake's position
+        this.y += this.speed
+
+        // If the has fallen off the bottom of the screen, reset its position
+        if (this.y > canvas.height) {
+          this.y = 0
+        }
+
+        // Draw the
+        ctx.beginPath()
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2)
+        ctx.fillStyle = "white"
+        ctx.fill()
+      }
     })
   }
 
@@ -117,20 +135,7 @@ function snow() {
     // Draw each snowflake
     for (let i = 0; i < numSnowflakes; i++) {
       const snowflake = snowflakes[i]
-
-      // Update the snowflake's position
-      snowflake.y += snowflake.speed
-
-      // If the snowflake has fallen off the bottom of the screen, reset its position
-      if (snowflake.y > canvas.height) {
-        snowflake.y = 0
-      }
-
-      // Draw the snowflake
-      ctx.beginPath()
-      ctx.arc(snowflake.x, snowflake.y, snowflake.radius, 0, Math.PI * 2)
-      ctx.fillStyle = "white"
-      ctx.fill()
+      snowflake.draw()
     }
 
     // Animate again
@@ -139,151 +144,6 @@ function snow() {
 
   // Start the animation
   animate()
-}
-
-/**
- * 单个球的运用
- */
-function motion() {
-  const canvas = document.getElementById("canvas-instance3")
-  const ctx = canvas.getContext("2d")
-
-  // 所有小球配置对样、ctx、速度v、时间t、
-  const itemsOption = [] // 记录options
-  const itemNums = 1 // 模型个数
-  const itemSize = 30 // 单个模型的大小
-
-  for (let i = 0; i < itemNums; i++) {
-    itemsOption.push({
-      // 样式相关
-      size: itemSize,
-      color: "#fff",
-
-      // 拥有自己的速度、运动方向
-      speed: 10,
-      tangent: Math.random() * 2, // 切线y/x的值
-
-      // 记录前一个点
-      sx: Math.random() * (canvas.width - 2 * itemSize) + itemSize,
-      sy: Math.random() * (canvas.height - 2 * itemSize) + itemSize,
-      sTime: 0,
-
-      // 目标点
-      x: Math.random() * (canvas.width - 2 * itemSize) + itemSize,
-      y: Math.random() * (canvas.height - 2 * itemSize) + itemSize,
-      time: 0
-    })
-  }
-
-  function run() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height)
-
-    for (let i = 0; i < itemsOption.length; i++) {
-      const option = itemsOption[i]
-
-      ctx.beginPath()
-      ctx.arc(option.x, option.y, option.size, 0, Math.PI * 2)
-      ctx.fillStyle = option.color
-      ctx.fill()
-
-      // 跟新当前坐标
-      option.sx = option.x
-      option.sy = option.y
-
-      // update目标点
-      if (option.sx > canvas.width - option.size) {
-        // 当前切线
-        let curAngle = Math.atan(option.tangent)
-        curAngle = (curAngle * 180) / Math.PI
-
-        let resultAngle
-        // 计算发射角度,
-        if (curAngle <= 0) {
-          resultAngle = 180 - curAngle
-        } else {
-          resultAngle = 180 - curAngle
-        }
-
-        option.tangent = (resultAngle * Math.PI) / 180
-      }
-
-      if (option.sx < option.size) {
-        // 当前切线
-        let curAngle = Math.atan(option.tangent)
-        curAngle = (curAngle * 180) / Math.PI
-
-        let resultAngle
-        // 计算发射角度
-        if (curAngle < 0) {
-          resultAngle = -curAngle
-        } else {
-          resultAngle = -curAngle
-        }
-        option.tangent = (resultAngle * Math.PI) / 180
-      }
-
-      if (option.sy > canvas.height - option.size) {
-        // 当前切线
-        let curAngle = Math.atan(option.tangent)
-        curAngle = (curAngle * 180) / Math.PI
-
-        let resultAngle
-        console.log("下", curAngle)
-
-        // 计算发射角度
-        if (curAngle <= 0) {
-          resultAngle = -curAngle
-        } else {
-          resultAngle = 180 - curAngle
-        }
-
-        option.tangent = (resultAngle * Math.PI) / 180
-      }
-
-      if (option.sy <= option.size) {
-        // 当前切线
-        let curAngle = Math.atan(option.tangent)
-        curAngle = (curAngle * 180) / Math.PI
-
-        let resultAngle
-        console.log("上", curAngle)
-        // 计算发射角度
-        if (curAngle <= 0) {
-          resultAngle = 180 - curAngle
-        } else {
-          resultAngle = -curAngle
-        }
-
-        option.tangent = (resultAngle * Math.PI) / 180
-      }
-
-      // 时间间隔
-      const curTime = Date.now()
-      // const spaceTime = curTime - option.sTime
-      const spaceTime = 0.2
-      option.sTime = curTime
-
-      // 根据运动函数，起点、运动间隔、速度、加速度等，计算出下一个点。
-      const end = uniformMotion(option.sx, option.sy, spaceTime, option.speed, option.tangent)
-      option.x = end.x
-      option.y = end.y
-    }
-
-    requestAnimationFrame(run)
-  }
-
-  run()
-}
-
-function uniformMotion(sx, sy, spaceTime, v, angle) {
-  // 时间按照ms
-  const offsetX = spaceTime * v * Math.cos(angle)
-  const offsetY = -(spaceTime * v * Math.sin(angle))
-
-  return {
-    x: sx + offsetX,
-    y: sy + offsetY
-  }
 }
 </script>
 
