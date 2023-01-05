@@ -57,7 +57,7 @@ watchEffect(() => {
   ruleForm.value = JSON.parse(JSON.stringify(props.formData))
 })
 
-// 验证规则：async-validator
+// 验证规则：async-validator, 传值的方式必须使用blur的验证方式。
 const rules = reactive<FormRules>({
   pass: [{ required: true, trigger: "blur", message: "pass错误" }],
   checkPass: [{ required: true, trigger: "blur", message: "checkPass错误" }],
