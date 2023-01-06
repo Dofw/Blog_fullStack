@@ -19,7 +19,7 @@ export default function collision() {
   const ctx: CanvasRenderingContext2D = canvas.getContext("2d") as CanvasRenderingContext2D
 
   const allBalls: BallInstance[] = []
-  const num = 10
+  const num = 20
   const colors = ["#67C23A", "#E6A23C", "#F56C6C", "#409EFF"]
 
   // 小球模型
@@ -158,9 +158,14 @@ function _randomRange(num: number, padding: number) {
 }
 
 /**
- * 小球的间距
- * @param ball
- * @param ball1
+ * 计算小球间距是否碰撞
+ * @param x
+ * @param y
+ * @param radius
+ * @param x1
+ * @param y1
+ * @param radius1
+ * @returns
  */
 function doublication(x: number, y: number, radius: number, x1: number, y1: number, radius1: number) {
   const dx = x - x1

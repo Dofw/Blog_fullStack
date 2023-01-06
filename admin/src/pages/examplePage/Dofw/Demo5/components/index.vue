@@ -1,10 +1,8 @@
 <template>
   <div class="canvas-container">
-    <canvas id="canvas-instance" width="739" height="335" style="width: 739px; height: 335px"></canvas>
-    <canvas id="canvas-instance2" width="739" height="335" style="width: 739px; height: 335px; background-color: #000"></canvas>
-
-    <canvas id="canvas-instance3" width="739" height="335" style="width: 739px; height: 335px; background-color: #000"></canvas>
-    <canvas id="canvas-instance4" width="739" height="335" style="width: 739px; height: 335px; background-color: #000"></canvas>
+    <canvas id="canvas-instance" width="739" height="335" style="width: 50%; height: 335px"></canvas>
+    <canvas id="canvas-instance2" width="739" height="335" style="width: 50%; height: 335px; background-color: #000"></canvas>
+    <canvas id="canvas-instance3" width="739" height="335" style="width: 100%; height: calc(100% - 335px); background-color: #000"></canvas>
   </div>
 </template>
 
@@ -151,23 +149,18 @@ function snow() {
 .canvas-container {
   position: relative;
 
-  width: 95%;
-  height: 95%;
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
 
   border: 1px solid orange;
 
   canvas {
-    position: absolute;
-    height: 100%;
-    &:nth-of-type(2) {
-      left: 740px;
-    }
     &:nth-of-type(3) {
-      top: 330px;
-    }
-    &:nth-of-type(4) {
-      top: 330px;
-      left: 740px;
+      flex-shrink: 1;
     }
   }
 }
