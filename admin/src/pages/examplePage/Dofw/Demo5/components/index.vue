@@ -1,7 +1,7 @@
 <template>
   <div class="canvas-container">
-    <canvas id="canvas-instance" width="739" height="335" style="width: 50%; height: 335px"></canvas>
-    <canvas id="canvas-instance2" width="739" height="335" style="width: 50%; height: 335px; background-color: #000"></canvas>
+    <canvas id="canvas-instance" width="700" height="335" style="width: 50%; height: 335px"></canvas>
+    <canvas id="canvas-instance2" width="700" height="335" style="width: 50%; height: 335px; background-color: #000"></canvas>
     <canvas id="canvas-instance3" width="739" height="335" style="width: 100%; height: calc(100% - 335px); background-color: #000"></canvas>
   </div>
 </template>
@@ -159,9 +159,6 @@ function snow() {
   border: 1px solid orange;
 
   canvas {
-    &:nth-of-type(3) {
-      flex-shrink: 1;
-    }
   }
 }
 </style>
