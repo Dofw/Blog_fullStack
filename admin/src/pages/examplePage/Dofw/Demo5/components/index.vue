@@ -1,8 +1,8 @@
 <template>
   <div class="canvas-container">
-    <canvas id="canvas-instance" width="700" height="335" style="width: 50%; height: 335px"></canvas>
-    <canvas id="canvas-instance2" width="700" height="335" style="width: 50%; height: 335px; background-color: #000"></canvas>
-    <canvas id="canvas-instance3" width="739" height="335" style="width: 100%; height: calc(100% - 335px); background-color: #000"></canvas>
+    <canvas id="canvas-instance" width="400" height="200"></canvas>
+    <canvas id="canvas-instance2" width="500" height="200" style="background-color: #000"></canvas>
+    <canvas id="canvas-instance3" width="739" height="200" style="background-color: #000"></canvas>
   </div>
 </template>
 
@@ -29,7 +29,7 @@ function initBg() {
   const img = new Image()
   let imgW = 0
   let imgH = 0
-  let csW = 800
+  let csW = 800 // csw 宽度，img宽度不一样。
   let clearW = 0
   let clearH = 0
 
@@ -37,8 +37,8 @@ function initBg() {
     imgW = e.path[0].naturalWidth
     imgH = e.path[0].naturalHeight
 
-    cs.style.width = imgW + "px"
-    cs.style.height = imgH + "px"
+    cs.style.width = imgW - 300 + "px"
+    cs.style.height = imgH - 200 + "px"
 
     cs.width = csW
     cs.height = clearH = imgH
