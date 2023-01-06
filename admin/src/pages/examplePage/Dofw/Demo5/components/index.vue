@@ -154,11 +154,12 @@ function snow() {
   padding: 20px;
   box-sizing: border-box;
   display: flex;
+  align-content: space-evenly;
   flex-wrap: wrap;
 
-  border: 1px solid orange;
-
   canvas {
+    width: 100% !important;
+    height: 33% !important;
   }
 }
 </style>
