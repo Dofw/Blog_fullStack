@@ -89,7 +89,8 @@ const mdCode = ref(`
           align-items: center;
           justify-content: center;
 
-          height: 100%;
+          height: 765px;
+          overflow: auto;
           // 新拟态
           border-radius: 10px;
           background: linear-gradient(145deg, #cacaca, #f0f0f0);
@@ -97,7 +98,7 @@ const mdCode = ref(`
         }
 
         .summary-container {
-          height: 890px;
+          height: 765px;
           overflow: auto;
         }
 

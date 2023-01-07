@@ -1,7 +1,13 @@
 <template>
   <div class="asideContent">
-    <div class="title" @click="onClick"></div>
-    <el-scrollbar>
+    <div class="title" @click="onClick">
+      <div></div>
+      <transition>
+        <span v-if="!globalStore.isCollapse">FullStack_Blog</span>
+      </transition>
+    </div>
+
+    <el-scrollbar class="menu-container">
       <el-menu :default-openeds="curRoutePath" :collapse="globalStore.isCollapse">
         <RecursionMenu :data="data" />
       </el-menu>
@@ -43,15 +49,42 @@ function onClick() {
 .asideContent {
   width: 100%;
   height: 100vh;
+
   overflow: hidden;
   @include theme-bg(vt-c-bg);
 
   .title {
     width: 100%;
     height: 60px;
-    border: 1px solid green;
+
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+
+    > div {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      border: $border;
+      animation: logAnimation 3s ease infinite alternate;
+
+      margin: 0 7px;
+
+      background-image: url("@/assets/vue_logo.jpg");
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
   }
 
+  .menu-container {
+    padding: 10px 0;
+  }
   //ui库
   :deep(.el-scrollbar) {
     @include theme-bg(vt-c-bg);
@@ -61,6 +94,33 @@ function onClick() {
     }
 
     @include elMenu;
+  }
+
+  @keyframes logAnimation {
+    0% {
+      scale: 1;
+    }
+
+    100% {
+      scale: 1.1;
+    }
+  }
+
+  .v-enter-active,
+  .v-leave-active {
+    transition: all 0.5s ease;
+  }
+
+  .v-enter-from,
+  .v-leave-to {
+    width: 0;
+    opacity: 0;
+  }
+
+  .v-enter-to,
+  .v-leave-from {
+    width: 50px;
+    opacity: 1;
   }
 }
 </style>
