@@ -3,7 +3,8 @@
     <el-aside width="auto">
       <LeftMenu />
     </el-aside>
-    <el-container>
+    <el-container class="container-box">
+      <canvas class="content-bg"></canvas>
       <el-header style="padding: 0">
         <Header />
       </el-header>

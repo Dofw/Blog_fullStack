@@ -1,3 +1,5 @@
+import type { Ref } from "vue"
+
 // 面向对象的变成体验
 interface BallOption {
   radius: number
@@ -14,9 +16,14 @@ interface BallInstance extends BallOption {
   update: () => void
 }
 
-export default function collision() {
-  const canvas: HTMLCanvasElement = document.getElementById("canvas-instance3") as HTMLCanvasElement
+export default function collision(domRef: Ref<HTMLCanvasElement>) {
+  const canvas: HTMLCanvasElement = domRef.value
   const ctx: CanvasRenderingContext2D = canvas.getContext("2d") as CanvasRenderingContext2D
+
+  // 这里造成重新渲染, 后期研究
+  // const rectData = canvas.getBoundingClientRect()
+  // canvas.width = Math.floor(rectData.width)
+  // canvas.height = Math.floor(rectData.height)
 
   const allBalls: BallInstance[] = []
   const num = 20

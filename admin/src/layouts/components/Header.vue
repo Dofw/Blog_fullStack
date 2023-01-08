@@ -27,6 +27,6 @@ const onChangeCollapse = (value: any) => {
 <style lang="scss" scoped>
 .header-container {
   height: 100%;
-  background-color: olivedrab;
+  background-color: rgba(35, 142, 74, 0.9);
 }
 </style>

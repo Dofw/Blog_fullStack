@@ -2,21 +2,23 @@
   <div class="canvas-container">
     <canvas id="canvas-instance" width="400" height="200"></canvas>
     <canvas id="canvas-instance2" width="500" height="200" style="background-color: #000"></canvas>
-    <canvas id="canvas-instance3" width="739" height="200" style="background-color: #000"></canvas>
+    <canvas ref="collisionCanvasRef" width="500" height="200" style="background-color: #000"></canvas>
   </div>
 </template>
 
-<script setup>
-import { onMounted } from "vue"
+<script setup lang="ts">
+import { onMounted, ref } from "vue"
+import type { Ref } from "vue"
 import imgUrl from "@/assets/vue_bg.jpeg"
 import collision from "@dofw/Demo5/components/collision"
 // import snowUrl from "@/assets/snow.png"
 
+const collisionCanvasRef: Ref<HTMLCanvasElement> = ref({} as HTMLCanvasElement)
 onMounted(() => {
   initBg()
   snow()
 
-  collision()
+  collision(collisionCanvasRef)
 })
 
 /**
