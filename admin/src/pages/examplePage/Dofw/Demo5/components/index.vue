@@ -36,8 +36,8 @@ function initBg() {
   let clearH = 0
 
   img.onload = function (e) {
-    imgW = e.path[0].naturalWidth
-    imgH = e.path[0].naturalHeight
+    imgW = this.naturalWidth
+    imgH = this.naturalHeight
 
     cs.style.width = imgW - 300 + "px"
     cs.style.height = imgH - 200 + "px"
