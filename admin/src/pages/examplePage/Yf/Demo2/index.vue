@@ -1,6 +1,8 @@
 <template>
   <div class="demo1-container">
     <div class="description">简介: vue-compiler-sfc 实现编译效果。全局引入ElementPlus、Vue3的CDN。</div>
+    <div class="description">简介: vue-compiler-sfc 实现编译效果。全局引入ElementPlus、Vue3的CDN。</div>
+    <div class="description">简介: vue-compiler-sfc 实现编译效果。全局引入ElementPlus、Vue3的CDN。</div>
     <div class="preview-wrapper">
       <!-- 组件集合 -->
       <el-tabs class="view" type="border-card">
