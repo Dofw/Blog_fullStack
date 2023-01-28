@@ -1,13 +1,44 @@
+@use "sass:math";
+@use "sass:map";
+
 /* 只需要重写你需要的即可 */
 @forward "element-plus/theme-chalk/src/common/var.scss" with (
-  $colors: (
-    "primary": (
-      "base": green
+  $colors:
+    map.deep-merge(
+      (
+        "white": red,
+        "black": orange,
+        "primary": (
+          // 'base': #409eff,
+          "base": green
+        ),
+        // "success": (
+        //   "base": #67c23a
+        // ),
+        // "warning": (
+        //   "base": #e6a23c
+        // ),
+        // "danger": (
+        //   "base": #f56c6c
+        // ),
+        // "error": (
+        //   "base": #f56c6c
+        // ),
+        // "info": (
+        //   "base": #909399
+        // )
+      ),
+      ()
+    ),
+  $text-color:
+    map.merge(
+      (
+        "primary": green,
+        "regular": green,
+        "secondary": green,
+        "placeholder": green,
+        "disabled": green
+      ),
+      ()
     )
-  )
 );
-
-// 如果只是按需导入，则可以忽略以下内容。
-
-// 如果你想导入所有样式:
-// @use "element-plus/theme-chalk/src/index.scss" as *;

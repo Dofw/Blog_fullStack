@@ -1,7 +1,7 @@
 <template>
   <div class="monaco-editor-container">
     <div v-if="showBtn" class="btns">
-      <el-button @click="run">运行</el-button>
+      <el-button @click="run" type="primary">运行</el-button>
     </div>
     <div class="monaco-editor-wrapper" ref="instanceDom"></div>
   </div>

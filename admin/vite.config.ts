@@ -60,8 +60,7 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       scss: {
-        additionalData: `@import '@/assets/scss/theme/sass_theme.scss';`
-        // additionalData: `@import '@/assets/scss/theme/custom_element_theme.scss';`
+        additionalData: `@use '@/assets/scss/theme/sass_theme.scss' as *;`
       }
     }
   }
