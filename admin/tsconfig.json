@@ -1,12 +1,14 @@
 {
   "extends": "@vue/tsconfig/tsconfig.web.json",
   "include": ["env.d.ts", "components.d.ts", "auto-imports.d.ts", "src/**/*", "src/**/*.vue"],
+  "exclude": ["@dofw/*"],
   "compilerOptions": {
     "preserveValueImports": true,
     "isolatedModules": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@dofw/*": ["./src/pages/examplePage/Dofw/*"]
     }
   },
 

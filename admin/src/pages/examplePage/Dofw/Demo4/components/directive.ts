@@ -36,7 +36,9 @@ const vLoading: ObjectDirective = {
 
   unmounted(el) {
     const instance = el[LOADING_INSTANCE]
-    el.removeChild(instance.vm.$el) // 先清除
+
+    const $el = instance.vm.$el
+    $el?.parentNode?.removeChild($el) // bug, 父组件销毁了，在使用el.removeChild会报错，已经销毁过了。
     instance.app.unmount() // 再卸载应用
   }
 }

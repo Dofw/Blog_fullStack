@@ -14,6 +14,9 @@ import ElementPlus from "unplugin-element-plus/vite"
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  build: {
+    sourcemap: true
+  },
   server: {
     proxy: {
       "/admin": {

@@ -10,5 +10,4 @@ declare module "@kangc/v-md-editor/lib/theme/vuepress.js"
 declare module "prismjs"
 
 // 自己模块
-declare module "@dofw/**/*.ts"
-// declare module "@dofw/Demo4/components/directive"
+// declare module "@dofw/*" // tsconfig.json中也可以设置

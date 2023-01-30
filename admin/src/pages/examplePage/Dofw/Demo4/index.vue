@@ -114,6 +114,12 @@ el[LOADING_INSTANCE] = {
 
 3. VUE 官网 directive 使用中，提到：除了 el 外，其他参数都是只读的，不要更改它们。若你需要在不同的钩子间共享信息，推荐通过元素的 dataset attribute 实现。
 
+4. BUG 解决
+
+::: tip
+// 销毁组件前，先判断父组件是不是已经被销毁了。
+$el?.parentNode?.removeChild($el) // bug, 父组件销毁了，在使用el.removeChild会报错，已经销毁过了。
+:::
 `)
 </script>
 
