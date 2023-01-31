@@ -3,7 +3,6 @@ import { fileURLToPath, URL } from "url"
 import { defineConfig } from "vite"
 import vue from "@vitejs/plugin-vue"
 import vueJsx from "@vitejs/plugin-vue-jsx"
-import checker from "vite-plugin-checker"
 import prismjs from "vite-plugin-prismjs"
 
 // Element-plus自动导入

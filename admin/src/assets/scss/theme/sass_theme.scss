@@ -1,9 +1,19 @@
+/*
+ * @Created Date: 2022/12/14
+ * @Author: yangfan@163.com
+ * @Last Modidied: 2023/01/31
+ * @Modified By: luyujie 1686661978@qq.com
+ * @Reviewed Date: 2023
+ * @Reviewer: 1686661978@qq.com
+ * @Copyright: Copyright (c) 2023 xc 
+ */
 @use "custom_element_theme" as *;
 
 @import "./sass_variable.scss"; // 主题：背景、蒙层(正反色)、文本(正反色)、code、主题色(vue中的绿色，不同环境的亮度)
 @import "../elementui/index.scss"; // elementui 主题修改定义的 @mixin
 // 利用scss方案实现, 对兼容性友好。
 // css变量，仅仅操作变量，而不会增加规则。
+
 $themes: (
   dark: (
     vt-c-bg: map-get($variable, vt-c-black),
