@@ -3,7 +3,6 @@ import { createPinia } from "pinia"
 import router from "@/routers"
 import App from "./App.vue"
 import "@/assets/scss/reset.scss"
-import "element-plus/dist/index.css"
 
 // 指令
 import myLoading from "@dofw/Demo4/components/directive"
