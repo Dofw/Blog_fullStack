@@ -109,3 +109,11 @@ Content-Type: image/jpeg(与请求体的不同，是 MIME)
 内容 2
 
 --aaa-- (两个--结尾, 如何写，根据接口要求来定 )
+
+2. 二进制 类型(最常见、最简单)
+
+Content-Type: application/octet-stream
+
+x-ext: 文件的后缀名，.png; // 接口约定时设置请求头。
+
+请求体: 二进制数据

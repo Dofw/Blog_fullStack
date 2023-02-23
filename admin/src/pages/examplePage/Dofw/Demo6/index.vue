@@ -3,11 +3,11 @@
     <div class="description">简介: upload 相关知识汇总</div>
     <div class="preview-wrapper">
       <!-- 组件集合 -->
-      <el-tabs class="view" type="border-card">
+      <!-- <el-tabs class="view" type="border-card">
         <el-tab-pane lazy :label="itemCode.componentName" v-for="itemCode in codeOptions" :key="itemCode.componentName">
           <MonacoEditor :tempCode="itemCode.code"></MonacoEditor>
         </el-tab-pane>
-      </el-tabs>
+      </el-tabs> -->
 
       <!-- 效果及总结 -->
       <el-tabs class="view" style="width: 100%" type="border-card">
