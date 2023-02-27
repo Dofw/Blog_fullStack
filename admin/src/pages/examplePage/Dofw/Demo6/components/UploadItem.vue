@@ -1,21 +1,17 @@
 <template>
-  <div>{{ data.fileName }} - {{ data.percent }}</div>
+  <div>{{ data.option.url }} - {{ data.percent }}</div>
 </template>
 
 <script setup lang="ts">
+import type { RequestItem } from "./utils"
+
 import { defineProps, withDefaults } from "vue"
+
 interface Props {
-  data: {
-    [K: string]: string | number
-  }
+  data: RequestItem
 }
-withDefaults(defineProps<Props>(), {
-  data() {
-    return {
-      percent: 0
-    }
-  }
-})
+
+const props = withDefaults(defineProps<Props>(), {})
 </script>
 
 <style scoped></style>

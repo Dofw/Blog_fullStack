@@ -1,63 +1,100 @@
-interface Option {
+import { reactive } from "vue"
+export interface UploadRequestHeaders {
+  [k: string]: string
+}
+
+export interface Option {
   url: string
-  signal: any
-  max?: number
+  signal?: AbortSignal
+  headers?: UploadRequestHeaders
 }
 
-interface RequestItem {
-  request: () => Promise<void>
+export interface RequestItem {
+  index: number
+  percent: number
+  option: Option
+  request: () => Promise<string>
   cancel: () => void
+  result: null | any
+  success: boolean
 }
 
-/**
- * 解决请求的并发
- * 1. 同时请求个数 max: 5
- * 2. 同时支持请求的取消功能
- */
+export function executeQueues(queues: Option[], max: number) {
+  const queue: RequestItem[] = []
 
-const queue: RequestItem[] = []
-// const cancelMap = new Map()
+  let flagIndex = 0 // 标记顺序
+  let curNum = 0
+  let finishNum = 0
 
-const defaultMax = 5
-let curNum = 0
+  // 先生成同步的信息: 名称等等。
+  queues.forEach((option) => {
+    const item = createRequestItem(option)
+    queue.push(item)
+  })
 
-function io(option: Option) {
-  const item = createRequestItem(option)
-  queue.unshift(item)
+  const minMax = Math.min(max, queues.length) // 传入的max太大。
+  for (let i = 0; i < minMax; i++) {
+    run() //每次的请求
+  }
 
-  run()
-}
+  return queue
 
-async function run() {
-  if (curNum <= defaultMax) {
-    const item = queue.pop()
-    item && item.request()
+  async function run() {
+    // 控制请求上线
+    if (curNum >= queue.length) {
+      return
+    }
+    const item = queue[curNum]
     curNum++
-  }
-}
 
-/**
- * 创建一个请求对象
- * @param option 请求配置
- */
-function createRequestItem(option: Option): RequestItem {
-  const controller = new AbortController()
-  option.signal = controller.signal
+    try {
+      // success
+      const res = await item.request()
+      item.result = res
+      item.success = true
+    } catch (error) {
+      // error
+      item.result = error
+      item.success = false
+    } finally {
+      // 一个请求完成后
+      finishNum++
 
-  const item = {
-    request: async () => {
-      try {
-        const res = await request(option)
-        curNum--
-        return res
-      } catch (error) {
-        curNum--
-        throw error
+      // 异步等待所有请求完成后，resolve
+      if (finishNum === queue.length) {
+        console.log("over")
+        // resolve()
       }
-    },
-    cancel: controller.abort
+
+      run()
+    }
   }
-  return item
+
+  /**
+   * 创建一个请求对象
+   * @param option 请求配置
+   */
+  function createRequestItem(option: Option): RequestItem {
+    const controller = new AbortController()
+    option.signal = controller.signal
+
+    const index = flagIndex++
+    const item: RequestItem = reactive({
+      index, // 为每次的请求打上顺序标记。
+      option,
+      percent: 0,
+      result: null,
+      success: false,
+      request: async () => {
+        // 错误会从内部一直向外不断传递
+        const res = await request(item)
+        return res
+      },
+      cancel: controller.abort
+    })
+
+    return item
+  }
 }
 
 /**
@@ -65,19 +102,89 @@ function createRequestItem(option: Option): RequestItem {
  * @param option
  * @returns
  */
-export async function request(option: Option) {
-  await delay(1000)
-  run()
-  return option.url
+const CONTENT_TYPES = {
+  default: "multipart/form-data",
+  blob: "application/octet-stream"
 }
 
-/**
- * delay-tool
- */
-function delay(duration: number) {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(undefined)
-    }, duration)
+export function request(item: RequestItem): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const option = item.option
+    const headers = option.headers || ({} as UploadRequestHeaders)
+
+    let xml = new XMLHttpRequest()
+    // xml.open("POST", option.url)
+    // 设置header
+    if (!headers.contentType) {
+      // 默认:传统
+      headers.contentType = CONTENT_TYPES.default
+    }
+    for (const key in headers) {
+      const value = headers[key]
+      if (value === CONTENT_TYPES.blob) {
+        // xml.setRequestHeader("X-Ext", file.extension) // 二进制格式,看后端需要。
+      }
+      xml.setRequestHeader(key, value)
+    }
+
+    /**
+     * signal: 添加事件
+     */
+    let onCanceled: (cancel: any) => void
+    if (option.signal) {
+      onCanceled = function onCanceled(cancel: any) {
+        if (!xml) {
+          return
+        }
+        reject(!cancel ? "abort" : cancel) // reject
+        xml.abort()
+        xml = null
+      }
+      option.signal.aborted ? onCanceled(undefined) : option.signal.addEventListener("abort", onCanceled)
+    }
+
+    /**
+     * 清除副作用
+     * @returns
+     */
+    function clean() {
+      if (!xml) {
+        return
+      }
+      option.signal && option.signal.removeEventListener("abort", onCanceled)
+      xml = null
+    }
+
+    /**
+     * state: 完成清空 xml = null, 垃圾回收掉。
+     * @returns
+     */
+    xml.onreadystatechange = () => {
+      if (!xml || xml.readyState !== 4) {
+        return
+      }
+
+      if (xml.status === 0 && !(xml.responseURL && xml.responseURL.indexOf("file:") === 0)) {
+        return
+      }
+
+      resolve("")
+      setTimeout(clean)
+    }
+
+    /**
+     * error
+     */
+
+    xml.onerror = (error) => {
+      reject(error) // reject
+    }
+
+    /**
+     * progress
+     */
+    xml.onprogress = (e) => {}
+
+    xml.send("上传的数据")
   })
 }

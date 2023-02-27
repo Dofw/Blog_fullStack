@@ -3,26 +3,26 @@
     <!-- 上传控件 -->
     <div class="upload-wrapper">
       <Upload />
-      <input ref="inputRef" type="file" @change="onChange" accept=".pdf" />
+      <input ref="inputRef" type="file" @change="onChange1" accept=".pdf" />
     </div>
 
-    <!-- <UploadItem :data="data"></UploadItem> -->
+    <UploadItem v-for="item in data" :data="item" :key="item.index"></UploadItem>
   </div>
 </template>
 
 <script setup lang="ts">
+import { executeQueues } from "./utils"
+
+import type { Option, RequestItem } from "./utils"
 import UploadItem from "./UploadItem.vue"
 import { Upload } from "@element-plus/icons-vue"
 import { ref } from "vue"
 import type { Ref } from "vue"
-const data = ref({
-  fileName: "文件1",
-  percent: 1
-})
 
 const inputRef: Ref<HTMLInputElement> = ref({} as HTMLInputElement)
 
-const onChange = (e: Event) => {
+const data: Ref<RequestItem[]> = ref([])
+const onChange1 = (e: Event) => {
   const files = inputRef.value.files
 
   const file = files && files[0]
@@ -33,6 +33,20 @@ const onChange = (e: Event) => {
     formData.append("name1", file, file.name)
     console.log(formData)
   }
+
+  // {
+  //   url:xxx, // 用户提供
+  //   percent, // 用户提供
+  //   success, // 用户提供
+  //   error, // 用户提供
+
+  //   // 上传文件信息
+  //   fileName: xxx,
+  //   size: xxx,
+  //   body:xxx,
+  // }
+
+  // data.value = executeQueues(arr, 3)
 }
 </script>
 

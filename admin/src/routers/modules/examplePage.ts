@@ -3,7 +3,7 @@ import ExampleLayout from "@/layouts/ExampleLayout.vue"
 
 const modules = import.meta.globEager("/src/pages/examplePage/**/*.vue")
 // const modules = import.meta.glob("/src/pages/examplePage/**/*.vue")
-console.log(modules)
+// console.log(modules)
 const VueRoutes = parseModules(modules)
 
 const examplePage: RouteRecordRaw = {
