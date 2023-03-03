@@ -7,6 +7,6 @@ export class AdminController {
   @ApiOperation({ summary: '初始' })
   @Get()
   index(): string {
-    return 'hellow!';
+    return 'admin.controller-hellow!';
   }
 }
