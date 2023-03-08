@@ -1,10 +1,17 @@
-import { Body, Controller, Get, Req, Res } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  UseInterceptors,
+  UploadedFile,
+} from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('uploads')
 export class UploadsController {
-  @Get()
-  upload(@Req() req: any) {
-    // res.send('123');
-    return 'upload';
+  @Post()
+  @UseInterceptors(FileInterceptor('files'))
+  upload(@UploadedFile() files) {
+    console.log(files);
+    return files;
   }
 }

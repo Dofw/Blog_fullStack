@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import { executeQueues } from "./utils"
+import { executeQueues, requestTest } from "./utils"
 
 import type { Option, RequestItem } from "./utils"
 import UploadItem from "./UploadItem.vue"
@@ -29,22 +29,15 @@ const onChange1 = (e: Event) => {
   if (file) {
     console.log(files && files[0])
     const formData = new FormData()
-    console.log("name1", file, file.name)
+
     formData.append("name1", file, file.name)
     console.log(formData)
+
+    requestTest({
+      url: "/admin/uploads",
+      body: formData
+    })
   }
-
-  // {
-  //   url:xxx, // 用户提供
-  //   percent, // 用户提供
-  //   success, // 用户提供
-  //   error, // 用户提供
-
-  //   // 上传文件信息
-  //   fileName: xxx,
-  //   size: xxx,
-  //   body:xxx,
-  // }
 
   // data.value = executeQueues(arr, 3)
 }

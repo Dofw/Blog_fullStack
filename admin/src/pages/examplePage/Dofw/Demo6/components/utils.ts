@@ -1,4 +1,13 @@
 import { reactive } from "vue"
+// import axios from "axios"
+// import type { AxiosRequestConfig } from "axios"
+
+// const res = axios("abc.com", {
+//   abc: 1
+// } as AxiosRequestConfig)
+
+// fetch("abc.com", {} as RequestInit)
+
 export interface UploadRequestHeaders {
   [k: string]: string
 }
@@ -7,6 +16,7 @@ export interface Option {
   url: string
   signal?: AbortSignal
   headers?: UploadRequestHeaders
+  body: Document | XMLHttpRequestBodyInit | null | FormData
 }
 
 export interface RequestItem {
@@ -63,7 +73,6 @@ export function executeQueues(queues: Option[], max: number) {
       // 异步等待所有请求完成后，resolve
       if (finishNum === queue.length) {
         console.log("over")
-        // resolve()
       }
 
       run()
@@ -113,7 +122,7 @@ export function request(item: RequestItem): Promise<string> {
     const headers = option.headers || ({} as UploadRequestHeaders)
 
     let xml = new XMLHttpRequest()
-    // xml.open("POST", option.url)
+    xml.open("POST", option.url)
     // 设置header
     if (!headers.contentType) {
       // 默认:传统
@@ -159,7 +168,7 @@ export function request(item: RequestItem): Promise<string> {
      * state: 完成清空 xml = null, 垃圾回收掉。
      * @returns
      */
-    xml.onreadystatechange = () => {
+    xml.onreadystatechange = (e) => {
       if (!xml || xml.readyState !== 4) {
         return
       }
@@ -168,23 +177,63 @@ export function request(item: RequestItem): Promise<string> {
         return
       }
 
-      resolve("")
-      setTimeout(clean)
+      resolve(xml.response)
+      setTimeout(clean, 0)
+    }
+
+    xml.onerror = (error) => {
+      reject(error) // reject
+    }
+    xml.onprogress = (e) => {}
+    xml.send("上传的数据")
+  })
+}
+
+/**
+ * 测试接口
+ * @param item
+ * @returns
+ */
+export function requestTest(item: Option): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const option = item
+    const headers = option.headers || ({} as UploadRequestHeaders)
+
+    const xml = new XMLHttpRequest()
+    xml.open("POST", option.url)
+    // 设置header
+    if (!headers.contentType) {
+      // 默认:传统
+      headers.contentType = CONTENT_TYPES.default
+    }
+    for (const key in headers) {
+      const value = headers[key]
+      if (value === CONTENT_TYPES.blob) {
+        // xml.setRequestHeader("X-Ext", file.extension) // 二进制格式,看后端需要。
+      }
+      xml.setRequestHeader(key, value)
     }
 
     /**
-     * error
+     * state: 完成清空 xml = null, 垃圾回收掉。
+     * @returns
      */
+    xml.onreadystatechange = (e) => {
+      if (!xml || xml.readyState !== 4) {
+        return
+      }
+
+      if (xml.status === 0 && !(xml.responseURL && xml.responseURL.indexOf("file:") === 0)) {
+        return
+      }
+
+      resolve(xml.response)
+    }
 
     xml.onerror = (error) => {
       reject(error) // reject
     }
 
-    /**
-     * progress
-     */
-    xml.onprogress = (e) => {}
-
-    xml.send("上传的数据")
+    xml.send(option.body)
   })
 }

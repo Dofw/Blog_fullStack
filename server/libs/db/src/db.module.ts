@@ -10,12 +10,10 @@ const Models = TypegooseModule.forFeature([Article]);
 @Global()
 @Module({
   imports: [
-    TypegooseModule.forRoot('mongodb://localhost/blog', {
-      // useNewUrlParser: true,
-      // useUnifiedTopology: true,
-      // useCreateIndex: true,
-      // useFindAndModify: false,
-    } as TypegooseConnectionOptions),
+    TypegooseModule.forRoot(
+      'mongodb://localhost/blog',
+      {} as TypegooseConnectionOptions,
+    ),
     Models,
   ],
   providers: [DbService],
