@@ -1,9 +1,17 @@
 import { NestFactory } from '@nestjs/core';
+import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AdminModule } from './admin.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AdminModule);
+  const app = await NestFactory.create<NestExpressApplication>(AdminModule);
+
+  // cors
+  app.enableCors();
+  // static
+  app.useStaticAssets('assets', {
+    prefix: '/assets',
+  });
 
   const config = new DocumentBuilder()
     .setTitle('Admin-Server-Api')

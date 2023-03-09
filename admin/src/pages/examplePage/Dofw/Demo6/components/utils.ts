@@ -194,7 +194,7 @@ export function request(item: RequestItem): Promise<string> {
  * @param item
  * @returns
  */
-export function requestTest(item: Option): Promise<string> {
+export function requestTest(item: Option): Promise<{ url: string }> {
   return new Promise((resolve, reject) => {
     const option = item
     const headers = option.headers || ({} as UploadRequestHeaders)
@@ -227,7 +227,7 @@ export function requestTest(item: Option): Promise<string> {
         return
       }
 
-      resolve(xml.response)
+      resolve(JSON.parse(xml.response))
     }
 
     xml.onerror = (error) => {

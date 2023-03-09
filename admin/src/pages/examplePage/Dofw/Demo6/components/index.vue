@@ -1,9 +1,10 @@
 <template>
   <div>
+    <img :src="url" alt="" style="border: 1px solid green; width: 100px; height: 100px" />
     <!-- 上传控件 -->
     <div class="upload-wrapper">
       <Upload />
-      <input ref="inputRef" type="file" @change="onChange1" accept=".pdf" />
+      <input ref="inputRef" type="file" @change="onChange1" accept="image/*" />
     </div>
 
     <UploadItem v-for="item in data" :data="item" :key="item.index"></UploadItem>
@@ -13,30 +14,31 @@
 <script setup lang="ts">
 import { executeQueues, requestTest } from "./utils"
 
-import type { Option, RequestItem } from "./utils"
+import type { RequestItem } from "./utils"
 import UploadItem from "./UploadItem.vue"
 import { Upload } from "@element-plus/icons-vue"
 import { ref } from "vue"
 import type { Ref } from "vue"
 
+const url: Ref<string> = ref("")
+
 const inputRef: Ref<HTMLInputElement> = ref({} as HTMLInputElement)
 
 const data: Ref<RequestItem[]> = ref([])
-const onChange1 = (e: Event) => {
+const onChange1 = async (e: Event) => {
   const files = inputRef.value.files
 
   const file = files && files[0]
   if (file) {
-    console.log(files && files[0])
     const formData = new FormData()
+    formData.append("files", file, file.name)
 
-    formData.append("name1", file, file.name)
-    console.log(formData)
-
-    requestTest({
+    const res = await requestTest({
       url: "/admin/uploads",
       body: formData
     })
+
+    url.value = res.url
   }
 
   // data.value = executeQueues(arr, 3)

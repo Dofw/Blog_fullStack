@@ -8,12 +8,23 @@ import { UploadsController } from './uploads/uploads.controller';
 import { UploadsService } from './uploads/uploads.service';
 
 import { MulterModule } from '@nestjs/platform-express';
+import * as multer from 'multer'; // 使用multer
 
 @Module({
   imports: [
     DbModule,
     MulterModule.register({
-      dest: '/uploads',
+      storage: multer.diskStorage({
+        // 存储路径
+        destination: function (req, file, cb) {
+          cb(null, 'assets/');
+        },
+        // 保存文件
+        filename: function (req, file, cb) {
+          cb(null, file.originalname);
+        },
+      }),
+      preservePath: true,
     }),
   ],
   controllers: [AdminController, UploadsController],
