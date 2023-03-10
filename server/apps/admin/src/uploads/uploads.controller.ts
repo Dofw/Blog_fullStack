@@ -10,10 +10,10 @@ import { FileInterceptor } from '@nestjs/platform-express';
 export class UploadsController {
   @Post()
   @UseInterceptors(FileInterceptor('files', {}))
-  upload(@UploadedFile('files') files: Express.Multer.File) {
+  upload(@UploadedFile('file') files: Express.Multer.file) {
     console.log(files);
     return {
-      url: `http://localhost:3300/${file.path}`,
+      url: `http://localhost:3300/${files.path}`,
     };
   }
 }

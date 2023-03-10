@@ -1,5 +1,6 @@
 <template>
   <div>
+    <iframe src="http://localhost:3300/assets/728cd14c83bede21cc82dd2da80ce931" type="pdf" style="width: 500px; height: 300px" frameborder="0"></iframe>
     <img :src="url" alt="" style="border: 1px solid green; width: 100px; height: 100px" />
     <!-- 上传控件 -->
     <div class="upload-wrapper">
