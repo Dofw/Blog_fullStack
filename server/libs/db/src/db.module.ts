@@ -1,4 +1,4 @@
-import { TypegooseConnectionOptions, TypegooseModule } from 'nestjs-typegoose';
+import { TypegooseModule } from 'nestjs-typegoose';
 import { Global, Module } from '@nestjs/common';
 import { DbService } from './db.service';
 
@@ -10,10 +10,13 @@ const Models = TypegooseModule.forFeature([Article]);
 @Global()
 @Module({
   imports: [
-    TypegooseModule.forRoot(
-      'mongodb://localhost/blog',
-      {} as TypegooseConnectionOptions,
-    ),
+    TypegooseModule.forRootAsync({
+      async useFactory() {
+        return {
+          uri: process.env.DB,
+        };
+      },
+    }),
     Models,
   ],
   providers: [DbService],

@@ -7,7 +7,7 @@ import {
   Get,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { UploadsInterceptor } from './uploads.interceptor';
+import { TestInterceptor } from '../_test/test.interceptor';
 
 @Controller('uploads')
 export class UploadsController {
@@ -21,7 +21,7 @@ export class UploadsController {
   }
 
   @Get('test')
-  @UseInterceptors(UploadsInterceptor)
+  @UseInterceptors(TestInterceptor)
   index(@Req() req: any) {
     console.log(req.$$$test);
     req.$$$test = 'new12321';

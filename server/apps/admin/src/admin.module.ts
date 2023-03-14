@@ -2,11 +2,11 @@ import { Module } from '@nestjs/common';
 import { AdminController } from './admin.controller';
 import { AdminService } from './admin.service';
 
-import { DbModule } from './../../../libs/db/src/db.module'; // 数据库模块链接
+import { CommonModule } from '@libs/common';
 import { UploadsModule } from './uploads/uploads.module';
 
 @Module({
-  imports: [DbModule, UploadsModule.forRoot({})],
+  imports: [CommonModule, UploadsModule.forRoot({})],
   controllers: [AdminController],
   providers: [AdminService],
 })
