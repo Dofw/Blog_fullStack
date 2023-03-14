@@ -1,9 +1,4 @@
-import {
-  DynamicModule,
-  MiddlewareConsumer,
-  Module,
-  NestModule,
-} from '@nestjs/common';
+import { DynamicModule, Module } from '@nestjs/common';
 import { MulterModule } from '@nestjs/platform-express';
 
 import * as multer from 'multer';
@@ -12,13 +7,10 @@ import { v4 as uuid } from 'uuid';
 
 import { UploadsController } from './uploads.controller';
 import { UploadsService } from './uploads.service';
-import { UploadsMiddleware } from './uploads.middleware';
 
 @Module({})
-export class UploadsModule implements NestModule {
+export class UploadsModule {
   static forRoot(options: any): DynamicModule {
-    // 基于 options 对象的属性自定义其service行为等。
-
     // 了解provider
     const providers = [
       UploadsService,
@@ -43,9 +35,5 @@ export class UploadsModule implements NestModule {
       providers,
       controllers: [UploadsController],
     };
-  }
-
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(UploadsMiddleware).exclude('uploads');
   }
 }
