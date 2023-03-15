@@ -4,9 +4,10 @@ import { AdminService } from './admin.service';
 
 import { CommonModule } from '@libs/common';
 import { UploadsModule } from './uploads/uploads.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [CommonModule, UploadsModule.forRoot({})],
+  imports: [CommonModule, UploadsModule.forRoot({}), AuthModule],
   controllers: [AdminController],
   providers: [AdminService],
 })
