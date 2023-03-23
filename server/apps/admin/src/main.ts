@@ -8,6 +8,7 @@ async function bootstrap() {
 
   // cors
   app.enableCors();
+
   // static
   app.useStaticAssets('assets', {
     prefix: '/assets',
@@ -17,6 +18,7 @@ async function bootstrap() {
     .setTitle('Admin-Server-Api')
     .setDescription('供后台管理页面API')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api-doc', app, document);

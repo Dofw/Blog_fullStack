@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import RegisterDto from './dto/register.dto';
 import LoginDto from './dto/login.dto';
@@ -36,12 +36,18 @@ export class AuthController {
   @Post('login')
   async login(@Body() dto: LoginDto, @Req() req: any) {
     return {
-      token: this.jwtService.sign(JSON.stringify(req.user._id)),
+      token: this.jwtService.sign({
+        username: req.user.username,
+        id: req.user._id,
+      }),
     };
   }
 
+  @ApiOperation({ summary: '获取用户信息' })
+  @ApiBearerAuth()
   @Get('info')
-  info() {
-    return '信息';
+  @UseGuards(AuthGuard('jwt'))
+  info(@Req() req: any) {
+    return req.user;
   }
 }
