@@ -7,6 +7,6 @@ import JwtStategy from './jwt.stratege';
 @Module({
   imports: [PassportModule],
   controllers: [AuthController],
-  providers: [LocalStrategy, JwtStategy],
+  providers: [LocalStrategy, JwtStategy], //可以理解为, 第一次admin中注册后,剩余的交给 AuthGuard('name')
 })
 export class AuthModule {}

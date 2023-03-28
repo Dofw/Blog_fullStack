@@ -1,12 +1,4 @@
 import { reactive } from "vue"
-// import axios from "axios"
-// import type { AxiosRequestConfig } from "axios"
-
-// const res = axios("abc.com", {
-//   abc: 1
-// } as AxiosRequestConfig)
-
-// fetch("abc.com", {} as RequestInit)
 
 export interface UploadRequestHeaders {
   [k: string]: string
@@ -20,29 +12,30 @@ export interface Option {
 }
 
 export interface RequestItem {
-  index: number
+  filename?: string
+  fileSize?: number
+
   percent: number
   option: Option
-  request: () => Promise<string>
-  cancel: () => void
+  cancel: (() => void) | null
+  callAgain: (() => void) | null
   result: null | any
   success: boolean
 }
 
-export function executeQueues(queues: Option[], max: number) {
+export function executeQueues(allItems: RequestItem[], max: number) {
   const queue: RequestItem[] = []
 
-  let flagIndex = 0 // 标记顺序
   let curNum = 0
   let finishNum = 0
 
   // 先生成同步的信息: 名称等等。
-  queues.forEach((option) => {
-    const item = createRequestItem(option)
-    queue.push(item)
+  allItems.forEach((item) => {
+    const itemReactive = createRequestItem(item)
+    queue.push(itemReactive)
   })
 
-  const minMax = Math.min(max, queues.length) // 传入的max太大。
+  const minMax = Math.min(max, allItems.length) // 传入的max太大。
   for (let i = 0; i < minMax; i++) {
     run() //每次的请求
   }
@@ -59,9 +52,10 @@ export function executeQueues(queues: Option[], max: number) {
 
     try {
       // success
-      const res = await item.request()
-      item.result = res
+      const res = await request(item)
+      item.result = JSON.parse(res)
       item.success = true
+      console.log(item)
     } catch (error) {
       // error
       item.result = error
@@ -83,26 +77,31 @@ export function executeQueues(queues: Option[], max: number) {
    * 创建一个请求对象
    * @param option 请求配置
    */
-  function createRequestItem(option: Option): RequestItem {
+  function createRequestItem(item: RequestItem): RequestItem {
     const controller = new AbortController()
-    option.signal = controller.signal
+    item.option.signal = controller.signal
+    item.cancel = controller.abort
 
-    const index = flagIndex++
-    const item: RequestItem = reactive({
-      index, // 为每次的请求打上顺序标记。
-      option,
-      percent: 0,
-      result: null,
-      success: false,
-      request: async () => {
-        // 错误会从内部一直向外不断传递
-        const res = await request(item)
-        return res
-      },
-      cancel: controller.abort
-    })
+    const itemReactive: RequestItem = reactive(item)
 
-    return item
+    item.callAgain = async () => {
+      const controller = new AbortController()
+      itemReactive.option.signal = controller.signal
+      itemReactive.cancel = controller.abort
+
+      try {
+        // success
+        const res = await request(itemReactive)
+        itemReactive.result = JSON.parse(res)
+        itemReactive.success = true
+      } catch (error) {
+        // error
+        itemReactive.result = error
+        itemReactive.success = false
+      }
+    }
+
+    return itemReactive
   }
 }
 
@@ -125,7 +124,6 @@ export function request(item: RequestItem): Promise<string> {
     xml.open("POST", option.url)
     // 设置header
     if (!headers.contentType) {
-      // 默认:传统
       headers.contentType = CONTENT_TYPES.default
     }
     for (const key in headers) {
@@ -136,9 +134,7 @@ export function request(item: RequestItem): Promise<string> {
       xml.setRequestHeader(key, value)
     }
 
-    /**
-     * signal: 添加事件
-     */
+    //signal: 添加事件
     let onCanceled: (cancel: any) => void
     if (option.signal) {
       onCanceled = function onCanceled(cancel: any) {
@@ -152,10 +148,7 @@ export function request(item: RequestItem): Promise<string> {
       option.signal.aborted ? onCanceled(undefined) : option.signal.addEventListener("abort", onCanceled)
     }
 
-    /**
-     * 清除副作用
-     * @returns
-     */
+    //清除副作用
     function clean() {
       if (!xml) {
         return
@@ -164,10 +157,7 @@ export function request(item: RequestItem): Promise<string> {
       xml = null
     }
 
-    /**
-     * state: 完成清空 xml = null, 垃圾回收掉。
-     * @returns
-     */
+    // state: 完成清空 xml = null, 垃圾回收掉。
     xml.onreadystatechange = (e) => {
       if (!xml || xml.readyState !== 4) {
         return
@@ -184,56 +174,10 @@ export function request(item: RequestItem): Promise<string> {
     xml.onerror = (error) => {
       reject(error) // reject
     }
-    xml.onprogress = (e) => {}
-    xml.send("上传的数据")
-  })
-}
-
-/**
- * 测试接口
- * @param item
- * @returns
- */
-export function requestTest(item: Option): Promise<{ url: string }> {
-  return new Promise((resolve, reject) => {
-    const option = item
-    const headers = option.headers || ({} as UploadRequestHeaders)
-
-    const xml = new XMLHttpRequest()
-    xml.open("POST", option.url)
-    // 设置header
-    if (!headers.contentType) {
-      // 默认:传统
-      headers.contentType = CONTENT_TYPES.default
+    xml.upload.onprogress = (e) => {
+      item.percent = Number((e.loaded / e.total).toFixed(2))
+      console.log("占比", item.percent)
     }
-    for (const key in headers) {
-      const value = headers[key]
-      if (value === CONTENT_TYPES.blob) {
-        // xml.setRequestHeader("X-Ext", file.extension) // 二进制格式,看后端需要。
-      }
-      xml.setRequestHeader(key, value)
-    }
-
-    /**
-     * state: 完成清空 xml = null, 垃圾回收掉。
-     * @returns
-     */
-    xml.onreadystatechange = (e) => {
-      if (!xml || xml.readyState !== 4) {
-        return
-      }
-
-      if (xml.status === 0 && !(xml.responseURL && xml.responseURL.indexOf("file:") === 0)) {
-        return
-      }
-
-      resolve(JSON.parse(xml.response))
-    }
-
-    xml.onerror = (error) => {
-      reject(error) // reject
-    }
-
     xml.send(option.body)
   })
 }

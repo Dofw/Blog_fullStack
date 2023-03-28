@@ -1,19 +1,17 @@
 <template>
   <div>
-    <iframe src="http://localhost:3300/assets/728cd14c83bede21cc82dd2da80ce931" type="pdf" style="width: 500px; height: 300px" frameborder="0"></iframe>
-    <img :src="url" alt="" style="border: 1px solid green; width: 100px; height: 100px" />
     <!-- 上传控件 -->
     <div class="upload-wrapper">
       <Upload />
-      <input ref="inputRef" type="file" @change="onChange1" accept="image/*" />
+      <input ref="inputRef" type="file" @change="onChange1" accept="image/*, .mp4" multiple />
     </div>
 
-    <UploadItem v-for="item in data" :data="item" :key="item.index"></UploadItem>
+    <UploadItem v-for="(item, index) in data" :data="item" :key="index"></UploadItem>
   </div>
 </template>
 
 <script setup lang="ts">
-import { executeQueues, requestTest } from "./utils"
+import { executeQueues } from "./utils"
 
 import type { RequestItem } from "./utils"
 import UploadItem from "./UploadItem.vue"
@@ -21,28 +19,41 @@ import { Upload } from "@element-plus/icons-vue"
 import { ref } from "vue"
 import type { Ref } from "vue"
 
-const url: Ref<string> = ref("")
-
 const inputRef: Ref<HTMLInputElement> = ref({} as HTMLInputElement)
 
 const data: Ref<RequestItem[]> = ref([])
 const onChange1 = async (e: Event) => {
   const files = inputRef.value.files
 
-  const file = files && files[0]
-  if (file) {
-    const formData = new FormData()
-    formData.append("files", file, file.name)
+  console.log(files)
 
-    const res = await requestTest({
-      url: "/admin/uploads",
-      body: formData
-    })
+  let allItems: RequestItem[] = []
+  if (files) {
+    for (let file of files) {
+      const formData = new FormData()
+      formData.append("files", file, file.name)
 
-    url.value = res.url
+      let option = {
+        url: "http://localhost:3300/uploads",
+        body: formData,
+        headers: {}
+      }
+
+      allItems.push({
+        filename: file.name,
+        fileSize: file.size,
+
+        percent: 0,
+        result: null,
+        success: false,
+        cancel: null,
+        callAgain: null,
+        option
+      })
+    }
   }
 
-  // data.value = executeQueues(arr, 3)
+  data.value = executeQueues(allItems, 3)
 }
 </script>
 
