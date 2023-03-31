@@ -1,4 +1,5 @@
 import { reactive } from "vue"
+import type { Ref, UnwrapNestedRefs } from "vue"
 
 export interface UploadRequestHeaders {
   [k: string]: string
@@ -24,15 +25,15 @@ export interface RequestItem {
 }
 
 export function executeQueues(allItems: RequestItem[], max: number) {
-  const queue: RequestItem[] = []
+  // 将用户传入对象设置为响应式
+  const newAllItems: UnwrapNestedRefs<RequestItem[]> = reactive(allItems)
 
   let curNum = 0
   let finishNum = 0
 
   // 先生成同步的信息: 名称等等。
-  allItems.forEach((item) => {
-    const itemReactive = createRequestItem(item)
-    queue.push(itemReactive)
+  newAllItems.forEach((item) => {
+    expandRequestItem(item)
   })
 
   const minMax = Math.min(max, allItems.length) // 传入的max太大。
@@ -40,14 +41,14 @@ export function executeQueues(allItems: RequestItem[], max: number) {
     run() //每次的请求
   }
 
-  return queue
+  return newAllItems
 
   async function run() {
     // 控制请求上线
-    if (curNum >= queue.length) {
+    if (curNum >= newAllItems.length) {
       return
     }
-    const item = queue[curNum]
+    const item = newAllItems[curNum]
     curNum++
 
     try {
@@ -55,7 +56,6 @@ export function executeQueues(allItems: RequestItem[], max: number) {
       const res = await request(item)
       item.result = JSON.parse(res)
       item.success = true
-      console.log(item)
     } catch (error) {
       // error
       item.result = error
@@ -65,7 +65,7 @@ export function executeQueues(allItems: RequestItem[], max: number) {
       finishNum++
 
       // 异步等待所有请求完成后，resolve
-      if (finishNum === queue.length) {
+      if (finishNum === newAllItems.length) {
         console.log("over")
       }
 
@@ -74,34 +74,30 @@ export function executeQueues(allItems: RequestItem[], max: number) {
   }
 
   /**
-   * 创建一个请求对象
+   * 扩展一个请求对象，属性。
    * @param option 请求配置
    */
-  function createRequestItem(item: RequestItem): RequestItem {
+  function expandRequestItem(item: RequestItem): void {
     const controller = new AbortController()
     item.option.signal = controller.signal
-    item.cancel = controller.abort
-
-    const itemReactive: RequestItem = reactive(item)
+    item.cancel = controller.abort.bind(controller)
 
     item.callAgain = async () => {
       const controller = new AbortController()
-      itemReactive.option.signal = controller.signal
-      itemReactive.cancel = controller.abort
+      item.option.signal = controller.signal
+      item.cancel = controller.abort.bind(controller)
 
       try {
         // success
-        const res = await request(itemReactive)
-        itemReactive.result = JSON.parse(res)
-        itemReactive.success = true
+        const res = await request(item)
+        item.result = JSON.parse(res)
+        item.success = true
       } catch (error) {
         // error
-        itemReactive.result = error
-        itemReactive.success = false
+        item.result = error
+        item.success = false
       }
     }
-
-    return itemReactive
   }
 }
 
@@ -176,7 +172,6 @@ export function request(item: RequestItem): Promise<string> {
     }
     xml.upload.onprogress = (e) => {
       item.percent = Number((e.loaded / e.total).toFixed(2))
-      console.log("占比", item.percent)
     }
     xml.send(option.body)
   })
