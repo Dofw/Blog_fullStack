@@ -59,7 +59,6 @@ import { codeOptions } from "./codes/_code"
       transform: translateY(-50%);
       border-left: 10px solid;
       border-radius: 2px;
-      @include theme-borderColor(vt-c-borderColor-light);
     }
   }
 

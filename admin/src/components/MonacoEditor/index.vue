@@ -143,7 +143,6 @@ function init(previewDom) {
   height: 100%;
   border-radius: 10px;
   overflow: hidden;
-  @include theme-bShadow(vt-c-shadow-5);
   .monaco-editor-wrapper {
     width: 100%;
     height: 100%;

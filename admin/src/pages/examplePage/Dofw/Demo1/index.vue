@@ -5,7 +5,7 @@
     <!-- code-preview -->
     <div class="preview-wrapper">
       <!-- <MonacoEditor class="code" :tempCode="tempCode" :previewDom="previewDom" :showBtn="true"></MonacoEditor> -->
-
+      <el-button type="primary">按钮</el-button>
       <el-tabs class="view" type="border-card">
         <el-tab-pane label="demo">
           <div ref="previewDom" class="view-dome__wrapper"></div>
@@ -56,7 +56,6 @@ const previewDom = ref(null)
       transform: translateY(-50%);
       border-left: 10px solid;
       border-radius: 2px;
-      @include theme-borderColor(vt-c-borderColor-light);
     }
   }
 

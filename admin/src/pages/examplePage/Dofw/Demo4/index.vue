@@ -151,7 +151,6 @@ $el?.parentNode?.removeChild($el) // bug, 父组件销毁了，在使用el.remov
       transform: translateY(-50%);
       border-left: 10px solid;
       border-radius: 2px;
-      @include theme-borderColor(vt-c-borderColor-light);
     }
   }
 

@@ -85,22 +85,4 @@ const curRoutePath = computed(() => {
     }
   }
 }
-
-.menu_exact :deep() {
-  @include el-sub-menu__title;
-}
-
-.menu_active :deep() {
-  @include el-sub-menu__title;
-}
-
-// .menu_item_exact.el-menu-item
-.menu_item_exact {
-  @include el-menu-item;
-}
-
-// .menu_item_active.el-menu-item
-.menu_item_active {
-  @include el-menu-item;
-}
 </style>

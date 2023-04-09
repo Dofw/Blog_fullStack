@@ -9,7 +9,6 @@ import prismjs from "vite-plugin-prismjs"
 import AutoImport from "unplugin-auto-import/vite"
 import Components from "unplugin-vue-components/vite"
 import { ElementPlusResolver } from "unplugin-vue-components/resolvers"
-import ElementPlus from "unplugin-element-plus/vite"
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -46,9 +45,6 @@ export default defineConfig({
     }),
     prismjs({
       languages: ["json", "md"]
-    }),
-    ElementPlus({
-      useSource: true
     })
   ],
   resolve: {
@@ -62,7 +58,7 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       scss: {
-        additionalData: `@use '@/assets/scss/theme/sass_theme.scss' as *;`
+        additionalData: `@use '@/assets/scss/index.scss' as *;`
       }
     }
   }

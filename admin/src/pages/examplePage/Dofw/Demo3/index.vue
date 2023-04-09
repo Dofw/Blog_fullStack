@@ -117,7 +117,6 @@ contentStyle： 内容容器的样式对象
       transform: translateY(-50%);
       border-left: 10px solid;
       border-radius: 2px;
-      @include theme-borderColor(vt-c-borderColor-light);
     }
   }
 

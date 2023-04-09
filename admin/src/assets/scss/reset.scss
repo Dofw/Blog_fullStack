@@ -1,4 +1,6 @@
 /* color palette from <https://github.com/vuejs/theme> */
+$border: 0px solid green;
+
 *,
 *::before,
 *::after {
@@ -12,9 +14,4 @@ body {
   width: 100vw;
   height: 100vh;
   padding: 0 !important;
-  @include theme-fc(vt-c-text-1);
-  @include theme-bg(vt-c-bg-mute);
-
-  // menu，vertical模式下，收缩弹框是生成在body下的
-  @include elPopperMenu;
 }

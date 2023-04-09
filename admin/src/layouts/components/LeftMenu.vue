@@ -51,7 +51,6 @@ function onClick() {
   height: 100vh;
 
   overflow: hidden;
-  @include theme-bg(vt-c-bg);
 
   .title {
     width: 100%;
@@ -84,16 +83,6 @@ function onClick() {
 
   .menu-container {
     padding: 10px 0;
-  }
-  //ui库
-  :deep(.el-scrollbar) {
-    @include theme-bg(vt-c-bg);
-
-    .el-menu:not(.el-menu--collapse) {
-      width: 200px;
-    }
-
-    @include elMenu;
   }
 
   @keyframes logAnimation {
