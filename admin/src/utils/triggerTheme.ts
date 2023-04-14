@@ -1,5 +1,7 @@
 // 设置theme
 export function triggerTheme() {
   const htmlDom = document.documentElement
-  htmlDom.classList.toggle("dark")
+  const curClass = htmlDom.className
+
+  curClass === "dark" ? (htmlDom.className = "light") : (htmlDom.className = "dark")
 }

@@ -1,0 +1,131 @@
+@import "./sass_variable.scss"; // 主题：背景、蒙层(正反色)、文本(正反色)、code、主题色(vue中的绿色，不同环境的亮度)
+// 利用scss方案实现, 对兼容性友好。
+// css变量，仅仅操作变量，而不会增加规则。
+
+$themes: (
+  dark: (
+    vt-c-bg: map-get($variable, vt-c-black),
+    vt-c-bg-soft: map-get($variable, vt-c-black-soft),
+    vt-c-bg-mute: map-get($variable, vt-c-black-mute),
+    vt-c-divider: map-get($variable, vt-c-divider-dark-1),
+    vt-c-divider-light: map-get($variable, vt-c-divider-dark-2),
+    vt-c-divider-inverse: map-get($variable, vt-c-divider-light-1),
+    vt-c-divider-inverse-light: map-get($variable, vt-c-divider-light-2),
+    vt-c-text-1: map-get($variable, vt-c-text-dark-1),
+    vt-c-text-2: map-get($variable, vt-c-text-dark-2),
+    vt-c-text-3: map-get($variable, vt-c-text-dark-3),
+    vt-c-text-4: map-get($variable, vt-c-text-dark-4),
+    vt-c-text-code: map-get($variable, vt-c-text-dark-code),
+    vt-c-text-inverse-1: map-get($variable, vt-c-text-light-1),
+    vt-c-text-inverse-2: map-get($variable, vt-c-text-light-2),
+    vt-c-text-inverse-3: map-get($variable, vt-c-text-light-3),
+    vt-c-text-inverse-4: map-get($variable, vt-c-text-light-4),
+    vt-c-brand: map-get($variable, vt-c-green),
+    vt-c-brand-light: map-get($variable, vt-c-green-dark),
+    vt-c-brand-highlight: map-get($variable, vt-c-green-darker),
+    //shadow
+    vt-c-shadow-1: map-get($shadowVar, vt-c-shadow-dark-1),
+    vt-c-shadow-2: map-get($shadowVar, vt-c-shadow-dark-2),
+    vt-c-shadow-3: map-get($shadowVar, vt-c-shadow-dark-3),
+    vt-c-shadow-4: map-get($shadowVar, vt-c-shadow-dark-4),
+    vt-c-shadow-5: map-get($shadowVar, vt-c-shadow-dark-5),
+    //borderColor
+    vt-c-borderColor: map-get($variable, vt-c-green),
+    vt-c-borderColor-light: map-get($variable, vt-c-green-dark),
+    vt-c-borderColor-highlight: map-get($variable, vt-c-green-darker),
+    //hover-bg and fonts
+    vt-c-hover-bg-start: map-get($hoverVar, vt-c-hover-dark-start),
+    vt-c-hover-bg-end: map-get($hoverVar, vt-c-hover-dark-end),
+    vt-c-hover-fc: map-get($hoverVar, vt-c-hover-dark-text)
+  ),
+  light: (
+    vt-c-bg: map-get($variable, vt-c-white),
+    vt-c-bg-soft: map-get($variable, vt-c-white-soft),
+    vt-c-bg-mute: map-get($variable, vt-c-white-mute),
+    vt-c-divider: map-get($variable, vt-c-divider-light-1),
+    vt-c-divider-light: map-get($variable, vt-c-divider-light-2),
+    vt-c-divider-inverse: map-get($variable, vt-c-divider-dark-1),
+    vt-c-divider-inverse-light: map-get($variable, vt-c-divider-dark-2),
+    vt-c-text-1: map-get($variable, vt-c-text-light-1),
+    vt-c-text-2: map-get($variable, vt-c-text-light-2),
+    vt-c-text-3: map-get($variable, vt-c-text-light-3),
+    vt-c-text-4: map-get($variable, vt-c-text-light-4),
+    vt-c-text-code: map-get($variable, vt-c-text-light-code),
+    vt-c-text-inverse-1: map-get($variable, vt-c-text-dark-1),
+    vt-c-text-inverse-2: map-get($variable, vt-c-text-dark-2),
+    vt-c-text-inverse-3: map-get($variable, vt-c-text-dark-3),
+    vt-c-text-inverse-4: map-get($variable, vt-c-text-dark-4),
+    vt-c-brand: map-get($variable, vt-c-green),
+    vt-c-brand-light: map-get($variable, vt-c-green-light),
+    vt-c-brand-highlight: map-get($variable, vt-c-green-lighter),
+    //shadow
+    vt-c-shadow-1: map-get($shadowVar, vt-c-shadow-light-1),
+    vt-c-shadow-2: map-get($shadowVar, vt-c-shadow-light-2),
+    vt-c-shadow-3: map-get($shadowVar, vt-c-shadow-light-3),
+    vt-c-shadow-4: map-get($shadowVar, vt-c-shadow-light-4),
+    vt-c-shadow-5: map-get($shadowVar, vt-c-shadow-light-5),
+    //borderColor
+    vt-c-borderColor: map-get($variable, vt-c-green),
+    vt-c-borderColor-light: map-get($variable, vt-c-green-light),
+    vt-c-borderColor-highlight: map-get($variable, vt-c-green-lighter),
+    //hover-bg and fonts
+    vt-c-hover-bg-start: map-get($hoverVar, vt-c-hover-light-start),
+    vt-c-hover-bg-end: map-get($hoverVar, vt-c-hover-light-end),
+    vt-c-hover-fc: map-get($hoverVar, vt-c-hover-light-text)
+  )
+);
+
+// sass 主题切换实现的核心代码
+// 使用 @include theme-xx($key)，对应生成两套。 [data-theme="#{$theme-name}"]
+@mixin generateThemesCode {
+  @each $theme-name, $theme-var in $themes {
+    //!global 把局部变量强升为全局变量, 原因，外部函数在用。
+    $theme-var: $theme-var !global;
+    //判断html的data-theme的属性值  #{}是sass的插值表达式
+    //& sass嵌套里的父容器标识   @content是混合器插槽，像vue的slot
+    // 编译 [data-theme=dark] 后，不带双引号。无效。选择只定义key不赋值。
+    [data-theme_#{$theme-name}] & {
+      @content;
+    }
+  }
+}
+
+@mixin theme-bg($key) {
+  @include generateThemesCode {
+    background-color: map-get($theme-var, $key);
+  }
+}
+
+@mixin theme-fc($key) {
+  @include generateThemesCode {
+    color: map-get($theme-var, $key);
+  }
+}
+
+@mixin theme-bShadow($key) {
+  @include generateThemesCode {
+    box-shadow: map-get($map: $theme-var, $key: $key);
+  }
+}
+
+@mixin theme-borderColor($key) {
+  @include generateThemesCode {
+    border-color: map-get($map: $theme-var, $key: $key) !important;
+  }
+}
+
+@mixin theme-hoverBg($start, $end) {
+  @include generateThemesCode {
+    background-image: linear-gradient(to right, map-get($theme-var, $start), map-get($theme-var, $end));
+  }
+}
+@mixin theme-hoverFc($key) {
+  @include generateThemesCode {
+    color: map-get($theme-var, $key);
+  }
+}
+
+// // 这里有顺序， 在调用了@include theme-xxx(vt-c-bg); 全局才有 $theme-var (global)
+// ul {
+//   color: map-get($theme-var, vt-c-bg);
+// }
