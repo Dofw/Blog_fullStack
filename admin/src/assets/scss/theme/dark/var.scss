@@ -11,9 +11,9 @@ $colors: () !default;
 $colors: map.deep-merge(
   (
     "white": #ffffff,
-    "black": #000000,
+    "black": #1a1a1a,
     "primary": (
-      "base": #46ff40
+      "base": #33a06f
     ),
     "success": (
       "base": #67c23a

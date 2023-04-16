@@ -5,6 +5,8 @@
 @use "var.scss" as *;
 @use "element-plus/theme-chalk/src/mixins/mixins.scss" as *;
 
+// 学习 element-ui 模块的思想编写方式。!!!
+
 html.light {
   color-scheme: light;
 
@@ -25,6 +27,8 @@ html.light {
   @include set-component-css-var("border-color", $border-color);
   // Fill --el-fill-color-#{$type}
   @include set-component-css-var("fill-color", $fill-color);
+  // menu
+  @include set-component-css-var("menu", $menu);
 }
 
 // --------------------------------------- 以下设置局域变量。

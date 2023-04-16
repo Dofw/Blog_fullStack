@@ -1,7 +1,7 @@
 @use "sass:map";
 @use "sass:math";
 
-@use "element-plus/theme-chalk/src/mixins/mixins.scss" as *;
+@use "element-plus/theme-chalk/src/mixins/mixins.scss" as *; // foward  config function _var
 @use "element-plus/theme-chalk/src/color/index.scss" as *;
 
 $types: primary, success, warning, danger, error, info;
@@ -11,9 +11,9 @@ $colors: () !default;
 $colors: map.deep-merge(
   (
     "white": #ffffff,
-    "black": #000000,
+    "black": #1a1a1a,
     "primary": (
-      "base": #e9ff40
+      "base": #42b883
     ),
     "success": (
       "base": #67c23a
@@ -69,25 +69,16 @@ $color-info: map.get($colors, "info", "base") !default;
 $bg-color: () !default;
 $bg-color: map.merge(
   (
-    "page": #0a0a0a,
-    "": #141414,
-    "overlay": #1d1e1f
+    "page": #f2f3f5,
+    "": #aeaeae,
+    // #8e8e8e #c7c7c7
+    "overlay": #ffffff
   ),
   $bg-color
 );
 
-// dark-mode
-@each $type in $types {
-  @for $i from 1 through 9 {
-    @include set-color-mix-level($type, $i, "light", map.get($bg-color, ""));
-  }
-}
-@each $type in $types {
-  @include set-color-mix-level($type, 2, "dark", $color-white);
-}
-
 // border
-$border-color-base: #f5f8ff;
+$border-color-base: #42b883;
 $border-color: () !default;
 $border-color: map.merge(
   (
@@ -116,19 +107,19 @@ $box-shadow: () !default;
 $box-shadow: map.merge(
   (
     "": (
-      0px 12px 32px 4px rgba(0, 0, 0, 0.36),
-      0px 8px 20px rgba(0, 0, 0, 0.72)
+      0px 12px 32px 4px rgba(255, 255, 255, 0.36),
+      0px 8px 20px rgba(255, 255, 255, 0.72)
     ),
     "light": (
-      0px 0px 12px rgba(0, 0, 0, 0.72)
+      0px 0px 12px rgba(255, 255, 255, 0.72)
     ),
     "lighter": (
-      0px 0px 6px rgba(0, 0, 0, 0.72)
+      0px 0px 6px rgba(255, 255, 255, 0.72)
     ),
     "dark": (
-      0px 16px 48px 16px rgba(0, 0, 0, 0.72),
-      0px 12px 32px #000000,
-      0px 8px 16px -8px #000000
+      0px 16px 48px 16px rgba(255, 255, 255, 0.72),
+      0px 12px 32px #ffffff,
+      0px 8px 16px -8px #ffffff
     )
   ),
   $box-shadow
@@ -163,7 +154,7 @@ $fill-color: map.merge(
 }
 
 // text
-$text-color-base: #f0f5ff;
+$text-color-base: #303133;
 $text-color: () !default;
 $text-color: map.merge(
   (
@@ -202,6 +193,29 @@ $card: map.merge(
     "bg-color": getCssVar("bg-color", "overlay")
   ),
   $card
+);
+
+// Menu
+// css3 var in packages/theme-chalk/src/menu.scss
+$menu: () !default;
+$menu: map.merge(
+  (
+    "active-color": getCssVar("color-primary"),
+    "text-color": getCssVar("text-color-primary"),
+    "hover-text-color": getCssVar("color-primary"),
+    "bg-color": getCssVar("fill-color", "blank"),
+    "hover-bg-color": getCssVar("color-primary-light-3"),
+    "item-height": 56px,
+    "sub-item-height": calc(#{getCssVar("menu-item-height")} - 6px),
+    "horizontal-sub-item-height": 36px,
+    "item-font-size": getCssVar("font-size-base"),
+    "item-hover-fill": getCssVar("color-primary-light-9"),
+    "border-color": getCssVar("border-color"),
+    "base-level-padding": 20px,
+    "level-padding": 20px,
+    "icon-width": 24px
+  ),
+  $menu
 );
 
 // Empty

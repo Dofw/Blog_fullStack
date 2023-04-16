@@ -31,15 +31,14 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
-.main-wrapper {
-  height: 100%;
-
-  width: 1500px;
-  margin: 0 auto;
-}
-
 .container-box {
   position: relative;
+
+  .main-wrapper {
+    height: 100%;
+    width: 1200px;
+    margin: 0 auto;
+  }
 
   > canvas.content-bg {
     position: absolute;

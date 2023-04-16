@@ -1,27 +1,19 @@
 <template>
   <template v-for="item in data" :key="String(item)">
     <!-- 将按钮归分组 -->
-    <el-menu-item-group class="recursion-menu" v-if="item.group">
+    <el-menu-item-group v-if="item.group">
       <template #title>{{ item.group }}</template>
       <RecursionMenu v-if="item.children" :data="item.children" />
     </el-menu-item-group>
 
     <!-- 按钮存在children -->
-    <!-- noArrow: !item.children || item.children.length === 0 -->
-    <el-sub-menu
-      :class="{
-        menu_active: curRoutePath.indexOf(item.path || '') > -1 && curRoutePath !== item.path,
-        menu_exact: curRoutePath === item.path
-      }"
-      v-if="!item.group && item.children"
-      :index="item.path || ''"
-    >
+    <el-sub-menu v-if="!item.group && item.children" :index="item.path || ''">
       <template #title>
         <el-icon>
           <message />
         </el-icon>
         <router-link custom :to="item.path || ''" v-slot="{ navigate }">
-          <span class="menu_text" @click="navigate">
+          <span @click="navigate">
             {{ item.title }}
           </span>
         </router-link>
@@ -30,20 +22,13 @@
     </el-sub-menu>
 
     <!-- 按钮下，不存在children -->
-    <el-menu-item
-      :class="{
-        menu_item_active: curRoutePath.indexOf(item.path || '') > -1 && curRoutePath !== item.path,
-        menu_item_exact: curRoutePath === item.path
-      }"
-      v-if="!item.group && !item.children"
-      :index="item.path || ''"
-    >
+    <el-menu-item v-if="!item.group && !item.children" :index="item.path || ''">
       <template #title>
         <el-icon>
           <message />
         </el-icon>
         <router-link custom :to="item.path || ''" v-slot="{ navigate }">
-          <span class="menu_text" @click="navigate">
+          <span @click="navigate">
             {{ item.title }}
           </span>
         </router-link>
@@ -75,14 +60,4 @@ const curRoutePath = computed(() => {
 })
 </script>
 
-<style scoped lang="scss">
-.recursion-menu {
-  :deep() > ul {
-    .el-sub-menu__title {
-      i {
-        margin-left: 20px;
-      }
-    }
-  }
-}
-</style>
+<style scoped lang="scss"></style>

@@ -34,6 +34,7 @@ declare module '@vue/runtime-core' {
     Example: typeof import('./src/components/Echart/Example.vue')['default']
     Loading: typeof import('element-plus/es')['ElLoadingDirective']
     MonacoEditor: typeof import('./src/components/MonacoEditor/index.vue')['default']
+    PreviewCodes: typeof import('./src/components/PreviewCodes/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }

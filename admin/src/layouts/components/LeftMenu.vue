@@ -1,13 +1,13 @@
 <template>
   <div class="asideContent">
-    <div class="title" @click="onClick">
+    <div class="title" :class="{ collapse: globalStore.isCollapse }" @click="onClick">
       <div></div>
-      <transition>
+      <transition name="fade">
         <span v-if="!globalStore.isCollapse">FullStack_Blog</span>
       </transition>
     </div>
 
-    <el-scrollbar class="menu-container">
+    <el-scrollbar>
       <el-menu :default-openeds="curRoutePath" :collapse="globalStore.isCollapse">
         <RecursionMenu :data="data" />
       </el-menu>
@@ -47,35 +47,36 @@ function onClick() {
 <style scoped lang="scss">
 // 主题切换
 .asideContent {
-  width: 100%;
   height: 100vh;
-
   overflow: hidden;
+  border: $border;
 
+  $common-width: 200px;
+  $common-collapse-width: 65px;
+
+  $titleHeight: 60px;
+  $logoWidth: 50px;
   .title {
-    width: 100%;
-    height: 60px;
-
+    width: $common-width;
+    height: $titleHeight;
     display: flex;
     justify-content: flex-start;
     align-items: center;
-
-    background: rgba(255, 255, 255, 0.1);
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    transition: width 1s;
+    &.collapse {
+      width: $common-collapse-width;
+    }
 
     > div {
-      width: 50px;
-      height: 50px;
+      width: $logoWidth;
+      height: $logoWidth;
       border-radius: 50%;
-      border: $border;
       animation: logAnimation 3s ease infinite alternate;
 
       margin: 0 7px;
 
       background-image: url("@/assets/vue_logo.jpg");
-      background-position: center;
+      background-position: center center;
       background-repeat: no-repeat;
       background-size: cover;
     }
@@ -83,6 +84,46 @@ function onClick() {
 
   .menu-container {
     padding: 10px 0;
+  }
+  :deep() {
+    .el-scrollbar {
+      padding: 10px 0;
+    }
+
+    .el-menu {
+      border: none;
+      width: $common-width;
+
+      .el-menu-item-group__title {
+        color: var(--el-color-primary-light-3);
+      }
+
+      &.el-menu--collapse {
+        width: $common-collapse-width;
+      }
+    }
+  }
+
+  // transition 动画。
+  .fade-enter-active,
+  .fade-leave-active {
+    transition: all 1s;
+  }
+
+  .fade-enter-to,
+  .fade-leave-from {
+    opacity: 1;
+  }
+
+  .fade-enter-from,
+  .fade-leave-to {
+    opacity: 0;
+    width: 0;
+  }
+
+  // menu的动画
+  .v-leave-to {
+    width: 50px;
   }
 
   @keyframes logAnimation {
@@ -93,23 +134,6 @@ function onClick() {
     100% {
       scale: 1.1;
     }
-  }
-
-  .v-enter-active,
-  .v-leave-active {
-    transition: all 0.5s ease;
-  }
-
-  .v-enter-from,
-  .v-leave-to {
-    width: 0;
-    opacity: 0;
-  }
-
-  .v-enter-to,
-  .v-leave-from {
-    width: 50px;
-    opacity: 1;
   }
 }
 </style>
