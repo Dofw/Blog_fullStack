@@ -17,44 +17,32 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, defineProps, defineEmits, withDefaults, watchEffect, defineExpose } from "vue"
+import { ref, reactive, defineProps, withDefaults, watchEffect, defineExpose } from "vue"
 import type { FormInstance, FormRules } from "element-plus"
 import type { FormData } from "./type"
+import { defaultFormValue, _clone } from "./util"
 
 export interface Props {
-  formData: FormData
+  formData?: FormData
+  model?: "add" | "edit"
 }
 
 // form实例
 const ruleFormRef = ref<FormInstance>({} as FormInstance)
-// form实例提升，做clear等相关处理
-defineExpose({
-  formInstance: ruleFormRef
-})
-
-const $emits = defineEmits(["submit", "cancle"])
 
 // props 默认值
 const props = withDefaults(defineProps<Props>(), {
   formData() {
-    return {
-      pass: "",
-      checkPass: "",
-      age: ""
-    }
-  }
+    return _clone(defaultFormValue)
+  },
+  model: "add"
 })
 
-// 表单数据，// 维持自己的状态。不影响外界
-const ruleForm = ref<FormData>({
-  pass: "",
-  checkPass: "",
-  age: ""
-})
-
+// 隔离外部数据。
+const ruleForm = ref<FormData>(_clone(defaultFormValue))
 watchEffect(() => {
-  // 深克隆一下。
-  ruleForm.value = JSON.parse(JSON.stringify(props.formData))
+  // 新增有默认值，编辑有传入的值。 props.fromData 作为 init。
+  initOrBackFormData()
 })
 
 // 验证规则：async-validator, 传值的方式必须使用blur的验证方式。
@@ -64,14 +52,35 @@ const rules = reactive<FormRules>({
   age: [{ required: true, type: "number", trigger: "blur", message: "age错误" }]
 })
 
-// 提交、撤销
+// 提交 - 区别 编辑 和 新增
+const operateOption = {
+  add: (formData: FormData) => {
+    console.log("新增操作", formData)
+  },
+  edit: (formData: FormData) => {
+    console.log("编辑操作", formData)
+  }
+}
 const submit = async (): Promise<void> => {
   await ruleFormRef.value.validate()
-  $emits("submit", ruleForm.value)
+  operateOption[props.model](ruleForm.value)
 }
+
 const cancle = (): void => {
-  $emits("cancle")
+  ruleFormRef.value.clearValidate()
+  initOrBackFormData()
 }
+
+// init or back to init
+function initOrBackFormData() {
+  ruleForm.value = _clone(props.formData)
+}
+
+// 取消功能暴露, 为dialog x 提供。
+defineExpose({
+  formInstance: ruleFormRef,
+  cancle
+})
 </script>
 
 <style scoped></style>
