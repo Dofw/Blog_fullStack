@@ -1,6 +1,6 @@
 <template>
   <div class="preview-container">
-    <div class="description">描述</div>
+    <div class="description">{{ description }}</div>
 
     <div class="content">
       <el-tabs class="view" type="border-card">
@@ -34,7 +34,8 @@ interface CodeOption {
 }
 
 interface Props {
-  codeOptions: CodeOption[] | []
+  codeOptions?: CodeOption[] | []
+  description?: string
 }
 withDefaults(defineProps<Props>(), {
   codeOptions: () => {
@@ -47,7 +48,6 @@ withDefaults(defineProps<Props>(), {
 .preview-container {
   width: 100%;
   height: 100%;
-  border: 1px solid red;
 
   $titleHeight: 60px;
   $radius: 10px;
@@ -94,12 +94,13 @@ withDefaults(defineProps<Props>(), {
           height: 100%;
           // 新拟态
           border-radius: 10px;
-          background: linear-gradient(145deg, #cacaca, #f0f0f0);
-          box-shadow: 5px 5px 40px #9d9d9d, 0px 0px 40px #ffffff;
+          // background: linear-gradient(145deg, #cacaca, #f0f0f0);
+          // box-shadow: 5px 5px 40px #9d9d9d, 0px 0px 40px #ffffff;
+          box-shadow: 5px 5px 40px var(--el-bg-color-overlay), 0px 0px 40px var(--el-bg-color);
+          background: linear-gradient(145deg, var(--el-bg-color-overlay), var(--el-bg-color));
         }
         .view-summary__wrapper {
           height: 100%;
-          border: 1px solid red;
         }
 
         :deep() {

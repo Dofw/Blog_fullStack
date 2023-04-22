@@ -24,7 +24,7 @@ import { defaultFormValue, _clone } from "./util"
 
 export interface Props {
   formData?: FormData
-  model?: "add" | "edit"
+  model: "add" | "edit"
 }
 
 // form实例

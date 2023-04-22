@@ -1,7 +1,7 @@
 <template>
   <div class="form-container">
     <div style="width: 100%">
-      <BaseFormNew></BaseFormNew>
+      <BaseFormNew model="add"></BaseFormNew>
     </div>
 
     <el-divider></el-divider>
