@@ -25,6 +25,8 @@ html.dark {
   @include set-component-css-var("border-color", $border-color);
   // Fill --el-fill-color-#{$type}
   @include set-component-css-var("fill-color", $fill-color);
+  // mask
+  @include set-component-css-var('mask-color', $mask-color);
 }
 
 // --------------------------------------- 以下设置局域变量。

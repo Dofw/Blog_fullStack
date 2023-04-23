@@ -29,6 +29,8 @@ html.light {
   @include set-component-css-var("fill-color", $fill-color);
   // menu
   @include set-component-css-var("menu", $menu);
+  // mask
+  @include set-component-css-var('mask-color', $mask-color);
 }
 
 // --------------------------------------- 以下设置局域变量。

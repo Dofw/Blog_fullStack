@@ -222,3 +222,13 @@ $empty: map.merge(
   ),
   $empty
 );
+
+// mask
+$mask-color: () !default;
+$mask-color: map.merge(
+  (
+    "": rgba(0, 0, 0, 0.8),
+    "extra-light": rgba(0, 0, 0, 0.3)
+  ),
+  $mask-color
+);

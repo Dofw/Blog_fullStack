@@ -49,7 +49,6 @@ function onClick() {
 .asideContent {
   height: 100vh;
   overflow: hidden;
-  border: $border;
 
   $common-width: 200px;
   $common-collapse-width: 65px;
