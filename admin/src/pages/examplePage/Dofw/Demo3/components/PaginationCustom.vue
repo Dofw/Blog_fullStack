@@ -54,6 +54,8 @@ const props = withDefaults(defineProps<Props>(), {
   pageFields: () => {
     return { ...defauldFields }
   },
+  pageStyle: {},
+  contentStyle: {},
   defaultPageSize: 10
 })
 
