@@ -88,21 +88,6 @@ watch(
   },
   { deep: true }
 )
-watch(
-  () => props.conditions,
-  () => {
-    console.log("watch-conditions")
-    // 如果保持页码不变,则直接调用。
-    // this.wrapperGetList();
-
-    //重置页码为初始，调用pageParams监听。否则重复调用了。
-    pageParams.value = {
-      [fields.value.noPage]: 1,
-      [fields.value.pageSize]: props.defaultPageSize || 10
-    }
-  },
-  { deep: true }
-)
 
 defineExpose({
   total,
@@ -120,12 +105,11 @@ function wrapperGetList() {
 }
 // 父组件出发更新。当前页面恢复 1。
 function updateList() {
-  const params = {
-    ...props.conditions,
-    ...pageParams.value,
-    [fields.value.noPage]: 1
+  // 改变 pageParams 触发 watch
+  pageParams.value = {
+    [fields.value.noPage]: 1,
+    [fields.value.pageSize]: props.defaultPageSize
   }
-  _getList(params)
 }
 function _getList(params: Params) {
   if (instanceComp) {

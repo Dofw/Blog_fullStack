@@ -2,30 +2,20 @@ export const code = `
 import type { Ref } from "vue"
 
 // 参数类型
-export interface Params extends PageParams, ConditionsParams {}
+export type Params = PageParams & ConditionsParams
 
-export interface PageParams {
-  noPage: number
-  pageSize: number
-}
-
-export interface ConditionsParams {
-  field: string
-}
+export type PageParams = Record<string, number>
+export type ConditionsParams = Omit<Record<string, any>, keyof PageParams>
 
 // 数据类型
-export type ArrListType = ListType[]
-export interface ListType {
-  field1: string
-  field2: string
-  field3: string
-  field4: string
-}
+export type ArrListType = any[]
 
+//暴露属性
 export interface ExposeType {
   loading: Ref<boolean>
-  list: Ref<ArrListType>
   total: Ref<number>
+  list: Ref<ArrListType>
+  updateList: () => void
 }
 
 
