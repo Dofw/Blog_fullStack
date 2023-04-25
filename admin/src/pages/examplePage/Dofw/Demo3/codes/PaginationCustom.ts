@@ -14,8 +14,6 @@ export const code = `
         :total="total"
         v-model:current-page="pageParams[fields.noPage]"
         v-model:page-size="pageParams[fields.pageSize]"
-        @size-change="_sizeChange"
-        @current-change="_currentChange"
         v-bind="$attrs"
       >
       </el-pagination>
@@ -117,19 +115,6 @@ function _getList(params: Params) {
     props.getList(params, instanceComp.exposed as ExposeType)
   }
 }
-
-function _currentChange(value: number) {
-  pageParams.value[fields.value.noPage] = value
-}
-// function _prevChange(value: number) {
-//   pageParams.value[fields.value.noPage] = value - 1
-// }
-// function _nextChange(value: number) {
-//   pageParams.value[fields.value.noPage] = value + 1
-// }
-function _sizeChange(value: number) {
-  pageParams.value[fields.value.pageSize] = value
-}
 </script>
 
 <style lang="scss" scoped>
@@ -167,6 +152,5 @@ function _sizeChange(value: number) {
   }
 }
 </style>
-
 
 `
