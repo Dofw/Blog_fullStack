@@ -1,4 +1,5 @@
 export const code = `
+<script>
 import type { Ref } from "vue"
 import type { FormInstance } from "element-plus"
 
@@ -17,4 +18,6 @@ export interface BaseFormInstance extends Ref {
 export interface ComponentsAddRest extends Ref {
   reset: () => void
 }
+</script>
+
 `

@@ -81,7 +81,6 @@ onMounted(() => {
 watch(
   () => pageParams.value,
   () => {
-    console.log("watch-PageParams", pageParams.value)
     wrapperGetList()
   },
   { deep: true }
@@ -99,19 +98,20 @@ const instanceComp: ComponentInternalInstance | null = getCurrentInstance()
 
 function wrapperGetList() {
   const params = { ...props.conditions, ...pageParams.value }
-  _getList(params)
+  if (instanceComp) {
+    props.getList(params, instanceComp.exposed as ExposeType)
+  }
 }
-// 父组件出发更新。当前页面恢复 1。
+
+/**
+ * 父组件出发更新。当前页码恢复 1。
+ * 1.出发watch，调用wrapperGetList
+ */
 function updateList() {
   // 改变 pageParams 触发 watch
   pageParams.value = {
     [fields.value.noPage]: 1,
     [fields.value.pageSize]: props.defaultPageSize
-  }
-}
-function _getList(params: Params) {
-  if (instanceComp) {
-    props.getList(params, instanceComp.exposed as ExposeType)
   }
 }
 </script>

@@ -12,24 +12,22 @@ export const code = `
     </el-form-item>
     <el-form-item>
       <el-button type="primary" @click="submit">Submit</el-button>
-      <el-button @click="cancle">Reset</el-button>
+      <el-button @click="cancel">Reset</el-button>
     </el-form-item>
   </el-form>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, defineProps, withDefaults, watchEffect, defineExpose } from "vue"
+import { ref, reactive, defineProps, withDefaults, defineExpose } from "vue"
 import type { FormInstance, FormRules } from "element-plus"
 import type { FormData } from "./type"
-import { defaultFormValue, _clone } from "./util"
+import { defaultFormValue, _clone } from "./constant"
+import useFormInit from "./useFormInit"
 
 export interface Props {
   formData?: FormData
-  model?: "add" | "edit"
+  model: "add" | "edit" | "detail"
 }
-
-// form实例
-const ruleFormRef = ref<FormInstance>({} as FormInstance)
 
 // props 默认值
 const props = withDefaults(defineProps<Props>(), {
@@ -39,12 +37,13 @@ const props = withDefaults(defineProps<Props>(), {
   model: "add"
 })
 
+const emits = defineEmits(["close", "update-list"])
+
+// form实例
+const ruleFormRef = ref<FormInstance>({} as FormInstance)
+
 // 隔离外部数据。
-const ruleForm = ref<FormData>(_clone(defaultFormValue))
-watchEffect(() => {
-  // 新增有默认值，编辑有传入的值。 props.fromData 作为 init。
-  initOrBackFormData()
-})
+const { ruleForm, resetData } = useFormInit(props, "formData", defaultFormValue)
 
 // 验证规则：async-validator, 传值的方式必须使用blur的验证方式。
 const rules = reactive<FormRules>({
@@ -55,11 +54,18 @@ const rules = reactive<FormRules>({
 
 // 提交 - 区别 编辑 和 新增
 const operateOption = {
-  add: (formData: FormData) => {
+  add: async (formData: FormData) => {
     console.log("新增操作", formData)
+    await Promise.resolve("新增完成")
+    finishOperate()
   },
-  edit: (formData: FormData) => {
+  edit: async (formData: FormData) => {
     console.log("编辑操作", formData)
+    await Promise.resolve("更新完成")
+    finishOperate()
+  },
+  detail: () => {
+    return
   }
 }
 const submit = async (): Promise<void> => {
@@ -67,21 +73,23 @@ const submit = async (): Promise<void> => {
   operateOption[props.model](ruleForm.value)
 }
 
-const cancle = (): void => {
+const cancel = (): void => {
   ruleFormRef.value.clearValidate()
-  initOrBackFormData()
+  ruleForm.value = _clone(resetData.value)
 }
 
-// init or back to init
-function initOrBackFormData() {
-  ruleForm.value = _clone(props.formData)
+function finishOperate() {
+  emits("close", false)
+  emits("update-list")
+  cancel()
 }
 
 // 取消功能暴露, 为dialog x 提供。
 defineExpose({
   formInstance: ruleFormRef,
-  cancle
+  cancel
 })
+
 </script>
 
 <style scoped></style>
