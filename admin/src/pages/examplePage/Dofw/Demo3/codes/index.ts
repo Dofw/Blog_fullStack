@@ -1,5 +1,21 @@
 export const code = `
 <template>
+  <!-- condition -->
+  <el-form :inline="true" :model="conditions" class="demo-form-inline px-5 mt-5">
+    <el-row>
+      <el-col :span="4">
+        <el-form-item label="测试:">
+          <el-input :disabled="true" size="default" v-model="conditions.field" placeholder="请输入企业名称" />
+        </el-form-item>
+      </el-col>
+
+      <el-col :span="4" class="">
+        <el-form-item>
+          <el-button size="default" type="primary" @click="onSearch">查询</el-button>
+        </el-form-item>
+      </el-col>
+    </el-row>
+  </el-form>
   <CustomPagination
     ref="pageInstance"
     :conditions="conditions"
@@ -22,19 +38,18 @@ export const code = `
 <script setup lang="ts">
 import type { Params, ExposeType } from "./type"
 import CustomPagination from "./PaginationCustom.vue"
-import { ref, onMounted } from "vue"
+import { ref } from "vue"
 
 const pageInstance = ref({} as ExposeType)
 
-const conditions = ref({
+const defaultConditions = {
   field: "init"
-})
+}
+const conditions = ref({ ...defaultConditions })
 
-onMounted(() => {
-  setTimeout(() => {
-    conditions.value.field = "reset"
-  }, 10000)
-})
+const onSearch = () => {
+  pageInstance.value.updateList() // 重新改变页码，自动就会带入新的 conditions
+}
 
 async function getList(params: Params, exposed: ExposeType) {
   if (!exposed) return
