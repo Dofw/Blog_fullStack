@@ -3,9 +3,13 @@ import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import RegisterDto from './dto/register.dto';
 import LoginDto from './dto/login.dto';
-import { InjectModel } from 'nestjs-typegoose';
-import User from '@libs/db/models/user.module';
-import { ReturnModelType } from '@typegoose/typegoose';
+// import { InjectModel } from 'nestjs-typegoose';
+// import User from '@libs/db/models/user.module';
+// import { ReturnModelType } from '@typegoose/typegoose';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { User } from '@libs/mysql/models/user.entity';
+
 import { AuthGuard } from '@nestjs/passport/dist';
 import { JwtService } from '@nestjs/jwt';
 
@@ -14,7 +18,8 @@ import { JwtService } from '@nestjs/jwt';
 export class AuthController {
   constructor(
     private readonly jwtService: JwtService,
-    @InjectModel(User) private readonly userModel: ReturnModelType<typeof User>,
+    @InjectRepository(User)
+    private readonly userModel: Repository<User>,
   ) {}
 
   @ApiOperation({ summary: '注册' })

@@ -1,21 +1,21 @@
 import { createRouter, createWebHistory } from "vue-router"
 import type { RouteRecordRaw } from "vue-router"
 import examplePage from "./modules/examplePage"
-import HomeLayout from "@/layouts/HomeLayout.vue"
+import Login from "@/pages/Login/index.vue"
 
 const routes: RouteRecordRaw[] = [
   {
     path: "/",
     redirect: "/example"
   },
-  examplePage,
   {
-    path: "/test",
-    component: HomeLayout,
+    path: "/login",
+    component: Login,
     meta: {
-      title: "Test"
+      hidden: true
     }
-  }
+  },
+  examplePage
 ]
 
 export default createRouter({

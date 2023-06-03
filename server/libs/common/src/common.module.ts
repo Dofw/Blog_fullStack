@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
 import { CommonService } from './common.service';
 
-import { DbModule } from '@libs/db';
+// import { DbModule } from '@libs/db';
+import { MysqlModule } from '@libs/mysql'; // 先学习mysql
 import { ConfigModule, ConfigModuleOptions } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { Global } from '@nestjs/common/decorators';
@@ -22,7 +23,8 @@ import { Global } from '@nestjs/common/decorators';
       },
     }),
 
-    DbModule,
+    // DbModule,
+    MysqlModule,
   ],
   providers: [CommonService],
   exports: [CommonService, JwtModule],
