@@ -1,3 +1,4 @@
+import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -14,6 +15,8 @@ async function bootstrap() {
     prefix: '/assets',
   });
 
+  const configService = app.get(ConfigService);
+
   const config = new DocumentBuilder()
     .setTitle('Admin-Server-Api')
     .setDescription('供后台管理页面API')
@@ -23,7 +26,7 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api-doc', app, document);
 
-  const Port = process.env.ADMIN_PORT;
+  const Port = configService.get('port');
   await app.listen(Port);
   console.log(`http://localhost:${Port}`);
 }

@@ -35,6 +35,24 @@
       ],
       "@libs/mysql/*": [
         "libs/mysql/src/*"
+      ],
+      "@libs/config": [
+        "libs/config/src"
+      ],
+      "@libs/config/*": [
+        "libs/config/src/*"
+      ],
+      "@libs/confs": [
+        "libs/confs/src"
+      ],
+      "@libs/confs/*": [
+        "libs/confs/src/*"
+      ],
+      "@app/test": [
+        "libs/test/src"
+      ],
+      "@app/test/*": [
+        "libs/test/src/*"
       ]
     }
   }

@@ -9,8 +9,8 @@
     "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
-    "start": "nest start",
-    "start:dev": "nest start --watch",
+    "start": "cross-env NODE_ENV=dev nest start --watch",
+    "start:dev": "cross-env NODE_ENV=dev nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
@@ -62,6 +62,7 @@
     "@types/supertest": "^2.0.11",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
+    "cross-env": "^7.0.3",
     "eslint": "^8.0.1",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
@@ -98,7 +99,10 @@
     "moduleNameMapper": {
       "^@libs/db(|/.*)$": "<rootDir>/libs/db/src/$1",
       "^@app/common(|/.*)$": "<rootDir>/libs/common/src/$1",
-      "^@libs/mysql(|/.*)$": "<rootDir>/libs/mysql/src/$1"
+      "^@libs/mysql(|/.*)$": "<rootDir>/libs/mysql/src/$1",
+      "^@libs/config(|/.*)$": "<rootDir>/libs/config/src/$1",
+      "^@libs/confs(|/.*)$": "<rootDir>/libs/confs/src/$1",
+      "^@app/test(|/.*)$": "<rootDir>/libs/test/src/$1"
     }
   }
 }

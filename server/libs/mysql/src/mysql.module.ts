@@ -1,3 +1,4 @@
+import { ConfigService } from '@nestjs/config';
 import { Module, Global } from '@nestjs/common';
 import { MysqlService } from './mysql.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -6,15 +7,15 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
-      async useFactory() {
+      inject: [ConfigService],
+      async useFactory(configService: ConfigService) {
         return {
           type: 'mysql',
-          host: process.env.MYSQL_HOST,
-          port: +process.env.MYSQL_PORT,
-          username: process.env.MYSQL_USER,
-          password: process.env.MYSQL_PASSWORD,
-          database: process.env.MYSQL_DATABASE,
-          entities: [],
+          host: configService.get('database.host'),
+          port: configService.get('database.port'),
+          username: configService.get('database.username'),
+          password: configService.get('database.password'),
+          database: configService.get('database.database'),
           autoLoadEntitties: true, // 自动载入实体
         };
       },
