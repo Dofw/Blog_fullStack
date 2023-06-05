@@ -1,3 +1,6 @@
+## 文件传输(上传、下载)
+1. XMLHttpRequest.responseType 参见mdn。(待不存)
+
 ## 数据传入进度分类
 
 ### 响应进度
