@@ -1,9 +1,9 @@
 <template>
-  <div class="xxxxx" ref="chart" :style="{ width, height }"></div>
+  <div class="echart-container" ref="chart" :style="{ width, height }"></div>
 </template>
 
 <script setup>
-import { defineProps, ref, onMounted, watch, defineExpose } from "vue"
+import { defineProps, ref, onMounted, watch, defineExpose, nextTick } from "vue"
 import * as echarts from "echarts"
 
 const props = defineProps({
@@ -36,6 +36,13 @@ defineExpose({
 onMounted(() => {
   let myChart = echarts.init(chart.value)
   myChart.setOption(props.options)
+  nextTick(() => {
+    const { width, height } = chart.value.getBoundingClientRect()
+    myChart.resize({
+      width,
+      height
+    })
+  })
   instance.value = myChart
 })
 
@@ -55,4 +62,15 @@ watch(
 const unwarp = (obj) => obj && (obj.__v_raw || obj.valueOf() || obj)
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.echart-container {
+  > div {
+    border: 1px solid green;
+    &:nth-of-type(1) {
+      border: 1px solid green;
+      width: 100% !important;
+      height: 100% !important;
+    }
+  }
+}
+</style>

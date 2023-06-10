@@ -1,5 +1,6 @@
 import * as echarts from "echarts"
-import type { RegisteredSeriesOption } from "echarts"
+import { SeriesType } from "./type"
+import type { SeriesOption, GeneralSeriesFunc, BarConfigType, LineConfigType } from "./type"
 
 // 图标 字体大小级别。
 export const CONST_FZ = {
@@ -18,44 +19,62 @@ export const CONST_FZ = {
   title_2: "28px"
 }
 
-export enum SeiresType {
-  BAR = "bar",
-  LINE = "line"
+// ---------------------------------------------series
+export function generalAllSeries(configs) {
+  const series: SeriesOption[] = []
+  configs.forEach((config) => {
+    const item = generalOneSeries(config, config.customSeriesFunc)
+    series.push(item)
+  })
+
+  return series
 }
-type Values<T> = T[keyof T]
-export type SeiresOption = Values<RegisteredSeriesOption>
-export interface ExtendSeiresOption {
-  custom: boolean
-  factorySeirse: (config) => SeiresOption
+export function generalOneSeries(config, customSeriesFunc: GeneralSeriesFunc) {
+  const { type } = config
+  return tempSeries[type](config, customSeriesFunc)
 }
 
-export const tempSeires = {
-  [SeiresType.BAR]: (config, option: ExtendSeiresOption = { custom: false, factorySeirse: (config) => ({}) }) => {
-    // user自定义，传入config。
-    if (option.custom) {
-      return option.factorySeirse(config)
-    }
+const tempSeries = {
+  [SeriesType.BAR]: (config: BarConfigType, customSeriesFunc: GeneralSeriesFunc) => {
+    // user自定义，传入GeneralSeriesFunc。
+    const result = executeCustomFunc(config, customSeriesFunc)
+    if (result) return result
 
     // 默认配置，只需要定义 seires type 里面需要东西。
-    const bar_Width = computedBarWidth(config.categoryAxis, 15)
-    const bar_barGap = "40%"
-    const { name = "", linearGradient = [], data } = config
+    const {
+      data = [],
+      seriesName = "",
+      unit = "",
+      color = "",
+
+      xAxisIndex = 0,
+      yAxisIndex = 0,
+      barGap,
+      barWidth,
+      linearGradient = [],
+      formatter = ""
+    } = config
 
     return {
-      name: name,
+      name: seriesName,
       type: "bar",
-      barGap: bar_barGap,
-      yAxisIndex: 1,
-      barWidth: bar_Width,
+      xAxisIndex: xAxisIndex,
+      yAxisIndex: yAxisIndex,
+      barGap: barGap,
+      barWidth: barWidth,
       itemStyle: {
         color: function (param) {
-          let position: [number, number, number, number] // a tuple type 元组类型
-          if (param.value < 0) {
-            position = [0, 1, 0, 0]
+          if (linearGradient) {
+            let position: [number, number, number, number] // a tuple type 元组类型
+            if (param.value < 0) {
+              position = [0, 1, 0, 0]
+            } else {
+              position = [0, 0, 0, 1]
+            }
+            return new echarts.graphic.LinearGradient(...position, linearGradient)
           } else {
-            position = [0, 0, 0, 1]
+            return color
           }
-          return new echarts.graphic.LinearGradient(...position, linearGradient)
         }
       },
       z: 20,
@@ -67,19 +86,28 @@ export const tempSeires = {
       }
     }
   },
-  [SeiresType.LINE]: (config, option: ExtendSeiresOption = { custom: false, factorySeirse: (config) => ({}) }) => {
-    // user自定义，传入config。
-    if (option.custom) {
-      return option.factorySeirse(config)
-    }
+  [SeriesType.LINE]: (config: LineConfigType, customSeriesFunc: GeneralSeriesFunc) => {
+    // user自定义，传入GeneralSeriesFunc。
+    const result = executeCustomFunc(config, customSeriesFunc)
+    if (result) return result
 
     // 默认配置，只需要定义 seires type 里面需要东西。
-    const { name = "", color = [], data } = config
+    const {
+      data = [],
+      seriesName = "",
+      unit = "",
+      color = "",
+
+      xAxisIndex = 0,
+      yAxisIndex = 0,
+      formatter = ""
+    } = config
 
     return {
-      name: name,
+      name: seriesName,
       type: "line",
-      yAxisIndex: 0,
+      xAxisIndex: xAxisIndex,
+      yAxisIndex: yAxisIndex,
       showSymbol: true,
       symbol: "emptyCircle",
       symbolSize: 10,
@@ -98,19 +126,41 @@ export const tempSeires = {
   }
 }
 
-export const tempTootip = {
+function executeCustomFunc(config, customSeriesFunc: GeneralSeriesFunc) {
+  if (customSeriesFunc) {
+    if (typeof customSeriesFunc === "function") {
+      const result = customSeriesFunc(config)
+      if (Object.prototype.toString.call(result) !== "[object Object]")
+        throw "config.customSeriesFunc: The return is not an object"
+      return customSeriesFunc(config)
+    } else {
+      throw "customSeriesFunc argument must be Function in tempSeries"
+    }
+  } else {
+    return false // false 代表不是函数。
+  }
+}
+
+// ---------------------------------------------------------tooltip
+export const tempTooltip = {
   generalFormatter: generalTootipFormatter, // 使用现有的一套。
   contentStr: getTooltipContentStr,
   titleStr: getTooltipTitleStr
 }
 
-export function generalTootipFormatter(configs) {
+/**
+ * CONST_FZ, 需不需要做为第二个参数. 不做就该文件下的CONST_FZ闭包.
+ * 暂时不作为第二个参数使用.
+ * @param configs
+ * @returns
+ */
+function generalTootipFormatter(configs, CONST_FZ) {
   // formater传入的参数
   return (e) => {
     let str = ""
     const category = getTooltipTitleStr(CONST_FZ, e[0].axisValue)
-    e.forEach((item, index) => {
-      const config = configs.find((config, index) => {
+    e.forEach((item) => {
+      const config = configs.find((config) => {
         return item.seriesName === config.name
       })
 
@@ -139,11 +189,15 @@ function getTooltipContentStr(CONST_FZ, item, config, legendType = "bar") {
     width:15px;height:2px;left:5px;background-color:${config.color || ""}"></span> 
     `
   }
-   <span style="flex-grow:0;font-family:Microsoft YaHei;font-size:${CONST_FZ.tooltip_content};color:#fff;line-height:25px">
+   <span style="flex-grow:0;font-family:Microsoft YaHei;font-size:${
+     CONST_FZ.tooltip_content
+   };color:#fff;line-height:25px">
    ${item.seriesName}
    &nbsp
    </span> 
-   <span style="flex-grow:1;text-align:right;color:#96D5FF;font-family:Microsoft YaHei;line-height:25px;font-size:${CONST_FZ.tooltip_content}">
+   <span style="flex-grow:1;text-align:right;color:#96D5FF;font-family:Microsoft YaHei;line-height:25px;font-size:${
+     CONST_FZ.tooltip_content
+   }">
    ${defaultValue(item.data, config.formatter)}&nbsp${config.unit || "亿"}<br /></span>
   </div>
   `
@@ -207,7 +261,8 @@ export function defaultValue(value, format, defaultVal = "-") {
     option.type = format
 
     // toFixed-num -> format=toFiexd num = num
-    const isToFixed = format && format.includes(`${formatOption.toFixed.type}${formatOption.toFixed.separate}`)
+    const isToFixed =
+      format && format.includes(`${formatOption.toFixed.type}${formatOption.toFixed.separate}`)
     if (isToFixed) {
       const parseArr = format.split(formatOption.toFixed.separate)
       // 处理toFixed
@@ -315,7 +370,10 @@ export function handlerDataFunc(data, option) {
       // 后端返回 存在categoryField为null, 也就意味着数据存在问题。
     }
 
-    const categoryVal = categoryField === "month" ? item[categoryField].slice(item[categoryField].length - 2).replace(/^0/g, "") + "月" : item[categoryField]
+    const categoryVal =
+      categoryField === "month"
+        ? item[categoryField].slice(item[categoryField].length - 2).replace(/^0/g, "") + "月"
+        : item[categoryField]
 
     dataAll.categoryAxis.push(categoryVal)
 
