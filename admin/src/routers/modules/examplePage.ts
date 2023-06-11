@@ -8,7 +8,7 @@ const VueRoutes = parseModules(modules)
 
 const examplePage: RouteRecordRaw = {
   path: "/example",
-  redirect: "/example/Dofw/Demo2",
+  redirect: "/example/Dofw/01BaseForm",
   component: ExampleLayout,
   meta: {
     title: "Examples"
