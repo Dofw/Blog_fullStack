@@ -22,7 +22,7 @@ import LeftMenu from "./components/LeftMenu.vue"
 import Header from "@/layouts/components/Header.vue"
 import { onMounted, ref } from "vue"
 import type { Ref } from "vue"
-import collision from "@dofw/Demo5/components/collision"
+import collision from "@dofw/05Canvas/components/collision"
 
 const canvasBgRef: Ref<HTMLCanvasElement> = ref({} as HTMLCanvasElement)
 onMounted(() => {

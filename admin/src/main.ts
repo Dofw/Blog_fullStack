@@ -5,9 +5,14 @@ import App from "./App.vue"
 import "@/assets/scss/reset.scss"
 
 // 指令
-import myLoading from "@dofw/Demo4/components/directive"
+import myLoading from "@dofw/04VDirective/components/directive"
 
 // tool-libs
 import { VMdEditor } from "@/toolLibs"
 
-createApp(App).use(router).use(createPinia()).use(VMdEditor).directive("myLoading", myLoading).mount("#app")
+createApp(App)
+  .use(router)
+  .use(createPinia())
+  .use(VMdEditor)
+  .directive("myLoading", myLoading)
+  .mount("#app")

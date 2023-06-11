@@ -21,7 +21,7 @@ const examplePage: RouteRecordRaw = {
 
 // tool
 function parseModules(modules: any) {
-  const Comps = []
+  const Comps: any[] = []
   for (const key in modules) {
     const paths = key.split("/")
 
@@ -33,6 +33,7 @@ function parseModules(modules: any) {
 
     const fileType = paths[paths.length - 3] // xxx/Demo1/index.vue
     const endName = paths[paths.length - 2] // xxx/index.vue
+    console.log(fileType, endName)
 
     // route 格式
     Comps.push({

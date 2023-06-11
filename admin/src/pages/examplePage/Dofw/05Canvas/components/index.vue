@@ -2,7 +2,12 @@
   <div class="canvas-container">
     <canvas id="canvas-instance" width="400" height="200"></canvas>
     <canvas id="canvas-instance2" width="500" height="200" style="background-color: #000"></canvas>
-    <canvas ref="collisionCanvasRef" width="500" height="200" style="background-color: #000"></canvas>
+    <canvas
+      ref="collisionCanvasRef"
+      width="500"
+      height="200"
+      style="background-color: #000"
+    ></canvas>
   </div>
 </template>
 
@@ -10,7 +15,7 @@
 import { onMounted, ref } from "vue"
 import type { Ref } from "vue"
 import imgUrl from "@/assets/vue_bg.jpeg"
-import collision from "@dofw/Demo5/components/collision"
+import collision from "./collision"
 // import snowUrl from "@/assets/snow.png"
 
 const collisionCanvasRef: Ref<HTMLCanvasElement> = ref({} as HTMLCanvasElement)
