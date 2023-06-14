@@ -1,14 +1,12 @@
 import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-
-import RegisterDto from './dto/register.dto';
+import RegisterPhoneDto from './dto/registerPhone.dto';
+import RegisterUserDto from './dto/registerUser.dto';
 import LoginDto from './dto/login.dto';
-// import { InjectModel } from 'nestjs-typegoose';
-// import User from '@libs/db/models/user.module';
-// import { ReturnModelType } from '@typegoose/typegoose';
+
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User } from '@libs/mysql/models/user.entity';
+import { Login } from '@libs/mysql/models/login.entity';
 
 import { AuthGuard } from '@nestjs/passport/dist';
 import { JwtService } from '@nestjs/jwt';
@@ -18,22 +16,55 @@ import { JwtService } from '@nestjs/jwt';
 export class AuthController {
   constructor(
     private readonly jwtService: JwtService,
-    @InjectRepository(User)
-    private readonly userModel: Repository<User>,
+    @InjectRepository(Login)
+    private readonly loginModel: Repository<Login>,
   ) {}
 
-  @ApiOperation({ summary: '注册' })
-  @Post('register')
-  async register(@Body() dto: RegisterDto) {
-    const { username, password } = dto;
+  @ApiOperation({ summary: '用户名注册' })
+  @Post('register/user')
+  async registerUser(@Body() dto: RegisterUserDto) {
+    const { username, password, loginType } = dto;
+    console.log('用户登录', dto);
+
+    const otherInfo = {
+      ip: '',
+      address: '',
+      equipmentInfo: '',
+    };
+
+    const option: RegisterUserDto = {
+      id: null,
+      username,
+      password,
+      loginType: +loginType,
+      ...otherInfo,
+    };
+    // 是否存在
+    const loginInfo = await this.loginModel.save(option);
+    return loginInfo;
+  }
+
+  @ApiOperation({ summary: '手机注册' })
+  @Post('register/phone')
+  async registerPhone(@Body() dto: RegisterPhoneDto) {
+    const { phone, loginType } = dto;
+
+    const otherInfo = {
+      ip: '',
+      address: '',
+      equipment: '',
+    };
+
+    const option: RegisterPhoneDto = {
+      id: null,
+      phone,
+      loginType,
+      ...otherInfo,
+    };
 
     // 是否存在
-
-    const userInfo = await this.userModel.create({
-      username,
-      password, //mongo set bcrypt
-    });
-    return userInfo;
+    const loginInfo = await this.loginModel.create(option);
+    return loginInfo;
   }
 
   @ApiOperation({ summary: '登录' })

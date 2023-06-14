@@ -16,7 +16,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
           username: configService.get('database.username'),
           password: configService.get('database.password'),
           database: configService.get('database.database'),
-          autoLoadEntitties: true, // 自动载入实体
+          autoLoadEntities: true, // 自动载入实体
         };
       },
     }),

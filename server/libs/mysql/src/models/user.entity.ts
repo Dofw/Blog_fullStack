@@ -1,5 +1,4 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
-// import { hashSync } from 'bcrypt';
 
 @Entity()
 export class User {
@@ -7,8 +6,5 @@ export class User {
   id: number;
 
   @Column()
-  username: string;
-
-  @Column()
-  password: string;
+  nikename: string;
 }
