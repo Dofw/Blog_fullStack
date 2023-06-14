@@ -17,6 +17,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
           password: configService.get('database.password'),
           database: configService.get('database.database'),
           autoLoadEntities: true, // 自动载入实体
+          synchronize: true, //// 实体与表同步 调试模式下开始。不然会有强替换导致数据丢是
         };
       },
     }),

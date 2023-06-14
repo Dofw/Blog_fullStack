@@ -7,7 +7,7 @@ export default class RegisterUserDto {
     required: false,
     example: null,
   })
-  id: null | number;
+  id?: null | number;
 
   @ApiProperty({
     description: '用户名',

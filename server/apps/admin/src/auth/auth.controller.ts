@@ -33,7 +33,6 @@ export class AuthController {
     };
 
     const option: RegisterUserDto = {
-      id: null,
       username,
       password,
       loginType: +loginType,

@@ -20,8 +20,8 @@ export class Login {
   @Column()
   password: string;
 
-  @Column()
-  phone: string; // 手机登录方式
+  // @Column()
+  // phone: string; // 手机登录方式
 
   // 以下是登录记录信息
   @Column()
@@ -34,6 +34,7 @@ export class Login {
   equipmentInfo?: string; // 设备信息
 
   @Column({
+    type: 'enum',
     enum: LoginEnum,
   } as ColumnOptions)
   loginType: number; // 登录类型
