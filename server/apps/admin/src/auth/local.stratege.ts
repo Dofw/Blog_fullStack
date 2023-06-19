@@ -5,7 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { LoginUser } from '@libs/mysql/models/loginUser.entity';
 
-import { IStrategyOptions, Strategy } from 'passport-local';
+import { type IStrategyOptions, Strategy } from 'passport-local';
 
 @Injectable()
 export default class LocalStrategy extends PassportStrategy(Strategy) {

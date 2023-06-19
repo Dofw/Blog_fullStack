@@ -1,7 +1,9 @@
+import { LoginUser } from './models/loginUser.entity';
 import { ConfigService } from '@nestjs/config';
 import { Module, Global } from '@nestjs/common';
 import { MysqlService } from './mysql.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { TypeOrmModule, type TypeOrmModuleAsyncOptions } from '@nestjs/typeorm';
+import * as path from 'path';
 
 @Global()
 @Module({
@@ -17,10 +19,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
           password: configService.get('database.password'),
           database: configService.get('database.database'),
           autoLoadEntities: true, // 自动载入实体
-          synchronize: true, //// 实体与表同步 调试模式下开始。不然会有强替换导致数据丢是
+          entities: [
+            path.join(__dirname, '../src/models/**/*.entity{.ts,.js}'),
+          ],
+          synchronize: true, //// 实体与表同步 调试模式下开始。不然会有强替换导致数据丢是. 生产不使用这种。
         };
       },
-    }),
+    } as TypeOrmModuleAsyncOptions),
   ],
   providers: [MysqlService],
   exports: [MysqlService],

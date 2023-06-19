@@ -55,17 +55,16 @@ export class AuthController {
   @UseGuards(AuthGuard('local'))
   @Post('user/login')
   async login(@Body() dto: LoginDto, @Req() req: any) {
-    console.log(111, req.user);
-
+    console.log('login', req.user);
     return {
       token: this.jwtService.sign({
         username: req.user.username,
-        id: req.user._id,
+        id: req.user.id,
       }),
     };
   }
 
-  @ApiOperation({ summary: '获取用户信息' })
+  @ApiOperation({ summary: 'user登录用户信息' })
   @ApiBearerAuth()
   @Get('info')
   @UseGuards(AuthGuard('jwt'))

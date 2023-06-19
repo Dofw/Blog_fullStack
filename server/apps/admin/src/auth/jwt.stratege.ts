@@ -9,7 +9,7 @@ import { ExtractJwt, Strategy, StrategyOptions } from 'passport-jwt';
 export default class JwtStategy extends PassportStrategy(Strategy) {
   constructor(
     @InjectRepository(LoginUser)
-    private readonly userModel: Repository<LoginUser>,
+    private readonly userInfoModel: Repository<LoginUser>,
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -18,7 +18,10 @@ export default class JwtStategy extends PassportStrategy(Strategy) {
   }
 
   async validate(tokenInfo: any): Promise<any> {
-    // return await this.userModel.findById({ _id: tokenInfo.id });
-    return 123;
+    console.log(111, tokenInfo);
+    return await this.userInfoModel.findOne({
+      select: ['username', 'password', 'id'],
+      where: { id: tokenInfo.id },
+    });
   }
 }

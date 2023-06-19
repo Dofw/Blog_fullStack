@@ -9,18 +9,17 @@ import { Repository } from 'typeorm';
 @ApiTags('默认')
 @Controller()
 export class AdminController {
-  constructor(
-    @InjectRepository(LoginUser)
-    private loginUser: Repository<LoginUser>,
-  ) {}
-
-  @ApiOperation({ summary: '初始' })
-  @ApiBearerAuth()
-  @Get()
-  @UseGuards(AuthGuard('jwt'))
-  async index() {
-    const result = await this.loginUser.find();
-    console.log(result);
-    return 'admin-controller-index';
-  }
+  // constructor(
+  //   @InjectRepository(LoginUser)
+  //   private loginUser: Repository<LoginUser>,
+  // ) {}
+  // @ApiOperation({ summary: '初始' })
+  // @ApiBearerAuth()
+  // @Get()
+  // @UseGuards(AuthGuard('jwt'))
+  // async index() {
+  //   const result = await this.loginUser.find();
+  //   console.log(result);
+  //   return 'admin-controller-index';
+  // }
 }
