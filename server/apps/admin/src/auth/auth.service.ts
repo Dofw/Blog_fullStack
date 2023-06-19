@@ -1,7 +1,11 @@
 import { LoginUser } from '@libs/mysql/models/loginUser.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import {
+  Repository,
+  type FindManyOptions,
+  type FindOptionsWhere,
+} from 'typeorm';
 import RegisterUserDto from './dto/registerUser.dto';
 
 @Injectable()
@@ -14,9 +18,13 @@ export class AuthService {
   async uSave(data: RegisterUserDto | Omit<RegisterUserDto, 'id'>) {
     return await this.loginUserModel.save(data);
   }
-  async uDelete() {}
-  async uGet() {
-    return await this.loginUserModel.find();
+  async uDelete(condition: number | number[] | FindOptionsWhere<LoginUser>) {
+    // return await this.loginUserModel.delete(condition);
+    return await this.loginUserModel.softDelete(condition); // 软删除
+  }
+  async uGet(condition?: FindManyOptions<LoginUser>) {
+    const result = await this.loginUserModel.find(condition);
+    return result;
   }
 
   // // phone 模式

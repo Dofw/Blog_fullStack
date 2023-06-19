@@ -1,5 +1,10 @@
-import { Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
-import { type ColumnOptions } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+// import { type ColumnOptions } from 'typeorm';
 
 // 三种登录方式 - 共同抽象属性
 export class BaseLoginInfo {
@@ -19,4 +24,7 @@ export class BaseLoginInfo {
 
   @UpdateDateColumn()
   updateTime?: Date;
+
+  @DeleteDateColumn()
+  deleteAt: Date;
 }

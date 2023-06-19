@@ -4,8 +4,8 @@ import { hashSync } from 'bcrypt';
 
 @Entity('login_user')
 export class LoginUser extends BaseLoginInfo {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn('increment')
+  id: number;
 
   @Column()
   username: string;
@@ -17,7 +17,6 @@ export class LoginUser extends BaseLoginInfo {
         return val;
       },
       to(val) {
-        console.log(113);
         return hashSync(val, 5);
       },
     },

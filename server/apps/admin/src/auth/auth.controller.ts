@@ -8,6 +8,7 @@ import { AuthGuard } from '@nestjs/passport/dist';
 import { JwtService } from '@nestjs/jwt';
 import { AuthService } from './auth.service';
 import { LoginUser } from '@libs/mysql/models/loginUser.entity';
+import { DeleteDto } from './dto/delete.dto';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -17,7 +18,7 @@ export class AuthController {
     private readonly jwtService: JwtService,
   ) {}
 
-  @ApiOperation({ summary: '用户名注册' })
+  @ApiOperation({ summary: 'user注册' })
   @Post('user/create')
   async registerUser(@Body() dto: RegisterUserDto) {
     const { id, ...restData } = dto;
@@ -27,7 +28,7 @@ export class AuthController {
       address: '',
       equipmentInfo: { type: 'PC端' },
     };
-    const data: LoginUser | Omit<LoginUser, 'id' | 'idd'> = {
+    const data: LoginUser | Omit<LoginUser, 'id' | 'deleteAt'> = {
       ...restData,
       ...otherInfo,
     };
@@ -35,11 +36,19 @@ export class AuthController {
   }
 
   @ApiOperation({
-    summary: '用户名方式信息获取',
+    summary: 'user获取',
   })
   @Get('user/get')
   async registerUserGet() {
     return await this.authService.uGet();
+  }
+
+  @ApiOperation({
+    summary: 'user删除',
+  })
+  @Post('user/delete')
+  async registerUserDel(@Body() body: DeleteDto) {
+    return await this.authService.uDelete(body.ids);
   }
 
   @ApiOperation({ summary: '登录' })
