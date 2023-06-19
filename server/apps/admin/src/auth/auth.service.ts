@@ -23,8 +23,7 @@ export class AuthService {
     return await this.loginUserModel.softDelete(condition); // 软删除
   }
   async uGet(condition?: FindManyOptions<LoginUser>) {
-    const result = await this.loginUserModel.find(condition);
-    return result;
+    return await this.loginUserModel.find(condition);
   }
 
   // // phone 模式

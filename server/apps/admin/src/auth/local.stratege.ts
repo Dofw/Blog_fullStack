@@ -3,14 +3,15 @@ import { PassportStrategy } from '@nestjs/passport';
 import { compareSync } from 'bcrypt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User } from '@libs/mysql/models/user.entity';
+import { LoginUser } from '@libs/mysql/models/loginUser.entity';
 
 import { IStrategyOptions, Strategy } from 'passport-local';
 
 @Injectable()
 export default class LocalStrategy extends PassportStrategy(Strategy) {
   constructor(
-    @InjectRepository(User) private readonly userModel: Repository<User>,
+    @InjectRepository(LoginUser)
+    private readonly userInfoModel: Repository<LoginUser>,
   ) {
     super({
       usernameField: 'username',
@@ -19,13 +20,16 @@ export default class LocalStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(username: string, password: string): Promise<any> {
-    // const user = await this.userModel.findOne({ username }).select('+password');
+    const userInfo = await this.userInfoModel.findOne({
+      select: ['username', 'password', 'id'],
+      where: { username },
+    });
 
-    // if (!user) throw new BadRequestException('用户不存在');
+    if (!userInfo) throw new BadRequestException('用户不存在');
 
-    // if (!compareSync(password, user.password))
-    //   throw new BadRequestException('密码不正确');
+    if (!compareSync(password, userInfo.password))
+      throw new BadRequestException('密码不正确');
 
-    return { username: '123', password: 123 };
+    return userInfo;
   }
 }

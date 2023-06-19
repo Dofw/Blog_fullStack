@@ -51,10 +51,12 @@ export class AuthController {
     return await this.authService.uDelete(body.ids);
   }
 
-  @ApiOperation({ summary: '登录' })
+  @ApiOperation({ summary: 'user登录' })
   @UseGuards(AuthGuard('local'))
-  @Post('login')
+  @Post('user/login')
   async login(@Body() dto: LoginDto, @Req() req: any) {
+    console.log(111, req.user);
+
     return {
       token: this.jwtService.sign({
         username: req.user.username,

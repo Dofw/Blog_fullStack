@@ -1,4 +1,3 @@
-import { User } from '@libs/mysql/models/user.entity';
 import { LoginUser } from '@libs/mysql/models/loginUser.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Module } from '@nestjs/common';
@@ -9,7 +8,7 @@ import LocalStrategy from './local.stratege';
 import JwtStategy from './jwt.stratege';
 
 @Module({
-  imports: [PassportModule, TypeOrmModule.forFeature([User, LoginUser])],
+  imports: [PassportModule, TypeOrmModule.forFeature([LoginUser])],
   controllers: [AuthController],
   providers: [LocalStrategy, JwtStategy, AuthService], //可以理解为, 第一次admin中注册后,剩余的交给 AuthGuard('name')
 })
