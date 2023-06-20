@@ -1,24 +1,31 @@
 import {
   CallHandler,
   ExecutionContext,
+  HttpStatus,
   Injectable,
   NestInterceptor,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { map } from 'rxjs';
+
+export interface Res<T> {
+  status: HttpStatus;
+  data: T;
+  success: boolean;
+  message: string;
+}
 
 @Injectable()
-export class TestInterceptor implements NestInterceptor {
-  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
-    const request = context.switchToHttp().getRequest();
-
-    request.$$$test = '123';
-
-    console.log('uploadIntercept');
-
-    return next
-      .handle()
-      .pipe(tap(() => console.log(`After... ${request.$$$test}`)));
+export default class ResInterceptor<T> implements NestInterceptor<T, Res<T>> {
+  intercept(ctx: ExecutionContext, next: CallHandler): Observable<Res<T>> {
+    return next.handle().pipe(
+      map((data) => ({
+        status: 200,
+        data,
+        message: '成功',
+        success: true,
+      })),
+    );
   }
 }
 
