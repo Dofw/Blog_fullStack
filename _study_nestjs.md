@@ -7,11 +7,10 @@ ORM: 对象关系映射 Object-relationnal-mapping
 ## 实践中问题
 
 1. @PrimaryGeneratedColumn('uuid'), 可能由于版本的问题, 每次保存 entity 等操作, 会将数据库对应的主键 id 取消。导致报错主键 duplicate
-   解决: 改成 increment、 或者手动添加 uuid。
 
 2. @Injectable() 所起的作用是啥？待源码分析。
 
-3. RxJS Observable ？
+3. RxJS Observable ？了解 js 的柯里化
 
 ## nestjs 应用架构思想
 

@@ -128,14 +128,14 @@ const tempSeries = {
 
 function executeCustomFunc(config, customSeriesFunc: GeneralSeriesFunc) {
   if (customSeriesFunc) {
-    if (typeof customSeriesFunc === "function") {
-      const result = customSeriesFunc(config)
-      if (Object.prototype.toString.call(result) !== "[object Object]")
-        throw "config.customSeriesFunc: The return is not an object"
-      return customSeriesFunc(config)
-    } else {
+    if (typeof customSeriesFunc !== "function")
       throw "customSeriesFunc argument must be Function in tempSeries"
-    }
+
+    const result = customSeriesFunc(config)
+    if (Object.prototype.toString.call(result) !== "[object Object]")
+      throw "config.customSeriesFunc: The return is not an object"
+
+    return result
   } else {
     return false // false 代表不是函数。
   }
