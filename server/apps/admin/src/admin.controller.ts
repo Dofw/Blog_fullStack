@@ -1,4 +1,4 @@
-import { SpecialErrorFilter } from './errorFilter/special.filter';
+import { SpecialErrorFilter } from './_function/errorFilter/special.filter';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
   Controller,
@@ -16,7 +16,6 @@ import { Repository } from 'typeorm';
 
 @ApiTags('默认')
 @Controller()
-@UseFilters(SpecialErrorFilter)
 export class AdminController {
   // constructor(
   //   @InjectRepository(LoginUser)

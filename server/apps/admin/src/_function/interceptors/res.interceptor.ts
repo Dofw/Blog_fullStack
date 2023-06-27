@@ -12,7 +12,6 @@ export interface Res<T> {
   status: HttpStatus;
   data: T;
   success: boolean;
-  message: string;
 }
 
 @Injectable()
@@ -22,7 +21,6 @@ export default class ResInterceptor<T> implements NestInterceptor<T, Res<T>> {
       map((data) => ({
         status: 200,
         data,
-        message: '成功',
         success: true,
       })),
     );

@@ -3,7 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AdminModule } from './admin.module';
-import { GlobalErrorFilter } from './errorFilter/global.filter';
+import { GlobalErrorFilter } from './_function/errorFilter/global.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AdminModule);
@@ -15,9 +15,6 @@ async function bootstrap() {
   app.useStaticAssets('assets', {
     prefix: '/assets',
   });
-
-  // 全局异常过滤器
-  app.useGlobalFilters(new GlobalErrorFilter());
 
   const configService = app.get(ConfigService);
 

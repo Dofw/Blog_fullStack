@@ -26,5 +26,5 @@ export class BaseLoginInfo {
   updateTime?: Date;
 
   @DeleteDateColumn()
-  deleteAt: Date;
+  deleteAt?: Date;
 }

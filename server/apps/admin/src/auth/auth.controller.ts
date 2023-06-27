@@ -28,7 +28,7 @@ export class AuthController {
       address: '',
       equipmentInfo: { type: 'PC端' },
     };
-    const data: LoginUser | Omit<LoginUser, 'id' | 'deleteAt'> = {
+    const data: Omit<LoginUser, 'id'> = {
       ...restData,
       ...otherInfo,
     };

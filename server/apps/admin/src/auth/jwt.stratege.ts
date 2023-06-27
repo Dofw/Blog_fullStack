@@ -18,7 +18,6 @@ export default class JwtStategy extends PassportStrategy(Strategy) {
   }
 
   async validate(tokenInfo: any): Promise<any> {
-    console.log(111, tokenInfo);
     return await this.userInfoModel.findOne({
       select: ['username', 'password', 'id'],
       where: { id: tokenInfo.id },

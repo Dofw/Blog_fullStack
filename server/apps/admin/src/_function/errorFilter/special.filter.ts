@@ -24,6 +24,6 @@ export class SpecialErrorFilter implements ExceptionFilter {
       jsonObj = msg;
     }
 
-    response.status(status).json({ ...jsonObj, _is: true });
+    response.status(status).json({ ...jsonObj, _isSpecial: true });
   }
 }

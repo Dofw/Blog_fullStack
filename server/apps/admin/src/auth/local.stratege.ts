@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  HttpException,
+  HttpStatus,
+  Injectable,
+} from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { compareSync } from 'bcrypt';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -25,10 +30,11 @@ export default class LocalStrategy extends PassportStrategy(Strategy) {
       where: { username },
     });
 
-    if (!userInfo) throw new BadRequestException('用户不存在');
+    if (!userInfo)
+      throw new HttpException('用户不存在', HttpStatus.BAD_REQUEST);
 
     if (!compareSync(password, userInfo.password))
-      throw new BadRequestException('密码不正确');
+      throw new HttpException('密码不正确', HttpStatus.BAD_REQUEST);
 
     return userInfo;
   }
