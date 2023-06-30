@@ -5,9 +5,10 @@ import { AdminService } from './admin.service';
 import { CommonModule } from '@libs/common';
 import { UploadsModule } from './uploads/uploads.module';
 import { AuthModule } from './auth/auth.module';
-import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import ResInterceptor from './_function/interceptors/res.interceptor';
 import { GlobalErrorFilter } from './_function/errorFilter/global.filter';
+import { AuthGuard } from '@nestjs/passport';
 
 @Module({
   imports: [CommonModule, UploadsModule.forRoot({}), AuthModule],
@@ -22,6 +23,10 @@ import { GlobalErrorFilter } from './_function/errorFilter/global.filter';
     {
       provide: APP_INTERCEPTOR,
       useClass: ResInterceptor,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard('jwt'),
     },
   ],
 })

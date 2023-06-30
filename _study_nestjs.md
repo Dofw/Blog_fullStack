@@ -43,7 +43,7 @@ ORM: 对象关系映射 Object-relationnal-mapping
    - 使用范围: 全局、module 中指定具体的路由使用。
 2. 异常过滤器( **工作中直接使用内置的 HTTP 异常** )
 
-   - 解决问题: 内置异常过滤器处理不了动态因素返回的异常。因此需要自定义,同时拥有异常层拥有的完全控制权。
+   - 解决问题: 内置异常过滤器处理不了动态因素返回的异常。因此**需要自定义**,同时拥有异常层拥有的**完全控制权**。
 
    - 执行时机: 在异常层,负责处理整个应用程序中的所有抛出的异常, 目的捕获异常定制友好的响应结果。
 
@@ -95,3 +95,8 @@ ORM: 对象关系映射 Object-relationnal-mapping
 2. 本项目使用环境文件 .dev.env .prod.env .env(ignore), .example.env(no ignore) (保证代码中不会存在密钥信息)
 3. 在 ConfigModule 模块注册的位置, 通过判断环境, 改变 envFilePath 的值。
 4. 所有使用 env 变量的都统一在 common/confs 下管理, 通过@nestjs/config 的 ConfigService 来使用。(集中管理)
+
+## 用户注册、登录相关实践
+
+1. 注册接口, 在 **entity 实现 password 加密保存, 加密方式 bcrypt**。
+2. 登录接口, 利用 **passport-local, 进行 compareSync, 方式 bcrypt 中的 compareSync**

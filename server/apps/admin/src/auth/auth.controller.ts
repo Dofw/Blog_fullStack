@@ -9,6 +9,7 @@ import { JwtService } from '@nestjs/jwt';
 import { AuthService } from './auth.service';
 import { LoginUser } from '@libs/mysql/models/loginUser.entity';
 import { DeleteDto } from './dto/delete.dto';
+import { PassJwt } from '../_function/decorators/passJwt.decorator';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -54,6 +55,7 @@ export class AuthController {
   @ApiOperation({ summary: 'user登录' })
   @UseGuards(AuthGuard('local'))
   @Post('user/login')
+  @PassJwt()
   async login(@Body() dto: LoginDto, @Req() req: any) {
     console.log('login', req.user);
     return {
@@ -67,7 +69,7 @@ export class AuthController {
   @ApiOperation({ summary: 'user登录用户信息' })
   @ApiBearerAuth()
   @Get('info')
-  @UseGuards(AuthGuard('jwt'))
+  // @UseGuards(AuthGuard('jwt')) // 设置为全局
   info(@Req() req: any) {
     return req.user;
   }
