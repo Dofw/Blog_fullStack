@@ -1,4 +1,3 @@
-import { PASS_JWT } from './../_function/decorators/passJwt.decorator';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -6,9 +5,10 @@ import { LoginUser } from '@libs/mysql/models/loginUser.entity';
 
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy, StrategyOptions } from 'passport-jwt';
-import { HttpException, HttpStatus } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 
+@Injectable()
 export default class JwtStategy extends PassportStrategy(Strategy) {
   constructor(
     @InjectRepository(LoginUser)
@@ -22,8 +22,6 @@ export default class JwtStategy extends PassportStrategy(Strategy) {
   }
 
   async validate(tokenInfo: any): Promise<any> {
-
-
     try {
       return await this.userInfoModel.findOne({
         select: ['username', 'password', 'id'],

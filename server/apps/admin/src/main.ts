@@ -3,7 +3,6 @@ import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AdminModule } from './admin.module';
-import { GlobalErrorFilter } from './_function/errorFilter/global.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AdminModule);
@@ -15,6 +14,9 @@ async function bootstrap() {
   app.useStaticAssets('assets', {
     prefix: '/assets',
   });
+
+  // 所有路由前缀
+  app.setGlobalPrefix('admin');
 
   const configService = app.get(ConfigService);
 

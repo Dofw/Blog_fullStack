@@ -6,7 +6,7 @@ import Login from "@/pages/Login/index.vue"
 const routes: RouteRecordRaw[] = [
   {
     path: "/",
-    redirect: "/example"
+    redirect: "/login"
   },
   {
     path: "/login",

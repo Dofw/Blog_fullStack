@@ -8,7 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import ResInterceptor from './_function/interceptors/res.interceptor';
 import { GlobalErrorFilter } from './_function/errorFilter/global.filter';
-import { AuthGuard } from '@nestjs/passport';
+import JwtGuard from './auth/jwt.guard';
 
 @Module({
   imports: [CommonModule, UploadsModule.forRoot({}), AuthModule],
@@ -26,7 +26,7 @@ import { AuthGuard } from '@nestjs/passport';
     },
     {
       provide: APP_GUARD,
-      useClass: AuthGuard('jwt'),
+      useClass: JwtGuard, //  继承自 AuthGuard('jwt'), imports AuthModule 必须也注入才能访问到 jwtStratege
     },
   ],
 })

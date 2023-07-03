@@ -1,6 +1,13 @@
 {
   "extends": "@vue/tsconfig/tsconfig.web.json",
-  "include": ["env.d.ts", "components.d.ts", "auto-imports.d.ts", "src/**/*", "src/**/*.vue"],
+  "include": [
+    "env.d.ts",
+    "libs.d.ts",
+    "components.d.ts",
+    "auto-imports.d.ts",
+    "src/**/*",
+    "src/**/*.vue"
+  ],
   "exclude": ["@dofw/*"],
   "compilerOptions": {
     "noImplicitAny": false, // 关闭any的警告提示。

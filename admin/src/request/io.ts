@@ -1,36 +1,16 @@
 import axios from "axios"
+import type { AxiosInstance, AxiosRequestConfig } from "axios"
+import type { CustomConfig } from "./type"
 
 /**
  * 1. 前后台约定，返回格式
+ * {
+ *    code: 200, //非外层
+ *    data: [],
+ *    msg: 'message',
+ *    success: true,
+ * };
  */
-// let res = {
-//   code: 200, //非外层
-//   data: [],
-//   msg: 'message',
-//   success: true,
-// };
-
-/**
- * 2. 状态码含义
- */
-// let codeMessage = {
-//   200: '服务器成功返回请求的数据。',
-//   201: '新建或修改数据成功。',
-//   202: '一个请求已经进入后台排队（异步任务）。',
-//   204: '删除数据成功。',
-//   400: '发出的请求有错误，服务器没有进行新建或修改数据的操作。',
-//   401: '用户没有权限（令牌、用户名、密码错误）。',
-//   402: '',
-//   403: '用户得到授权，但是访问是被禁止的。',
-//   404: '发出的请求针对的是不存在的记录，服务器没有进行操作。',
-//   406: '请求的格式不可得。',
-//   410: '请求的资源被永久删除，且不会再得到的。',
-//   422: '当创建一个对象时，发生一个验证错误。',
-//   500: '服务器发生错误，请检查服务器。',
-//   502: '网关错误。',
-//   503: '服务不可用，服务器暂时过载或维护。',
-//   504: '网关超时。',
-// };
 
 /**
  * 3.1 保存所有url:cancleFunc
@@ -44,9 +24,17 @@ const cancelMaps = new Map()
  *    - 1. 多次请求,只需要最后一次请求结果
  */
 export default class Io {
-  constructor(baseConf, customConf) {
+  public instance: AxiosInstance
+
+  constructor(
+    baseConf: AxiosRequestConfig = {},
+    customConf: CustomConfig = { _isCancel: false, _isToken: true }
+  ) {
     // 实例
-    this.instance = axios.create({ baseConf, ...customConf })
+    this.instance = axios.create({
+      ...baseConf,
+      ...customConf
+    })
     /**
      * 控制内置功能开启 - interceptor
      * 1. req: 机制导致它优先级最高。
@@ -70,9 +58,9 @@ export default class Io {
   }
 
   addCancelFunctional(config) {
-    if (config._isCancle) {
+    if (config._isCancel) {
       // 取消上一次
-      this.removeCancel(config)
+      this.removeCancelFunctional(config)
       const controller = new AbortController()
       cancelMaps.set(config.url, () => {
         controller.abort()
@@ -83,7 +71,7 @@ export default class Io {
   }
 
   removeCancelFunctional(config) {
-    if (config._isCancle) {
+    if (config._isCancel) {
       const preCancel = cancelMaps.get(config.url)
       if (preCancel) {
         preCancel()
@@ -94,6 +82,7 @@ export default class Io {
 
   // cancel&clear cancelMaps
   removeAllCancel() {
+    // eslint-disable-next-line no-unused-vars
     for (const [key, preCancel] of cancelMaps) {
       preCancel()
     }
@@ -124,7 +113,7 @@ export default class Io {
   // tools
   handlerInterceptorParams(params) {
     let arr
-    if (typeof arr === "function") {
+    if (typeof params === "function") {
       arr = [params]
     } else if (Array.isArray(params)) {
       arr = params

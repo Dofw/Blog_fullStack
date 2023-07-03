@@ -25,6 +25,7 @@
 <script setup lang="ts">
 import { ref } from "vue"
 import { ElMessage } from "element-plus"
+import { loginApi } from "@/api/login"
 
 const loginFormRef = ref({
   username: "admin",
@@ -32,8 +33,13 @@ const loginFormRef = ref({
 })
 
 const onLogin = async () => {
-  // await LoginApi()
-  ElMessage.success("登录成功!")
+  try {
+    await loginApi(loginFormRef.value)
+    ElMessage.success("登录成功!")
+  } catch (error) {
+    console.log("错误", error)
+    ElMessage.error("登录失败!")
+  }
 }
 </script>
 

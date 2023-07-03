@@ -33,7 +33,6 @@ function parseModules(modules: any) {
 
     const fileType = paths[paths.length - 3] // xxx/Demo1/index.vue
     const endName = paths[paths.length - 2] // xxx/index.vue
-    console.log(fileType, endName)
 
     // route 格式
     Comps.push({

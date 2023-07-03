@@ -19,8 +19,8 @@ export default defineConfig({
     proxy: {
       "/admin": {
         target: "http://localhost:3300",
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/admin/, "")
+        changeOrigin: true
+        // rewrite: (path) => path.replace(/^\/admin/, "")
       }
     }
   },

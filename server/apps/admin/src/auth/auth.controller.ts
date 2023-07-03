@@ -12,6 +12,7 @@ import { DeleteDto } from './dto/delete.dto';
 import { PassJwt } from '../_function/decorators/passJwt.decorator';
 
 @ApiTags('Auth')
+@ApiBearerAuth()
 @Controller('auth')
 export class AuthController {
   constructor(
@@ -67,7 +68,6 @@ export class AuthController {
   }
 
   @ApiOperation({ summary: 'user登录用户信息' })
-  @ApiBearerAuth()
   @Get('info')
   // @UseGuards(AuthGuard('jwt')) // 设置为全局
   info(@Req() req: any) {
