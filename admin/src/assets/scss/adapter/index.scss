@@ -1,0 +1,34 @@
+$screenMap: (
+  pc: (
+    481px,
+    1920px
+  ),
+  mobile: (
+    320px,
+    480px
+  ),
+  big: 1921px
+);
+
+@mixin adapt-to($type) {
+  // 取出对应的尺寸
+  $bp: map-get(
+    $map: $screenMap,
+    $key: $type
+  );
+  // list值
+  @if (type-of($value: $bp) == "list") {
+    $min: nth($bp, 1);
+    $max: nth($bp, 2);
+
+    @media (min-width: $min) and (max-width: $max) {
+      @content;
+    }
+  }
+  // 单值
+  @else {
+    @media (min-width: $bp) {
+      @content;
+    }
+  }
+}

@@ -47,7 +47,8 @@ $color-info: map.get($colors, "info", "base") !default;
   $colors: map.deep-merge(
     (
       $type: (
-        "#{$mode}-#{$number}": mix($mix-color, map.get($colors, $type, "base"), math.percentage(math.div($number, 10)))
+        "#{$mode}-#{$number}":
+          mix($mix-color, map.get($colors, $type, "base"), math.percentage(math.div($number, 10)))
       )
     ),
     $colors

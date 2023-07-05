@@ -37,6 +37,7 @@ declare module '@vue/runtime-core' {
     PreviewCodes: typeof import('./src/components/PreviewCodes/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    XInput: typeof import('./src/components/XInput/index.vue')['default']
   }
 }
 
