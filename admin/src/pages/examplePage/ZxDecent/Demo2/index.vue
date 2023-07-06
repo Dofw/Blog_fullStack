@@ -14,7 +14,7 @@
         <el-tab-pane label="demo">
           <div class="view-dome__wrapper"></div>
         </el-tab-pane>
-        <el-tab-pane label="summary"> 总结： 1.基于compiler-sfc，实现Vue模板编译例子。2. 了解monaco-editor的基本使用。 </el-tab-pane>
+        <el-tab-pane label="summary"> 总结： 1.基于compiler-sfc，实现Vue模板编译例子。2. 了解monaco-editor的基本使用。zx cehigggggggggggg </el-tab-pane>
       </el-tabs>
     </div>
   </div>
