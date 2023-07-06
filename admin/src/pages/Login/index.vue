@@ -1,33 +1,36 @@
 <template>
-  <div class="login-container">
-    <el-button>所有的按钮</el-button>
-    <el-button>所有的按钮</el-button>
-    <el-button>所有的按钮</el-button>
-    <div class="ground-glass">
-      <el-form>
-        <el-row>
-          <el-col>
-            <el-form-item label="自定义Input">
-              <XInput />
-            </el-form-item>
-          </el-col>
-          <el-col>
-            <el-form-item label="账号">
-              <el-input v-model="loginFormRef.username"></el-input>
-            </el-form-item>
-          </el-col>
+  <div class="x-login--pager">
+    <div class="x-ground--glass">
+      <div class="x-login--wrapper">
+        <p>TopFullStack</p>
+        <el-form>
+          <el-row>
+            <el-col>
+              <el-form-item>
+                <XInput label="username" v-model.lazy="loginFormRef.username" />
+              </el-form-item>
+            </el-col>
 
-          <el-col>
-            <el-form-item label="密码">
-              <el-input v-model="loginFormRef.password"></el-input>
-            </el-form-item>
-          </el-col>
+            <el-col style="margin-top: 20px">
+              <el-form-item>
+                <XInput label="password" v-model="loginFormRef.password" :showPassword="true" />
+              </el-form-item>
+            </el-col>
 
-          <el-col>
-            <el-button @click="onLogin">登录</el-button>
-          </el-col>
-        </el-row>
-      </el-form>
+            <el-col style="margin-top: 20px">
+              <el-form-item>
+                <XInput label="验证码" v-model="loginFormRef.password" :showPassword="true" />
+              </el-form-item>
+            </el-col>
+
+            <el-col>
+              <el-button @click="onLogin" size="large">登录</el-button>
+            </el-col>
+
+            <el-col> 代理 </el-col>
+          </el-row>
+        </el-form>
+      </div>
     </div>
   </div>
 </template>
@@ -39,30 +42,6 @@ import { loginApi } from "@/api/login"
 import { ref } from "vue"
 import { ElMessageBox } from "element-plus"
 import XInput from "@/components/XInput/index.vue"
-
-const drawer2 = ref(true)
-const radio1 = ref("Option 1")
-const handleClose = (done: () => void) => {
-  ElMessageBox.confirm("Are you sure you want to close this?")
-    .then(() => {
-      done()
-    })
-    .catch(() => {
-      // catch error
-    })
-}
-function cancelClick() {
-  drawer2.value = false
-}
-function confirmClick() {
-  ElMessageBox.confirm(`Are you confirm to chose ${radio1.value} ?`)
-    .then(() => {
-      drawer2.value = false
-    })
-    .catch(() => {
-      // catch error
-    })
-}
 
 const loginFormRef = ref({
   username: "admin",
@@ -81,7 +60,7 @@ const onLogin = async () => {
 </script>
 
 <style scoped lang="scss">
-.login-container {
+.x-login--pager {
   position: relative;
   width: 100%;
   height: 100%;
@@ -90,7 +69,7 @@ const onLogin = async () => {
   justify-content: end;
   align-items: center;
 
-  .ground-glass {
+  .x-ground--glass {
     position: absolute;
     top: 15px;
     right: 0;
@@ -103,6 +82,26 @@ const onLogin = async () => {
     backdrop-filter: blur(2px);
     -webkit-backdrop-filter: blur(2px);
     border-radius: 10px;
+
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+
+    > .x-login--wrapper {
+      width: 55%;
+      height: 70%;
+      // border: $border;
+
+      > p {
+        width: 100%;
+        margin-top: 10px;
+        margin-bottom: 60px;
+        color: #fff;
+        font-weight: bold;
+        font-size: 20px;
+      }
+    }
   }
 }
 </style>
