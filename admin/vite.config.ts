@@ -1,6 +1,7 @@
 import { fileURLToPath, URL } from "url"
-
 import { defineConfig } from "vite"
+import UnoCSS from "unocss/vite"
+
 import vue from "@vitejs/plugin-vue"
 import vueJsx from "@vitejs/plugin-vue-jsx"
 import prismjs from "vite-plugin-prismjs"
@@ -25,11 +26,11 @@ export default defineConfig({
     }
   },
   plugins: [
+    UnoCSS(),
     vue({
       reactivityTransform: true
     }),
     vueJsx(),
-    // checker({ typescript: true }),
     AutoImport({
       resolvers: [ElementPlusResolver()]
     }),

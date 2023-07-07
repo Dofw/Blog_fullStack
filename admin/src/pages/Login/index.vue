@@ -11,23 +11,26 @@
               </el-form-item>
             </el-col>
 
-            <el-col style="margin-top: 20px">
+            <el-col class="mt-4">
               <el-form-item>
                 <XInput label="password" v-model="loginFormRef.password" :showPassword="true" />
               </el-form-item>
             </el-col>
 
-            <el-col style="margin-top: 20px">
+            <el-col class="mt-4">
               <el-form-item>
                 <XInput label="验证码" v-model="loginFormRef.password" :showPassword="true" />
               </el-form-item>
             </el-col>
 
-            <el-col>
+            <el-col class="mt-4">
               <el-button @click="onLogin" size="large">登录</el-button>
             </el-col>
 
-            <el-col> 代理 </el-col>
+            <el-col class="mt-1">
+              <img src="@/assets/imgs/QQ.png" style="width: 35px" alt="" />
+              <img src="@/assets/imgs/weixin.png" style="width: 35px" alt="" />
+            </el-col>
           </el-row>
         </el-form>
       </div>
@@ -50,7 +53,7 @@ const loginFormRef = ref({
 
 const onLogin = async () => {
   try {
-    await loginApi(loginFormRef.value)
+    const res = await loginApi(loginFormRef.value)
     ElMessage.success("登录成功!")
   } catch (error) {
     console.log("错误", error)
