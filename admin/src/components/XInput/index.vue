@@ -8,6 +8,7 @@
     </div>
 
     <input
+      ref="inputDom"
       :type="showPassword ? (isView ? 'password' : 'text') : type"
       @keydown="onKeydown"
       @input="onInput"
@@ -19,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, defineProps, withDefaults, defineEmits } from "vue"
+import { ref, computed, onMounted, defineProps, withDefaults, defineEmits } from "vue"
 import { View, Hide } from "@element-plus/icons-vue"
 
 interface Props {
@@ -61,7 +62,6 @@ const modifierFunc = (val) => {
 const onInput = (e) => {
   let { value } = e.target as HTMLInputElement
   const result = modifierFunc(value)
-  console.log(result)
   $emits("update:modelValue", result)
   $emits("input", result)
 }

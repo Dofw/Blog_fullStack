@@ -2,12 +2,17 @@
   <div class="x-login--pager">
     <div class="x-ground--glass">
       <div class="x-login--wrapper">
-        <p>TopFullStack</p>
+        <p>
+          TopFullStack:
+          <span v-if="loading">loading...</span>
+          <span v-if="!loading && !userInfo">请登录</span>
+          <span v-if="!loading && userInfo">{{ userInfo.username }}</span>
+        </p>
         <el-form>
           <el-row>
             <el-col>
               <el-form-item>
-                <XInput label="username" v-model.lazy="loginFormRef.username" />
+                <XInput label="username" v-model="loginFormRef.username" />
               </el-form-item>
             </el-col>
 
@@ -18,18 +23,18 @@
             </el-col>
 
             <el-col class="mt-4">
-              <el-form-item>
-                <XInput label="验证码" v-model="loginFormRef.password" :showPassword="true" />
-              </el-form-item>
+              <el-form-item> <VerifyImg /> </el-form-item>
             </el-col>
 
             <el-col class="mt-4">
-              <el-button @click="onLogin" size="large">登录</el-button>
+              <el-button @click="wrapLogin" size="large">登录</el-button>
+              <el-button @click="logout" size="large">退出</el-button>
             </el-col>
 
-            <el-col class="mt-1">
-              <img src="@/assets/imgs/QQ.png" style="width: 35px" alt="" />
-              <img src="@/assets/imgs/weixin.png" style="width: 35px" alt="" />
+            <el-col class="mt-5 auth2-img">
+              <p>微信、QQ授权登录</p>
+              <img src="@/assets/imgs/QQ.png" alt="" />
+              <img src="@/assets/imgs/weixin.png" alt="" />
             </el-col>
           </el-row>
         </el-form>
@@ -39,26 +44,20 @@
 </template>
 
 <script setup lang="ts">
-import { ElMessage } from "element-plus"
-import { loginApi } from "@/api/login"
-
+import useUserLogin from "@/pages/Login/useUserLogin"
 import { ref } from "vue"
-import { ElMessageBox } from "element-plus"
 import XInput from "@/components/XInput/index.vue"
+import VerifyImg from "./VerifyImg.vue"
 
 const loginFormRef = ref({
-  username: "admin",
-  password: "admin"
+  username: "admin1",
+  password: "admin1"
 })
 
-const onLogin = async () => {
-  try {
-    const res = await loginApi(loginFormRef.value)
-    ElMessage.success("登录成功!")
-  } catch (error) {
-    console.log("错误", error)
-    ElMessage.error("登录失败!")
-  }
+const { userInfo, loading, login, logout } = useUserLogin()
+
+const wrapLogin = async () => {
+  await login(loginFormRef.value)
 }
 </script>
 
@@ -104,7 +103,21 @@ const onLogin = async () => {
         font-weight: bold;
         font-size: 20px;
       }
+
+      .auth2-img {
+        > p {
+          margin-bottom: 14px;
+        }
+        > img {
+          // border: $border;
+          width: 40px !important;
+          margin-right: 15px;
+
+          cursor: pointer;
+        }
+      }
     }
   }
 }
 </style>
+@/pages/Login/useUserLogin

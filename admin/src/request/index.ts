@@ -42,9 +42,10 @@ io.addReqInterceptor((config) => {
 io.addResInterceptor(
   async (res) => {
     const { data, config, status } = res
-    console.log(111, res)
+    console.log(data)
     // 状态为200
-    if (status === 200) {
+    const isSuccessCode = [200, 201]
+    if (isSuccessCode.includes(status)) {
       return data
     }
     // const { response } = res
@@ -99,7 +100,6 @@ io.addResInterceptor(
     // }
   },
   (error) => {
-    console.log("err" + error) // for debug
     let { message } = error
 
     if (message === "Network Error") {

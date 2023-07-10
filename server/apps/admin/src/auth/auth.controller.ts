@@ -60,6 +60,7 @@ export class AuthController {
   async login(@Body() dto: LoginDto, @Req() req: any) {
     console.log('login', req.user);
     return {
+      ...req.user,
       token: this.jwtService.sign({
         username: req.user.username,
         id: req.user.id,

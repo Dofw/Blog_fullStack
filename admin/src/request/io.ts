@@ -50,10 +50,11 @@ export default class Io {
         // 取消请求功能。
         this.removeCancelFunctional(response.config)
         return response
-      },
-      (error) => {
-        return error
       }
+      // ,
+      // (error) => {
+      //   return error
+      // }
     )
   }
 
