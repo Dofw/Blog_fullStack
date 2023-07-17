@@ -1,14 +1,25 @@
 <template>
-  <div class="verify-img--container" ref="containerDom">
-    <div class="img-area"></div>
-    <div class="drag-area">
-      <div class="drag-area--btn" ref="dragDom" @mousedown="mousedownFunc"></div>
+  <div>
+    <div v-if="!isPass" class="verify-img--container" ref="containerDom">
+      <div class="img-area"></div>
+      <div class="drag-area">
+        <div class="drag-area--btn" ref="dragDom" @mousedown="mousedownFunc"></div>
+      </div>
     </div>
+    <div v-else>通过</div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue"
+import { ref, defineProps, withDefaults, defineEmits } from "vue"
+interface Props {
+  isPass: boolean
+}
+const props = withDefaults(defineProps<Props>(), {
+  isPass: false
+})
+
+const emits = defineEmits(["update-pass"])
 
 const containerDom = ref<HTMLDivElement>()
 const dragDom = ref<HTMLDivElement>()
@@ -16,7 +27,6 @@ const dragDom = ref<HTMLDivElement>()
 let initMove = 0 // 恢复初始move
 let startPoint = 0 // 记录当前的鼠标移动的位置
 let moveSpace = 0 // 记录计算的move间距
-
 function mousedownFunc(e) {
   // 记录当前start
   startPoint = e.clientX
@@ -47,11 +57,13 @@ function mousemoveFunc(e) {
 
 function mouseupFunc(e) {
   const offset = computedDragSpace()
+  console.log(offset)
   // 校验成功，样式隐藏。
   if (isInRange(offset)) {
     alert("通过")
+    emits("update-pass", true)
   } else {
-    startPoint = 0 // 记录当前的鼠标移动的位置
+    startPoint = 0
     moveSpace = 0
     containerDom.value?.style.setProperty("--move", initMove + "px")
   }
@@ -59,19 +71,26 @@ function mouseupFunc(e) {
   window.removeEventListener("mouseup", mouseupFunc)
 }
 
+/**
+ * 计算drag左侧距离img左侧的间距。
+ */
 function computedDragSpace() {
   const { left } = containerDom.value!.getBoundingClientRect()
   const { left: left2 } = dragDom.value!.getBoundingClientRect()
   return left2 - left
 }
 
+/**
+ * 计算值是否符合通过范围
+ * @param value
+ */
 function isInRange(value) {
   const computedStyle = getComputedStyle(containerDom.value!)
   let imgWVar = +computedStyle.getPropertyValue("--image-w").replace("px", "")
   let puzzleWVar = +computedStyle.getPropertyValue("--puzzle-w").replace("px", "")
   const num = 15
   const leftNum = Number(-num + imgWVar - 2 * puzzleWVar)
-  const rightNum = Number(num + imgWVar - puzzleWVar)
+  const rightNum = Number(num + imgWVar - 2 * puzzleWVar)
   return value >= leftNum && value <= rightNum
 }
 </script>
@@ -99,11 +118,17 @@ function isInRange(value) {
     }
   }
 
+  &:hover {
+    .img-area {
+      display: block;
+    }
+  }
   .img-area {
     position: absolute;
     bottom: 60px;
     width: var(--image-w);
     height: 300px;
+    display: none;
 
     background-image: url("@/assets/verify.jpg");
     background-size: cover;

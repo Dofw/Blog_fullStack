@@ -23,7 +23,9 @@
             </el-col>
 
             <el-col class="mt-4">
-              <el-form-item> <VerifyImg /> </el-form-item>
+              <el-form-item>
+                <VerifyImg :isPass="isPass" @update-pass="updatePass" />
+              </el-form-item>
             </el-col>
 
             <el-col class="mt-4">
@@ -58,6 +60,10 @@ const { userInfo, loading, login, logout } = useUserLogin()
 
 const wrapLogin = async () => {
   await login(loginFormRef.value)
+}
+const isPass = ref(false)
+const updatePass = (val) => {
+  isPass.value = val
 }
 </script>
 
