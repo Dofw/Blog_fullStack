@@ -1,10 +1,8 @@
 <template>
-  <div class="verify-img--container">
-    <div class="img-area">
-      <div class="img-area--btn"></div>
-    </div>
+  <div class="verify-img--container" ref="containerDom">
+    <div class="img-area"></div>
     <div class="drag-area">
-      <div class="drag-area--btn" @mousedown="mousedown"></div>
+      <div class="drag-area--btn" ref="dragDom" @mousedown="mousedownFunc"></div>
     </div>
   </div>
 </template>
@@ -12,43 +10,99 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue"
 
-const imgBtn = ref(null)
-const dragBtn = ref<HTMLDivElement>()
+const containerDom = ref<HTMLDivElement>()
+const dragDom = ref<HTMLDivElement>()
 
-const mousedown = () => {
-  console.log("点击")
+let initMove = 0 // 恢复初始move
+let startPoint = 0 // 记录当前的鼠标移动的位置
+let moveSpace = 0 // 记录计算的move间距
+
+function mousedownFunc(e) {
+  // 记录当前start
+  startPoint = e.clientX
+  // 绑定window的move事件
   window.addEventListener("mousemove", mousemoveFunc)
-  window.addEventListener("mouseup", () => {
-    window.removeEventListener("mousemove", mousemoveFunc)
-  })
+  window.addEventListener("mouseup", mouseupFunc)
 }
 
 function mousemoveFunc(e) {
-  console.log(e)
+  const curPoint = e.clientX
+  const { left, right } = containerDom.value!.getBoundingClientRect()
+  let offset
+
+  if (curPoint < left) {
+    offset = left - startPoint
+    startPoint = left
+  } else if (curPoint > right) {
+    offset = right - startPoint
+    startPoint = right
+  } else {
+    offset = curPoint - startPoint
+    startPoint = curPoint
+  }
+  moveSpace = moveSpace + offset
+
+  containerDom.value!.style.setProperty("--move", moveSpace + "px")
+}
+
+function mouseupFunc(e) {
+  const offset = computedDragSpace()
+  // 校验成功，样式隐藏。
+  if (isInRange(offset)) {
+    alert("通过")
+  } else {
+    startPoint = 0 // 记录当前的鼠标移动的位置
+    moveSpace = 0
+    containerDom.value?.style.setProperty("--move", initMove + "px")
+  }
+  window.removeEventListener("mousemove", mousemoveFunc)
+  window.removeEventListener("mouseup", mouseupFunc)
+}
+
+function computedDragSpace() {
+  const { left } = containerDom.value!.getBoundingClientRect()
+  const { left: left2 } = dragDom.value!.getBoundingClientRect()
+  return left2 - left
+}
+
+function isInRange(value) {
+  const computedStyle = getComputedStyle(containerDom.value!)
+  let imgWVar = +computedStyle.getPropertyValue("--image-w").replace("px", "")
+  let puzzleWVar = +computedStyle.getPropertyValue("--puzzle-w").replace("px", "")
+  const num = 15
+  const leftNum = Number(-num + imgWVar - 2 * puzzleWVar)
+  const rightNum = Number(num + imgWVar - puzzleWVar)
+  return value >= leftNum && value <= rightNum
 }
 </script>
 
 <style scoped lang="scss">
 .verify-img--container {
+  --puzzle-w: 50px;
+  --puzzle-h: 50px;
+  --image-w: 400px;
+  --image-h: 300px;
+  --move: 0px;
+
   position: relative;
-  width: 100%;
+  width: var(--image-w);
   height: 50px;
   border: $border;
 
   .drag-area {
-    height: 100%;
     .drag-area--btn {
       cursor: pointer;
-      width: 60px;
-      height: 100%;
+      width: var(--puzzle-w);
+      height: var(--puzzle-h);
       background-color: green;
-      border: 5px;
+      transform: translateX(clamp(0px, var(--move), calc(var(--image-w) - var(--puzzle-w))));
     }
   }
+
   .img-area {
     position: absolute;
     bottom: 60px;
-    width: 100%;
+    width: var(--image-w);
     height: 300px;
 
     background-image: url("@/assets/verify.jpg");
@@ -57,32 +111,51 @@ function mousemoveFunc(e) {
 
     border: $border;
     border-radius: 10px;
-    z-index: 100;
+    z-index: 1;
 
     &::before {
       content: "";
       position: absolute;
-      top: 30%;
-      right: 10%;
-
-      width: 50px;
-      height: 50px;
-      background-color: rgba(0, 0, 0, 0.5);
-      border: $border;
-    }
-
-    .img-area--btn {
-      width: 50px;
-      height: 50px;
-      border: $border;
+      width: inherit;
+      height: inherit;
+      z-index: 2;
 
       background-image: inherit;
+      background-color: rgba(0, 0, 0, 0.7);
+      background-blend-mode: multiply;
+
+      background-size: inherit;
       background-repeat: inherit;
-      background-size: 1200px 800px;
-      background-position: center center;
+
+      clip-path: inset(
+        calc((var(--image-h) - var(--puzzle-h)) / 2) calc(var(--puzzle-h))
+          calc((var(--image-h) - var(--puzzle-h)) / 2) calc(var(--image-w) - var(--puzzle-h) * 2)
+      );
+    }
+
+    &::after {
+      content: "";
       position: absolute;
-      top: 30%;
-      left: 10%;
+      transform: translateX(
+        // 限制 图片滑块 的范围
+        clamp(
+            calc(var(--image-w) * -1 + 2 * var(--puzzle-w)),
+            calc(var(--image-w) * -1 + 2 * var(--puzzle-w) + var(--move)),
+            var(--puzzle-w)
+          )
+      );
+      width: inherit;
+      height: inherit;
+      z-index: 3;
+
+      background-image: inherit;
+      background-size: inherit;
+      background-repeat: inherit;
+
+      clip-path: inset(
+        calc((var(--image-h) - var(--puzzle-h)) / 2) calc(var(--puzzle-h))
+          calc((var(--image-h) - var(--puzzle-h)) / 2) calc(var(--image-w) - var(--puzzle-h) * 2)
+      );
     }
   }
 }
