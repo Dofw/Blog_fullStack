@@ -55,3 +55,23 @@ function generateAttrMap(option) {
 
   return result
 }
+
+// 设置动画起始、终止状态。
+function createComputedVal(scrollStart, scrollEnd, statusStart, statusEnd) {
+  return function (scroll) {
+    return computedVal(scroll, scrollStart, scrollEnd, statusStart, statusEnd)
+  }
+}
+// baseVal
+function computedVal(scroll, scrollStart, scrollEnd, statusStart, statusEnd) {
+  if (scroll <= scrollStart) {
+    return statusStart
+  }
+  if (scroll >= scrollEnd) {
+    return statusEnd
+  }
+
+  return (
+    ((scroll - scrollStart) * (statusEnd - statusStart)) / (scrollEnd - scrollStart) + statusStart
+  )
+}

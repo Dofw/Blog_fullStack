@@ -73,8 +73,9 @@ const loginFormRef = ref({
 const boxRef = ref(null)
 onMounted(() => {
   const posInfos = getItemsPos(boxRef.value, { width: 50, height: 50, offset: 50 })
-
   const allItems = document.querySelectorAll(".sticky .item")
+
+
 
   allItems.forEach((item) => {
     // const index = item.dataset.index // 方法一
