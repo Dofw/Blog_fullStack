@@ -19,7 +19,7 @@ import { Upload } from "@element-plus/icons-vue"
 import { ref } from "vue"
 import type { Ref } from "vue"
 
-const inputRef: Ref<HTMLInputElement> = ref({} as HTMLInputElement)
+const inputRef: Ref<HTMLInputElement> = ref({} as Ref<HTMLInputElement>)
 
 const data: Ref<RequestItem[]> = ref([])
 const onChange1 = async (e: Event) => {

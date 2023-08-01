@@ -24,10 +24,11 @@ html {
   transition: background 0.5s;
 
   @include adapter.adapt-to("pc") {
-    background-image: url("@/assets/imgs/杀生丸.jpeg");
+    // background-image: url("@/assets/imgs/杀生丸.jpeg");
+    background: #000;
   }
 
   @include adapter.adapt-to("mobile") {
-    background-image: url("@/assets/imgs/地铁线路.jpg");
+    // background-image: url("@/assets/imgs/地铁线路.jpg");
   }
 }
