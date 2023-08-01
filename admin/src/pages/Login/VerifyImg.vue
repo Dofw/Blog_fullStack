@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="!isPass" class="verify-img--container" ref="containerDom">
-      <div class="img-area"></div>
+      <div class="img-area" ref="imgAreaDom"></div>
       <div class="drag-area">
         <div class="drag-area--btn" ref="dragDom" @mousedown="mousedownFunc"></div>
       </div>
@@ -23,11 +23,21 @@ const emits = defineEmits(["update-pass"])
 
 const containerDom = ref<HTMLDivElement>()
 const dragDom = ref<HTMLDivElement>()
+const imgAreaDom = ref<HTMLDivElement>()
+
+function showImg() {
+  containerDom.value!.classList.add('showImg') 
+}
+function hiddenImg() {
+  containerDom.value!.classList.remove('showImg')
+}
 
 let initMove = 0 // 恢复初始move
 let startPoint = 0 // 记录当前的鼠标移动的位置
 let moveSpace = 0 // 记录计算的move间距
 function mousedownFunc(e) {
+  // 显示img
+  showImg()
   // 记录当前start
   startPoint = e.clientX
   // 绑定window的move事件
@@ -56,6 +66,7 @@ function mousemoveFunc(e) {
 }
 
 function mouseupFunc(e) {
+
   const offset = computedDragSpace()
   console.log(offset)
   // 校验成功，样式隐藏。
@@ -67,6 +78,8 @@ function mouseupFunc(e) {
     moveSpace = 0
     containerDom.value?.style.setProperty("--move", initMove + "px")
   }
+
+  hiddenImg()
   window.removeEventListener("mousemove", mousemoveFunc)
   window.removeEventListener("mouseup", mouseupFunc)
 }
@@ -118,17 +131,25 @@ function isInRange(value) {
     }
   }
 
-  &:hover {
+  &.showImg {
     .img-area {
       display: block;
     }
   }
+
+  &:hover{
+    .img-area {
+      display: block;
+    }
+  }
+
   .img-area {
     position: absolute;
     bottom: 60px;
     width: var(--image-w);
     height: 300px;
     display: none;
+    transition: all .5s;
 
     background-image: url("@/assets/verify.jpg");
     background-size: cover;

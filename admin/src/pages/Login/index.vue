@@ -24,7 +24,7 @@
 
             <el-col class="mt-4">
               <el-form-item>
-                <VerifyImg :isPass="isPass" @update-pass="updatePass" />
+                <VerifyImg :isPass="isPassRef" @update-pass="updatePass" />
               </el-form-item>
             </el-col>
 
@@ -47,9 +47,10 @@
 
 <script setup lang="ts">
 import useUserLogin from "@/pages/Login/useUserLogin"
-import { ref } from "vue"
+import { ref,watch } from "vue"
 import XInput from "@/components/XInput/index.vue"
 import VerifyImg from "./VerifyImg.vue"
+import { ElMessage } from "element-plus";
 
 const loginFormRef = ref({
   username: "admin1",
@@ -58,13 +59,24 @@ const loginFormRef = ref({
 
 const { userInfo, loading, login, logout } = useUserLogin()
 
-const wrapLogin = async () => {
-  await login(loginFormRef.value)
-}
-const isPass = ref(false)
+
+const isPassRef = ref(false)
+function resetPass() {isPassRef.value = false}
 const updatePass = (val) => {
-  isPass.value = val
+  isPassRef.value = val
 }
+
+const wrapLogin = async () => {
+  if(!isPassRef.value) ElMessage.warning('请先验证图片!')
+  try {
+    await login(loginFormRef.value)
+  } catch (error) {
+    resetPass() 
+  }
+}
+watch(loginFormRef.value, () => {
+  resetPass()
+})
 </script>
 
 <style scoped lang="scss">

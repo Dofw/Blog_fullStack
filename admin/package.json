@@ -17,6 +17,7 @@
     "echarts": "^5.3.3",
     "element-plus": "^2.3.7",
     "highlight.js": "^11.7.0",
+    "mammoth": "^1.6.0",
     "monaco-editor": "^0.34.0",
     "node-sass": "^7.0.1",
     "pinia": "^2.0.12",
