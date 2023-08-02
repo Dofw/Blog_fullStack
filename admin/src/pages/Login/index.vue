@@ -1,5 +1,5 @@
 <template>
-  <div class="x-animation-container">
+  <div class="x-animation-container" ref="scrollRef">
     <div class="x-animation-content">
       <div class="top"></div>
       <div class="center">
@@ -64,29 +64,29 @@ import { ref, watch, onMounted } from "vue"
 import XInput from "@/components/XInput/index.vue"
 import VerifyImg from "./VerifyImg.vue"
 import { ElMessage } from "element-plus"
-import { getItemsPos, setPosStyles } from "."
+import { getItemsPos,getItemsCenterPos, updateItemsStatus, initAnimationMaps } from "."
 
 const loginFormRef = ref({
   username: "admin1",
   password: "admin1"
 })
 const boxRef = ref(null)
+const scrollRef: any = ref(null)
 onMounted(() => {
   const posInfos = getItemsPos(boxRef.value, { width: 50, height: 50, offset: 50 })
+  const centerPos = getItemsCenterPos(boxRef.value, 50, 50)
   const allItems = document.querySelectorAll(".sticky .item")
+  // 初始化4个状态。
+  initAnimationMaps(allItems, posInfos,centerPos)
 
-
-
-  allItems.forEach((item) => {
-    // const index = item.dataset.index // 方法一
-    const index = item.getAttribute("data-index")
-
-    const pos = posInfos.find((item) => {
-      return item.index === index
-    })
-
-    setPosStyles(item, pos)
-  })
+  scrollRef.value.addEventListener(
+    "scroll",
+    function (e) {
+      const scroll = e.target.scrollTop 
+      updateItemsStatus(scroll, allItems)
+    },
+   true
+  )
 })
 
 const { userInfo, loading, login, logout } = useUserLogin()
@@ -166,7 +166,8 @@ watch(loginFormRef.value, () => {
   height: 100%;
   border: $border;
 
-  overflow-y: scroll;
+  // overflow-y: scroll;
+  overflow: scroll;
 
   .x-animation-content {
     width: 100%;

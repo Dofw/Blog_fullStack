@@ -34,26 +34,99 @@ export function getItemsPos(container, option?: Option) {
 
   return result
 }
+export function getItemsCenterPos(container, width, height) {
+  const { clientWidth, clientHeight } = container
+  const left = clientWidth / 2 - width / 2
+  const top = clientHeight / 2 - height / 2
+  return {
+    left,
+    top
+  }
+}
 
-export function setPosStyles(dom, option) {
-  const attrs = generateAttrMap(option)
-  attrs.forEach((attr) => {
-    dom.style[attr.key] = attr.value + "px"
+// dom - status 对象的map
+const animationMaps = new Map()
+
+// 根据初始预期状态，设置每个dom的animation配置
+export function initAnimationMaps(items, posInfos, centerPos) {
+  // 这里设置动画的滚动区域。
+  const scrollStart = 600
+  const scrollEnd = 2873
+
+  let delaySize = 200
+
+  for (const item of items) {
+    const index = item.dataset.index
+    const colNum = index.split("-")[1]
+    const centerNum = Math.ceil(items.length / 4)
+    const a = Math.abs(centerNum - colNum)
+    console.log(colNum, centerNum, a, delaySize * a)
+    const pos = findPosInfo(index, posInfos)
+    animationMaps.set(
+      item,
+      createAnimationConf(scrollStart, scrollEnd, item, pos, centerPos, delaySize * a)
+    )
+  }
+}
+
+function findPosInfo(index, posInfos) {
+  return posInfos.find((item) => {
+    return item.index === index
   })
 }
 
-function generateAttrMap(option) {
-  const keys = Object.keys(option)
-  const result: any = []
+function createAnimationConf(scrollStart, scrollEnd, item, pos, centerPos, delaySize) {
+  // 可以获取dom的额外属性。
+  const index = item.dataset.index
 
-  keys.forEach((key) => {
-    result.push({
-      key,
-      value: option[key]
-    })
-  })
+  // opacity
+  const opacity = createComputedVal(scrollStart - delaySize, scrollEnd - delaySize, 0, 1)
 
-  return result
+  // left-top
+  const leftComp = createComputedVal(
+    scrollStart - delaySize,
+    scrollEnd - delaySize,
+    centerPos.left,
+    pos.left
+  ) // (初始化计算器)只需要init执行一次。不需要scroll变化触发一致生成。
+  const topComp = createComputedVal(
+    scrollStart - delaySize,
+    scrollEnd - delaySize,
+    centerPos.top,
+    pos.top
+  )
+  const left = function (scroll) {
+    return leftComp(scroll) + "px" // 包一层，是将数字处理成合理的数值。
+  }
+  const top = function (scroll) {
+    return topComp(scroll) + "px"
+  }
+
+  // scale
+  const scaleComp = createComputedVal(scrollStart, scrollEnd, 1, 1)
+  const scale = function (scroll) {
+    return `scale(${scaleComp(scroll)})`
+  }
+
+  return {
+    opacity,
+    left,
+    top,
+    scale
+  }
+}
+
+export function updateItemsStatus(scroll, items) {
+  for (const item of items) {
+    const animationObj = animationMaps.get(item)
+
+    for (const key in animationObj) {
+      const execute = animationObj[key]
+      // console.log(123123, key, execute(scroll))
+
+      item.style[key] = execute(scroll)
+    }
+  }
 }
 
 // 设置动画起始、终止状态。
