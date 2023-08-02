@@ -103,8 +103,8 @@ function createAnimationConf(scrollStart, scrollEnd, item, pos, centerPos, delay
   }
 
   // scale
-  const scaleComp = createComputedVal(scrollStart, scrollEnd, 1, 1)
-  const scale = function (scroll) {
+  const scaleComp = createComputedVal(scrollStart, scrollEnd, 1, 1.5)
+  const transform = function (scroll) {
     return `scale(${scaleComp(scroll)})`
   }
 
@@ -112,7 +112,7 @@ function createAnimationConf(scrollStart, scrollEnd, item, pos, centerPos, delay
     opacity,
     left,
     top,
-    scale
+    transform
   }
 }
 
