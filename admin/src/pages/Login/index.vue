@@ -64,7 +64,7 @@ import { ref, watch, onMounted } from "vue"
 import XInput from "@/components/XInput/index.vue"
 import VerifyImg from "./VerifyImg.vue"
 import { ElMessage } from "element-plus"
-import { getItemsPos,getItemsCenterPos, updateItemsStatus, initAnimationMaps } from "."
+import { getItemsPos, getItemsCenterPos, updateItemsStatus, initAnimationMaps } from "."
 
 const loginFormRef = ref({
   username: "admin1",
@@ -73,20 +73,28 @@ const loginFormRef = ref({
 const boxRef = ref(null)
 const scrollRef: any = ref(null)
 onMounted(() => {
-  const posInfos = getItemsPos(boxRef.value, { width: 50, height: 50, offset: 50 })
-  const centerPos = getItemsCenterPos(boxRef.value, 50, 50)
   const allItems = document.querySelectorAll(".sticky .item")
+  const globalCtx = {
+    areaBox: boxRef.value,
+    items: allItems
+  }
+
   // 初始化4个状态。
-  initAnimationMaps(allItems, posInfos,centerPos)
+  initAnimationMaps(globalCtx)
 
   scrollRef.value.addEventListener(
     "scroll",
     function (e) {
-      const scroll = e.target.scrollTop 
-      updateItemsStatus(scroll, allItems)
+      const scroll = e.target.scrollTop
+      updateItemsStatus(scroll, globalCtx)
     },
-   true
+    true
   )
+
+  window.addEventListener("resize", () => {
+    // 初始化4个状态。
+    initAnimationMaps(globalCtx)
+  })
 })
 
 const { userInfo, loading, login, logout } = useUserLogin()

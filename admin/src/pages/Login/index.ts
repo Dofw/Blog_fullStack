@@ -48,19 +48,23 @@ export function getItemsCenterPos(container, width, height) {
 const animationMaps = new Map()
 
 // 根据初始预期状态，设置每个dom的animation配置
-export function initAnimationMaps(items, posInfos, centerPos) {
+export function initAnimationMaps(context) {
+  animationMaps.clear()
   // 这里设置动画的滚动区域。
+  const { items, areaBox } = context
+  const posInfos = getItemsPos(areaBox, { width: 50, height: 50, offset: 50 })
+  const centerPos = getItemsCenterPos(areaBox, 50, 50)
+
   const scrollStart = 600
   const scrollEnd = 2873
 
-  let delaySize = 200
+  let delaySize = 400
 
   for (const item of items) {
     const index = item.dataset.index
     const colNum = index.split("-")[1]
     const centerNum = Math.ceil(items.length / 4)
     const a = Math.abs(centerNum - colNum)
-    console.log(colNum, centerNum, a, delaySize * a)
     const pos = findPosInfo(index, posInfos)
     animationMaps.set(
       item,
@@ -116,13 +120,13 @@ function createAnimationConf(scrollStart, scrollEnd, item, pos, centerPos, delay
   }
 }
 
-export function updateItemsStatus(scroll, items) {
+export function updateItemsStatus(scroll, context) {
+  const { items } = context
   for (const item of items) {
     const animationObj = animationMaps.get(item)
 
     for (const key in animationObj) {
       const execute = animationObj[key]
-      // console.log(123123, key, execute(scroll))
 
       item.style[key] = execute(scroll)
     }
