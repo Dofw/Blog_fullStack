@@ -51,14 +51,9 @@ const animationMaps = new Map()
 export function initAnimationMaps(context) {
   animationMaps.clear()
   // 这里设置动画的滚动区域。
-  const { items, areaBox } = context
-  const posInfos = getItemsPos(areaBox, { width: 50, height: 50, offset: 50 })
+  const { items, areaBox, delaySize, scrollStart, scrollEnd } = context
+  const posInfos = getItemsPos(areaBox, { width: 50, height: 50, offset: 80 })
   const centerPos = getItemsCenterPos(areaBox, 50, 50)
-
-  const scrollStart = 600
-  const scrollEnd = 2873
-
-  let delaySize = 400
 
   for (const item of items) {
     const index = item.dataset.index
@@ -68,7 +63,14 @@ export function initAnimationMaps(context) {
     const pos = findPosInfo(index, posInfos)
     animationMaps.set(
       item,
-      createAnimationConf(scrollStart, scrollEnd, item, pos, centerPos, delaySize * a)
+      createAnimationConf(
+        scrollStart,
+        scrollEnd,
+        item,
+        pos,
+        centerPos,
+        delaySize * centerNum - delaySize * a
+      )
     )
   }
 }
@@ -84,21 +86,11 @@ function createAnimationConf(scrollStart, scrollEnd, item, pos, centerPos, delay
   const index = item.dataset.index
 
   // opacity
-  const opacity = createComputedVal(scrollStart - delaySize, scrollEnd - delaySize, 0, 1)
+  const opacity = createComputedVal(scrollStart + delaySize, scrollEnd, 0, 1)
 
   // left-top
-  const leftComp = createComputedVal(
-    scrollStart - delaySize,
-    scrollEnd - delaySize,
-    centerPos.left,
-    pos.left
-  ) // (初始化计算器)只需要init执行一次。不需要scroll变化触发一致生成。
-  const topComp = createComputedVal(
-    scrollStart - delaySize,
-    scrollEnd - delaySize,
-    centerPos.top,
-    pos.top
-  )
+  const leftComp = createComputedVal(scrollStart + delaySize, scrollEnd, centerPos.left, pos.left) // (初始化计算器)只需要init执行一次。不需要scroll变化触发一致生成。
+  const topComp = createComputedVal(scrollStart + delaySize, scrollEnd, centerPos.top, pos.top)
   const left = function (scroll) {
     return leftComp(scroll) + "px" // 包一层，是将数字处理成合理的数值。
   }
@@ -107,7 +99,7 @@ function createAnimationConf(scrollStart, scrollEnd, item, pos, centerPos, delay
   }
 
   // scale
-  const scaleComp = createComputedVal(scrollStart, scrollEnd, 1, 1.5)
+  const scaleComp = createComputedVal(scrollStart + delaySize, scrollEnd, 0, 1.5)
   const transform = function (scroll) {
     return `scale(${scaleComp(scroll)})`
   }

@@ -2,7 +2,7 @@
   <div class="x-animation-container" ref="scrollRef">
     <div class="x-animation-content">
       <div class="top"></div>
-      <div class="center">
+      <div class="center" ref="centerRef">
         <div class="sticky" ref="boxRef">
           <template v-for="row in 2">
             <div class="item" v-for="col in 5" :data-index="`${row}-${col}`">
@@ -64,19 +64,34 @@ import { ref, watch, onMounted } from "vue"
 import XInput from "@/components/XInput/index.vue"
 import VerifyImg from "./VerifyImg.vue"
 import { ElMessage } from "element-plus"
-import { getItemsPos, getItemsCenterPos, updateItemsStatus, initAnimationMaps } from "."
+import { updateItemsStatus, initAnimationMaps } from "."
 
 const loginFormRef = ref({
   username: "admin1",
   password: "admin1"
 })
-const boxRef = ref(null)
+const boxRef: any = ref(null)
 const scrollRef: any = ref(null)
+const centerRef: any = ref(null)
 onMounted(() => {
   const allItems = document.querySelectorAll(".sticky .item")
+
+  const { top, height } = centerRef.value.getBoundingClientRect()
+  const { top: boxTop } = scrollRef.value.getBoundingClientRect()
+  const clientHeight = document.documentElement.clientHeight
+
+  // top-boxtop = scrollTop + top
+  const scrollStart = top - boxTop
+  const scrollEnd = top - boxTop + height + 0 - clientHeight
+
+
   const globalCtx = {
     areaBox: boxRef.value,
-    items: allItems
+    items: allItems,
+    centerDom: centerRef.value,
+    delaySize: 400, // 延迟距离
+    scrollStart, // 该动画模块范围起点
+    scrollEnd // 该动画模块范围结束点
   }
 
   // 初始化4个状态。
@@ -86,6 +101,7 @@ onMounted(() => {
     "scroll",
     function (e) {
       const scroll = e.target.scrollTop
+
       updateItemsStatus(scroll, globalCtx)
     },
     true
@@ -212,6 +228,7 @@ watch(loginFormRef.value, () => {
         // align-items: center;
         // justify-items: center;
 
+     
         .item {
           position: absolute;
           background-color: #fff;
@@ -220,7 +237,13 @@ watch(loginFormRef.value, () => {
           line-height: 50px;
           border-radius: 7px;
           text-align: center;
+          @for $i from 1 through 10 {
+            &:nth-of-type(#{$i}){
+              background-color: rgb(random() * 255, random() * 255, random() * 255);
+            }
+          }
         }
+
       }
     }
     .footer {
