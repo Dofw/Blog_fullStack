@@ -7,15 +7,24 @@
 - 贝塞尔曲线
 - 同步,强行渲染
 
-### 贝赛尔曲线实现方案
+### Js 动画相关 Api 详见 MDN
 
-### Js 动画
+1. element.animate(keyframes, options)
 
-提供了 animation Api...
+- 详细见
+- 这种方式是创建一个新的对象实例, 不影响原生设置的动画变化, 不改变 style 的属性。
 
-### xxx
+2. element.getAnimations() 包含所有的动画对象。
 
-### **Css 动画 延迟技巧, 实现更加复杂的动画效果**
+3. window.IntersectionObserver
+
+- 监听一个元素进入视口，可以解决滚动加载、进入视口的一些实践问题。
+
+### Js 控制 Css 方案
+
+### 贝赛尔曲线实现方案 **制作更复杂动画的方案**
+
+### 通过 Css 变量**Css 动画 延迟技巧, 实现更加复杂的动画效果**
 
 移动时间轴,通过动画延迟来实现; js 控制--delay
 

@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router"
 import type { RouteRecordRaw } from "vue-router"
 import examplePage from "./modules/examplePage"
+import animationPage from "./modules/animationPage"
 import Login from "@/pages/Login/index.vue"
 
 const routes: RouteRecordRaw[] = [
@@ -15,7 +16,8 @@ const routes: RouteRecordRaw[] = [
       hidden: true
     }
   },
-  examplePage
+  examplePage,
+  animationPage
 ]
 
 export default createRouter({
