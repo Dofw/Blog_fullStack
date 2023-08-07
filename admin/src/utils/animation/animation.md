@@ -9,18 +9,20 @@
 
 ### Js 动画相关 Api 详见 MDN
 
-1. element.animate(keyframes, options)
+1. element.animate(keyframes, options) **同 css animation 动画**
 
 - 详细见
-- 这种方式是创建一个新的对象实例, 不影响原生设置的动画变化, 不改变 style 的属性。
+- 这种方式是创建一个新的对象实例, 不影响原生设置的动画变化, 不改变 style 的属性, 不会导致重绘？待看官方文档。
 
 2. element.getAnimations() 包含所有的动画对象。
 
-3. window.IntersectionObserver
+3. window.IntersectionObserver **监听元素进入和离开视口相关的实践方案**
 
 - 监听一个元素进入视口，可以解决滚动加载、进入视口的一些实践问题。
 
-### Js 控制 Css 方案
+### Js 控制 style 方案
+
+### Js 控制 class 方案 **常用的解决方案，js 控制类，css 负责动画**
 
 ### 贝赛尔曲线实现方案 **制作更复杂动画的方案**
 

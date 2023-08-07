@@ -15,7 +15,11 @@
     </div>
   </div>
 </template>
-
+<script lang="ts">
+export default {
+  name: "钉钉官网"
+}
+</script>
 <script setup lang="ts">
 import { ref, onMounted } from "vue"
 import { updateItemsStatus, initAnimationMaps } from "."
