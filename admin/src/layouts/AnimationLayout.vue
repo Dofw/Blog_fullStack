@@ -7,7 +7,7 @@
       <el-header style="padding: 0">
         <Header />
       </el-header>
-      <el-main style="padding: 0">
+      <el-main style="padding: 0; height: calc(100vh - 60px)">
         <router-view />
       </el-main>
     </el-container>
