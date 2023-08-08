@@ -27,7 +27,6 @@ function parseModules(modules: any) {
     if (paths.length !== 6) continue
 
     const fileType = paths[paths.length - 2]
-    console.log(modules[key].default)
     // route 格式
     Comps.push({
       path: `/animation/${fileType}`,
