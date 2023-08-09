@@ -25,7 +25,6 @@ html {
 
   @include adapter.adapt-to("pc") {
     // background-image: url("@/assets/imgs/杀生丸.jpeg");
-    background: #000;
   }
 
   @include adapter.adapt-to("mobile") {
