@@ -9,7 +9,7 @@ const animationPage: RouteRecordRaw = {
   redirect: "/animation/DingDing",
   component: AnimationLayout,
   meta: {
-    title: "Animation"
+    title: "DuYi_Yuan"
   },
   children: [
     // Vue

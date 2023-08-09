@@ -22,13 +22,5 @@ import Header from "@/layouts/components/Header.vue"
 <style scoped lang="scss">
 .container-box {
   position: relative;
-
-  > canvas.content-bg {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-  }
 }
 </style>

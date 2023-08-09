@@ -11,7 +11,7 @@ const examplePage: RouteRecordRaw = {
   redirect: "/example/Dofw/01BaseForm",
   component: ExampleLayout,
   meta: {
-    title: "Examples"
+    title: "Work_summary"
   },
   children: [
     // Vue

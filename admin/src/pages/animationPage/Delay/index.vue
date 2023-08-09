@@ -51,7 +51,6 @@ const onChange = (e) => {
     animation: move 2s var(--delay);
     animation-play-state: paused;
     animation-timing-function: ease;
-    // animation-direction: alternate-reverse;
     animation-iteration-count: infinite;
   }
 
