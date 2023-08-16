@@ -1,9 +1,5 @@
 <template>
-  <div class="container">
-    <!-- <div class="item" v-for="num in 20">
-      <span>加载中...</span>
-    </div> -->
-  </div>
+  <div class="container"></div>
 </template>
 
 <script lang="ts">
@@ -13,9 +9,10 @@ export default {
 </script>
 <script setup lang="ts">
 import { onMounted } from "vue"
+import { debounce } from "@/utils/index"
 onMounted(() => {
   /**
-   * 编写原生代码
+   * 编写原生代码 ( 袁教头牛逼！ )
    *
    * 需求：跳转到已看过的视屏位置。
    * 拆解
@@ -26,7 +23,7 @@ onMounted(() => {
    */
 
   const container: any = document.querySelector(".container")
-
+  const debounceLoadedSource = debounce(loadedSource, 300)
   /**
    * 记录
    */
@@ -42,9 +39,10 @@ onMounted(() => {
     }
 
     // 懒加载调佣资源
+    debounceLoadedSource(8)
   })
 
-  createElements(1)
+  createElements(10)
 
   /**
    * 根据页码生产相应的容器，不加载数据。
@@ -69,8 +67,86 @@ onMounted(() => {
    * @param page
    * @param pageSize
    */
-  function loadedSource(page, pageSize) {
-    return []
+  async function loadedSource(pageSize) {
+    // 全局inScreen，计算出获取的page
+    const pages = computedPages(8)
+
+    // 先判断 page 页是否加载过了
+    const allItems = container.children
+    for (const page of pages) {
+      const [minIndex, maxIndex] = pageToIndex(page, pageSize)
+      console.log(111, page, minIndex, maxIndex, allItems[minIndex])
+      const oneStatus = allItems[minIndex].dataset.loaded
+      // 已经加载过了，继续
+      if (oneStatus) {
+        continue
+      }
+
+      const data: any[] = await getApi(page, pageSize)
+      // 这里就是 下标
+      for (let i = minIndex; i <= maxIndex; i++) {
+        const itemInfo = data.find((item) => {
+          return item.index === +i
+        })
+        const dom = allItems[i - 1]
+        const content = `
+        <span>
+          ${itemInfo?.text + itemInfo?.index}
+        </span>
+      `
+        dom.dataset.loaded = true
+        dom.style.backgroundColor = itemInfo.bgColor
+        dom.innerHTML = content
+      }
+    }
+  }
+
+  function pageToIndex(page, pageSize) {
+    return [(page - 1) * pageSize + 1, page * pageSize]
+  }
+
+  /**
+   * 模拟假数据
+   */
+  function getApi(page, pageSize) {
+    return new Promise<any[]>((resolve, reject) => {
+      // 1: 1-8 2: 9-16
+      const data: any = []
+      for (let i = 1; i <= pageSize; i++) {
+        data.push({
+          index: (page - 1) * pageSize + i,
+          text: `模拟数据QaQ`,
+          bgColor: `rgba(${Math.random() * 255},${Math.random() * 255},${Math.random() * 255},1)`
+        })
+      }
+
+      setTimeout(() => {
+        resolve(data)
+      }, 1000)
+    })
+  }
+
+  /**
+   * 在视口的 下表范围。
+   * @param nums
+   */
+  function computedMinMax() {
+    const nums: any[] = [...inScreen]
+    if (!nums.length) return [0, 0]
+    const min = Math.min(...nums)
+    const max = Math.max(...nums)
+    return [min, max]
+  }
+
+  // 在视口数据，所属页码
+  function computedPages(pageSize = 8) {
+    const pageSet = new Set()
+    const [min, max] = computedMinMax()
+    for (let i = min; i <= max; i++) {
+      const page = Math.ceil(i / pageSize)
+      pageSet.add(page)
+    }
+    return [...pageSet]
   }
 })
 </script>
@@ -93,11 +169,6 @@ onMounted(() => {
 
     height: 400px;
     border-radius: 20px;
-    @for $i from 1 to 20 {
-      &:nth-of-type(#{$i}) {
-        background-color: rgba(random() * 255, random() * 255, random() * 255, 1);
-      }
-    }
   }
 }
 </style>

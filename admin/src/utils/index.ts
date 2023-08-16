@@ -1,6 +1,6 @@
 export { triggerTheme } from "./triggerTheme"
 
-export function debounce(fn: () => void, delay: number) {
+export function debounce(fn: (...arg: any) => void, delay: number) {
   let timer: any = null
   return function (this: any, ...args: any) {
     const self = this
