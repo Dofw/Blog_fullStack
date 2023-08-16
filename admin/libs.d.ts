@@ -6,3 +6,5 @@ declare module "axios" {
     _isCancel?: boolean
   }
 }
+
+declare module "d3"
