@@ -25,6 +25,7 @@ export default class D3Model {
   // 初始化一些全局属性。
   svg: any = null
   g1: any = null // 最外层的 group
+  treeLayout: any = null
   dataPoint: any = null
   oldNodeGs: any = null
   constructor(option: Option) {
@@ -59,7 +60,7 @@ export default class D3Model {
       .attr("class", "svg")
       .attr("width", width)
       .attr("height", height)
-      .attr("viewBox", `${0} ${0} ${width} ${height}`)
+      .attr("viewBox", `${0} ${-height / 2} ${width} ${height}`) // 调整视图 居中。
       .attr("cursor", "pointer")
 
     this.svg = svg
@@ -73,12 +74,15 @@ export default class D3Model {
 
     this.g1 = g1
     // 定义layout, 通过 hierarchy 根据布局定义好point位置
-    const treeLayout = d3.tree().size([innerH - boxSize[1], innerW - boxSize[0]])
+    const treeLayout = (this.treeLayout = d3
+      .tree()
+      .size([innerH - boxSize[1], innerW - boxSize[0]])
+      .nodeSize([300, 500]))
+
     // TODO: 控制展示多少层
     const dataDeep = d3.hierarchy(data)
     // TODO: 打上坐标点
-    const dataPoint = treeLayout(dataDeep)
-    console.log(dataPoint)
+    const dataPoint = (this.dataPoint = treeLayout(dataDeep))
 
     // TODO: 初始化时，控制层级展示
     dataPoint.descendants().forEach((node: any) => {
@@ -87,14 +91,12 @@ export default class D3Model {
       node.children = undefined
     })
 
-    this.dataPoint = dataPoint
-
     // svg 的 zoom事件
     svg
       .call(
         d3
           .zoom()
-          .scaleExtent([0.5, 5])
+          .scaleExtent([0, 5])
           .on("zoom", (e) => {
             // TODO: 最外层 group 组， 会应用到下面的所有。
             g1.attr("transform", () => {
@@ -109,19 +111,23 @@ export default class D3Model {
 
   // TODO:update
   update() {
-    const { boxSize, fontSize } = this.option
+    const { boxSize, fontSize, data } = this.option
+
+    // this.clearSvg()
+
+    // TODO: 控制展示多少层
+    const dataDeep = d3.hierarchy(data)
+    // TODO: 打上坐标点
+    this.dataPoint = this.treeLayout(dataDeep)
+
+    this.g1.selectAll(".lines-g").remove()
     // TODO: 1,划线
     const linesG = this.g1!.append("g").attr("class", "lines-g") // 先分组
 
-    linesG
-      .selectAll(".broken-line")
-      .data(this.dataPoint.links())
-      .join("path")
-      .attr("class", "broken-line")
-      .attr("fill", "none")
-      .attr("stroke", "black")
-      .attr("stroke-width", 1)
-      .attr("d", this.generalBrokenLine)
+    const lines = linesG.selectAll(".broken-line").data(this.dataPoint.links(), (d) => {
+      return d.source.data.name + d.target.data.name
+    })
+    this.lineJoin(lines)
 
     /**
      * TODO: 绘制 NODE， 这里使用所有node归为一个组。 ( TODO:分组的重要行！！！ )
@@ -129,31 +135,47 @@ export default class D3Model {
      * 2. 将所有node归为一个组。
      */
     // const nodeG = g1.append("g").attr("class", "node-g")
-
+    console.log(
+      this.dataPoint.descendants().map((node) => {
+        return [node.data.name, node.x, node.y]
+      })
+    )
     const nodes = this.g1!.selectAll(".node-g").data(this.dataPoint.descendants(), (d) => {
-      return d.data.name
+      return d.data.name + d.x + d.y
     })
+    this.nodeJoin(nodes)
+  }
 
-    const nodeGs = nodes
-      .join(
-        (enter) => enter.append("g"),
-        (update) => update,
-        (exit) => exit.remove()
-      )
-      .attr("class", "node-g")
-      .on("click", (e, d) => {
-        if (d.children) {
-          d._children = d.children
-          d.children = null
-        } else {
-          d.children = d._children
+  clearSvg() {
+    this.g1.selectAll("*").remove()
+  }
+
+  nodeJoin(nodes) {
+    const { boxSize } = this.option
+    const myTransition = this.svg.transition().duration(1000)
+    const nodeClick = (e, d) => {
+      d.parent.children.forEach((node, index) => {
+        if (d.data.name === node.data.name) {
+          d.parent.data.children.splice(index, 1)
         }
-        this.update()
-      }) // 一个 node 作为一个group，注册事件，充分利用事件冒泡可以。
+      })
 
-    // 2. 给每个node添加rect
-    nodeGs
+      // ;(d.data.children = d.data.children || []).push({
+      //   name: "root-1-3" + Math.random()
+      // })
+      // if (d.children) {
+      //   d._children = d.children
+      //   d.children = null
+      // } else {
+      //   d.children = d._children
+      // }
+      this.update()
+    }
+    // 进入
+    const enterNodeGs = nodes.enter().append("g").attr("class", "node-g").on("click", nodeClick) // 一个 node 作为一个group，注册事件，充分利用事件冒泡可以。
+    enterNodeGs
       .append("rect")
+      .transition(myTransition)
       .attr("class", "node")
       .attr("z-index", -1)
       .attr("fill", "rgba(0, 0, 0, .3)")
@@ -167,8 +189,66 @@ export default class D3Model {
       .attr("width", boxSize[0])
       .attr("height", boxSize[1])
 
-    nodeGs
+    // 更新
+    nodes
+      .attr("x", (d: any) => {
+        return d.y
+      })
+      .attr("y", (d: any) => d.x - boxSize[1] / 2)
+    // 移除
+    nodes.exit().remove()
+
+    this.nodeAppendText(enterNodeGs, nodes)
+  }
+
+  lineJoin(lines) {
+    const myTransition = this.svg.transition().duration(1000)
+    lines
+      .enter()
+      .append("path")
+      .transition(myTransition)
+      .attr("class", "broken-line")
+      .attr("fill", "none")
+      .attr("stroke", "black")
+      .attr("stroke-width", 1)
+      .style("opacity", 1)
+      .attr("d", this.generalBrokenLine)
+
+    lines
+      .attr("class", "broken-line")
+      .attr("fill", "none")
+      .attr("stroke", "black")
+      .attr("stroke-width", 1)
+      .style("opacity", 1)
+      .attr("d", this.generalBrokenLine)
+
+    lines.exit().remove()
+  }
+
+  nodeAppendText(enterNodeGs, nodes) {
+    const { boxSize, fontSize } = this.option
+    // 进入
+    enterNodeGs
       .append("text")
+      .attr("class", "text")
+      .attr("fill", "none")
+      .attr("stroke", "green")
+      .attr("y", (d) => d.x)
+      .attr("x", (d) => {
+        return d.y
+      })
+      .attr("dx", (d) => {
+        const name = d.data.name
+        const center = boxSize[0] / 2
+        const textLen = name.length * fontSize
+        return center - textLen / 2
+      })
+      .style("text-anchor", (d) => "start")
+      .text((d) => d.data.name)
+
+    // 更新
+    nodes
+      .selectAll("text")
       .attr("class", "text")
       .attr("fill", "none")
       .attr("stroke", "green")
