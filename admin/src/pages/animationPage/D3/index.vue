@@ -35,6 +35,10 @@ const data = {
       value: 10,
       children: [
         {
+          name: "root-1-1",
+          value: 10
+        },
+        {
           name: "root-1-11",
           value: 10
         }
