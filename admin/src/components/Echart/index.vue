@@ -3,50 +3,50 @@
 </template>
 
 <script setup>
-import { defineProps, ref, onMounted, watch, defineExpose } from "vue";
-import * as echarts from "echarts";
+import { defineProps, ref, onMounted, watch, defineExpose } from "vue"
+import * as echarts from "echarts"
 
 const props = defineProps({
   className: {
     type: String,
-    default: "",
+    default: ""
   },
   width: {
     type: String,
-    default: "100%",
+    default: "100%"
   },
   height: {
     type: String,
-    default: "100%",
+    default: "100%"
   },
   options: {
     type: Object,
     default: () => {
-      return {};
-    },
-  },
-});
+      return {}
+    }
+  }
+})
 
-const chart = ref(null); // dom
-const instance = ref(null); // 实例
+const chart = ref(null) // dom
+const instance = ref(null) // 实例
 defineExpose({
-  instance,
-});
+  instance
+})
 
 onMounted(() => {
-  let myChart = echarts.init(chart.value);
-  myChart.setOption(props.options);
-  instance.value = myChart;
-});
+  let myChart = echarts.init(chart.value)
+  myChart.setOption(props.options)
+  instance.value = myChart
+})
 
 watch(
   () => {
-    return props.options;
+    return props.options
   },
   (options) => {
-    instance.value.setOption(options);
-  },
-);
+    instance.value.setOption(options)
+  }
+)
 </script>
 
 <style lang="scss" scoped></style>

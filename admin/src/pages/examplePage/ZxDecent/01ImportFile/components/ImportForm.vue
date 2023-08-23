@@ -37,10 +37,10 @@
   </Dialog>
 </template>
 <script lang="ts" setup>
-import {ref} from 'vue'
+import { ref } from "vue"
 // import { getAccessToken, getTenantId } from '@/utils/auth'
-import { type UploadRequestHandler,ElMessage } from 'element-plus'
-import Dialog from './Dialog.vue'
+import { type UploadRequestHandler, ElMessage } from "element-plus"
+import Dialog from "./Dialog.vue"
 
 interface Props {
   // uploadUrl: string
@@ -50,7 +50,7 @@ interface Props {
 
 withDefaults(defineProps<Props>(), {
   // uploadUrl: '',
-  title: '',
+  title: "",
   uploadFile: undefined
 })
 
@@ -69,25 +69,25 @@ const open = () => {
 defineExpose({ open }) // 提供 open 方法，用于打开弹窗
 
 //************** 权限 token
-const AccessTokenKey = 'ACCESS_TOKEN'
-const getAccessToken = ()=>{
-  return localStorage.getItem(AccessTokenKey) ? localStorage.getItem(AccessTokenKey) : ''
+const AccessTokenKey = "ACCESS_TOKEN"
+const getAccessToken = () => {
+  return localStorage.getItem(AccessTokenKey) ? localStorage.getItem(AccessTokenKey) : ""
 }
 // *************
 
 /** 提交表单 */
 const submitForm = async () => {
   if (fileList.value.length == 0) {
-    ElMessage.error('请上传文件')
+    ElMessage.error("请上传文件")
     return
   }
   // 提交请求
   uploadHeaders.value = {
-    Authorization: 'Bearer ' + getAccessToken(),
-    'Content-Type': 'application/x-www-form-urlencoded'
+    Authorization: "Bearer " + getAccessToken(),
+    "Content-Type": "application/x-www-form-urlencoded"
   }
   formLoading.value = true
-  uploadRef.value!.submit()
+  uploadRef.value.submit()
   dialogVisible.value = false
   fileList.value = []
 }
@@ -99,7 +99,7 @@ const onCancel = () => {
 }
 
 /** 文件上传成功 */
-const emits = defineEmits(['success', 'downloadTemplate'])
+const emits = defineEmits(["success", "downloadTemplate"])
 const submitFormSuccess = (response: any) => {
   // console.log('打印呀')
   if (response.code !== 0) {
@@ -109,26 +109,26 @@ const submitFormSuccess = (response: any) => {
   }
   // 拼接提示语
   const data = response.data
-  let text = '上传成功数量：' + data.createUsernames.length + ';'
+  let text = "上传成功数量：" + data.createUsernames.length + ";"
   for (let username of data.createUsernames) {
-    text += '< ' + username + ' >'
+    text += "< " + username + " >"
   }
-  text += '更新成功数量：' + data.updateUsernames.length + ';'
+  text += "更新成功数量：" + data.updateUsernames.length + ";"
   for (const username of data.updateUsernames) {
-    text += '< ' + username + ' >'
+    text += "< " + username + " >"
   }
-  text += '更新失败数量：' + Object.keys(data.failureUsernames).length + ';'
+  text += "更新失败数量：" + Object.keys(data.failureUsernames).length + ";"
   for (const username in data.failureUsernames) {
-    text += '< ' + username + ': ' + data.failureUsernames[username] + ' >'
+    text += "< " + username + ": " + data.failureUsernames[username] + " >"
   }
   ElMessage.alert(text)
   // 发送操作成功的事件
-  emits('success')
+  emits("success")
 }
 
 /** 上传错误提示 */
 const submitFormError = (): void => {
-  ElMessage.error('上传失败，请您重新上传！')
+  ElMessage.error("上传失败，请您重新上传！")
   formLoading.value = false
 }
 
@@ -141,17 +141,11 @@ const resetForm = () => {
 
 /** 文件数超出提示 */
 const handleExceed = (): void => {
-  ElMessage.error('最多只能上传一个文件！')
+  ElMessage.error("最多只能上传一个文件！")
 }
 
 /** 下载模板操作 */
 const importTemplate = () => {
-  emits('downloadTemplate')
-  // const res = await UserApi.importUserTemplate()
-  // download.excel(res, '用户导入模版.xls')
+  emits("downloadTemplate")
 }
-
-// const uploadFile = (option: any) => {
-//   props.upload(option)
-// }
 </script>

@@ -4,7 +4,12 @@
 
     <div class="content">
       <el-tabs class="view" type="border-card">
-        <el-tab-pane lazy :label="itemCode.componentName" v-for="itemCode in codeOptions" :key="itemCode.componentName">
+        <el-tab-pane
+          lazy
+          :label="itemCode.componentName"
+          v-for="itemCode in codeOptions"
+          :key="itemCode.componentName"
+        >
           <MonacoEditor :tempCode="itemCode.code"></MonacoEditor>
         </el-tab-pane>
       </el-tabs>

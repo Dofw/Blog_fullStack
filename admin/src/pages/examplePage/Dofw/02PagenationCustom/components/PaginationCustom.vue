@@ -1,6 +1,11 @@
 <template>
   <div class="custom-pagination-container">
-    <div class="content-wrapper" :style="contentStyle" v-loading="loading" element-loading-text="Loading...">
+    <div
+      class="content-wrapper"
+      :style="contentStyle"
+      v-loading="loading"
+      element-loading-text="Loading..."
+    >
       <!-- 空数据外侧提供 -->
       <slot name="content" :data="list"></slot>
     </div>
@@ -29,7 +34,16 @@ const defauldFields = {
 <script setup lang="ts">
 import type { ArrListType, Params, PageParams, ConditionsParams, ExposeType } from "./type"
 import type { Ref, ComponentInternalInstance } from "vue"
-import { defineProps, withDefaults, ref, computed, onMounted, watch, defineExpose, getCurrentInstance } from "vue"
+import {
+  defineProps,
+  withDefaults,
+  ref,
+  computed,
+  onMounted,
+  watch,
+  defineExpose,
+  getCurrentInstance
+} from "vue"
 
 interface PageFieldsType {
   noPage?: string

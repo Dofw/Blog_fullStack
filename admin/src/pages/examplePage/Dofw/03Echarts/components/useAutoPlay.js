@@ -1,4 +1,4 @@
-import { onMounted, onUnmounted, ref, watch } from "vue";
+import { onMounted, onUnmounted, ref, watch } from "vue"
 // import { debounce2 } from "@/utils/utils";
 
 /**
@@ -7,64 +7,62 @@ import { onMounted, onUnmounted, ref, watch } from "vue";
  * @param {Object} options data(数据要求为响应式数据Ref)、duration(间隔)、index(初始第几个), seriesIndex(指定series中某一个serie)、cb(扩展函数)接受2个参数(echartInstance, data)
  */
 export default function useAutoPlay(componentInstance, options) {
-  const { duration, index, seriesIndex, data, cb, onEvents, isPlay } = options;
+  const { duration, index, seriesIndex, data, cb, onEvents, isPlay } = options
   // setup环境中只运行一次
-  const myChartInstance = ref(null);
-  const playDuration = duration || 5000;
-  const $seriesIndex = seriesIndex || 0;
-  const $onEvents = onEvents || {};
-  const $isPlay = isPlay || false;
-  let autoIndex = index || 0;
-  let autoPreIndex = index || 0;
-  let autoPlayTimer = null;
+  const myChartInstance = ref(null)
+  const playDuration = duration || 5000
+  const $seriesIndex = seriesIndex || 0
+  const $onEvents = onEvents || {}
+  const $isPlay = isPlay || false
+  let autoIndex = index || 0
+  let autoPreIndex = index || 0
+  let autoPlayTimer = null
 
   onMounted(() => {
-    myChartInstance.value = componentInstance.value.instance;
+    myChartInstance.value = componentInstance.value.instance
     // 绑定事件
-    bindEvent($onEvents, start2, end2);
+    bindEvent($onEvents, start2, end2)
     // 开启播放
     if ($isPlay) {
-      start(data.value, cb);
+      start(data.value, cb)
     }
-  });
+  })
 
   onUnmounted(() => {
     //解绑事件
-    unBindEvent();
+    unBindEvent()
     //清楚定时器
-    clearInterval(autoPlayTimer);
-  });
+    clearInterval(autoPlayTimer)
+  })
 
   watch(
     () => {
-      return data.value;
+      return data.value
     },
     (val) => {
       if ($isPlay) {
-        start(val, cb);
+        start(val, cb)
       }
-    },
-  );
+    }
+  )
 
-  const wrapperEvents = {};
+  const wrapperEvents = {}
   /**
    * 绑定事件
    */
   function bindEvent(events, start2, end2) {
     if (Object.prototype.toString.call(events) !== "[object Object]") {
-      console.warn(
-        "useAutoPlay的options.onEvents 是如下格式 {eventName: func}",
-      );
-      return;
+      console.warn("useAutoPlay的options.onEvents 是如下格式 {eventName: func}")
+      return
     }
 
     if (myChartInstance.value) {
       // event的函数包装成高阶函数，传递额外参数
-      const names = Object.keys(events);
+      const names = Object.keys(events)
       for (let i = 0; i < names.length; i++) {
-        const name = names[i];
+        const name = names[i]
         if (typeof events[name] !== "function") {
-          console.error("useAutoPlay中传递的onEvent内部事件不是函数！");
+          console.error("useAutoPlay中传递的onEvent内部事件不是函数！")
         }
 
         // //加防抖的事件
@@ -80,10 +78,10 @@ export default function useAutoPlay(componentInstance, options) {
         // }
 
         wrapperEvents[name] = (e) => {
-          return events[name](e, start2, end2);
-        };
+          return events[name](e, start2, end2)
+        }
 
-        myChartInstance.value.on(name, wrapperEvents[name]);
+        myChartInstance.value.on(name, wrapperEvents[name])
       }
     }
   }
@@ -93,9 +91,9 @@ export default function useAutoPlay(componentInstance, options) {
    */
   function unBindEvent() {
     if (myChartInstance.value) {
-      const names = Object.keys(wrapperEvents);
+      const names = Object.keys(wrapperEvents)
       for (let i = 0; i < names.length; i++) {
-        myChartInstance.value.off(names[i], wrapperEvents[names[i]]);
+        myChartInstance.value.off(names[i], wrapperEvents[names[i]])
       }
     }
   }
@@ -107,11 +105,11 @@ export default function useAutoPlay(componentInstance, options) {
     myChartInstance.value.dispatchAction({
       type: "highlight",
       seriesIndex: $seriesIndex,
-      dataIndex: autoIndex,
-    });
+      dataIndex: autoIndex
+    })
 
     if (Array.isArray(data)) {
-      autoPlay(data, cb);
+      autoPlay(data, cb)
     }
   }
 
@@ -120,7 +118,7 @@ export default function useAutoPlay(componentInstance, options) {
    */
   function start2() {
     if ($isPlay) {
-      autoPlay(data.value, cb);
+      autoPlay(data.value, cb)
     }
   }
 
@@ -128,7 +126,7 @@ export default function useAutoPlay(componentInstance, options) {
    * 外部结束自动播放
    */
   function end2() {
-    clearInterval(autoPlayTimer);
+    clearInterval(autoPlayTimer)
   }
 
   /**
@@ -138,29 +136,29 @@ export default function useAutoPlay(componentInstance, options) {
    */
   function autoPlay(data, fn) {
     if (!myChartInstance.value) {
-      return;
+      return
     }
 
     if (autoPlayTimer) {
-      clearInterval(autoPlayTimer);
+      clearInterval(autoPlayTimer)
     }
 
     autoPlayTimer = setInterval(() => {
       if (!data || data.length === 0) {
-        clearInterval(autoPlayTimer);
-        return;
+        clearInterval(autoPlayTimer)
+        return
       }
 
       if (autoIndex > data.length - 1) {
-        autoIndex = 0;
+        autoIndex = 0
       }
 
       // 扩展功能由使用者定义
       if (typeof fn === "function") {
-        fn(myChartInstance.value, data, autoIndex, autoPreIndex);
+        fn(myChartInstance.value, data, autoIndex, autoPreIndex)
       }
 
-      autoPreIndex = autoIndex++;
-    }, playDuration);
+      autoPreIndex = autoIndex++
+    }, playDuration)
   }
 }

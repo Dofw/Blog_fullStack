@@ -174,7 +174,14 @@ function _randomRange(num: number, padding: number) {
  * @param radius1
  * @returns
  */
-function doublication(x: number, y: number, radius: number, x1: number, y1: number, radius1: number) {
+function doublication(
+  x: number,
+  y: number,
+  radius: number,
+  x1: number,
+  y1: number,
+  radius1: number
+) {
   const dx = x - x1
   const dy = y - y1
   const space = Math.sqrt(dx * dx + dy * dy)

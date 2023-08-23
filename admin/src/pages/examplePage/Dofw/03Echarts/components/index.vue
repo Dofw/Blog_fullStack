@@ -7,7 +7,14 @@
 <script setup>
 import Echart from "./Echart.vue"
 // import useAutoPlay from "./useAutoPlay"
-import { handlerDataFunc, generalAllSeries, tempTooltip, generalMax_Min, CONST_FZ, computedBarWidth } from "./bestPractice.ts"
+import {
+  handlerDataFunc,
+  generalAllSeries,
+  tempTooltip,
+  generalMax_Min,
+  CONST_FZ,
+  computedBarWidth
+} from "./bestPractice.ts"
 import { onMounted, ref, computed } from "vue"
 
 const myChart = ref({})
@@ -19,17 +26,17 @@ onMounted(() => {
       {
         name: "测试1",
         field1: 10,
-        month: '1'
+        month: "1"
       },
       {
         name: "测试2",
         field1: 20,
-        month: '2'
+        month: "2"
       },
       {
         name: "测试3",
         field1: 15,
-        month: '3'
+        month: "3"
       }
     ]
   }, 3000)
@@ -60,7 +67,7 @@ const options = computed(() => {
       type: "bar",
       name: "本年累计",
       unit: "亿元",
-      color: 'red',
+      color: "red",
       linearGradient: [
         { offset: 0, color: "rgba(225, 225, 225, 1)" },
         { offset: 0.1, color: "rgba(243, 203, 66, 1)" },
@@ -162,36 +169,38 @@ const options = computed(() => {
       bottom: "5%",
       containLabel: true
     },
-    xAxis: [{
-      type: "category",
-      boundaryGap: true,
-      data: categoryAxis,
-      axisLabel: {
-        //坐标轴刻度标签的相关设置。
-        interval: 0, //设置为 1，表示『隔一个标签显示一个标签』
-        //	margin:15,
+    xAxis: [
+      {
+        type: "category",
+        boundaryGap: true,
+        data: categoryAxis,
+        axisLabel: {
+          //坐标轴刻度标签的相关设置。
+          interval: 0, //设置为 1，表示『隔一个标签显示一个标签』
+          //	margin:15,
 
-        color: "#FFF",
-        fontStyle: "normal",
-        fontSize: CONST_FZ.label,
-        fontFamily: "Microsoft YaHei",
-        fontWeight: 400
-      },
-      axisTick: {
-        //坐标轴刻度相关设置。
-        show: false
-      },
-      axisLine: {
-        show: true,
-        lineStyle: {
-          color: "#59809B"
+          color: "#FFF",
+          fontStyle: "normal",
+          fontSize: CONST_FZ.label,
+          fontFamily: "Microsoft YaHei",
+          fontWeight: 400
+        },
+        axisTick: {
+          //坐标轴刻度相关设置。
+          show: false
+        },
+        axisLine: {
+          show: true,
+          lineStyle: {
+            color: "#59809B"
+          }
+        },
+        splitLine: {
+          //坐标轴在 grid 区域中的分隔线。
+          show: false
         }
-      },
-      splitLine: {
-        //坐标轴在 grid 区域中的分隔线。
-        show: false
       }
-    }],
+    ],
     yAxis: [
       {
         type: "value",

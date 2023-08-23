@@ -1,20 +1,20 @@
 <script lang="ts" name="Dialog" setup>
-import { propTypes } from '@/utils/propTypes'
-import { isNumber } from '@/utils/is'
+import { propTypes } from "@/utils/propTypes"
+import { isNumber } from "@/utils/is"
 
 const slots = useSlots()
 
 const props = defineProps({
   modelValue: propTypes.bool.def(false),
-  title: propTypes.string.def('Dialog'),
+  title: propTypes.string.def("Dialog"),
   fullscreen: propTypes.bool.def(true),
-  width: propTypes.oneOfType([String, Number]).def('40%'),
+  width: propTypes.oneOfType([String, Number]).def("40%"),
   scroll: propTypes.bool.def(false), // 是否开启滚动条。如果是的话，按照 maxHeight 设置最大高度
-  maxHeight: propTypes.oneOfType([String, Number]).def('300px')
+  maxHeight: propTypes.oneOfType([String, Number]).def("300px")
 })
 
 const getBindValue = computed(() => {
-  const delArr: string[] = ['fullscreen', 'title', 'maxHeight']
+  const delArr: string[] = ["fullscreen", "title", "maxHeight"]
   const attrs = useAttrs()
   const obj = { ...attrs, ...props }
   for (const key in obj) {
@@ -95,13 +95,13 @@ const dialogStyle = computed(() => {
   </ElDialog>
 </template>
 
-<!-- <style lang="scss">
-.#{$elNamespace}-dialog__header {
+<style lang="scss">
+.el-dialog__header {
   margin-right: 0 !important;
   border-bottom: 1px solid var(--tags-view-border-color);
 }
 
-.#{$elNamespace}-dialog__footer {
+.el-dialog__footer {
   border-top: 1px solid var(--tags-view-border-color);
 }
 
@@ -112,12 +112,12 @@ const dialogStyle = computed(() => {
 }
 
 .dark {
-  .#{$elNamespace}-dialog__header {
+  .el-dialog__header {
     border-bottom: 1px solid var(--el-border-color);
   }
 
-  .#{$elNamespace}-dialog__footer {
+  .el-dialog__footer {
     border-top: 1px solid var(--el-border-color);
   }
 }
-</style> -->
+</style>

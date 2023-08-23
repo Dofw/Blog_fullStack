@@ -1,5 +1,8 @@
 <template>
-  <PreviewCodes :codeOptions="codeOptions" description="简介: 分页需求统一视图样式、重复操作逻辑封装在内部，外部只提供getList、conditions">
+  <PreviewCodes
+    :codeOptions="codeOptions"
+    description="简介: 分页需求统一视图样式、重复操作逻辑封装在内部，外部只提供getList、conditions"
+  >
     <template #demo>
       <Example />
     </template>

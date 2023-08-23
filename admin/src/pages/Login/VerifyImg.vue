@@ -26,10 +26,10 @@ const dragDom = ref<HTMLDivElement>()
 const imgAreaDom = ref<HTMLDivElement>()
 
 function showImg() {
-  containerDom.value!.classList.add('showImg') 
+  containerDom.value!.classList.add("showImg")
 }
 function hiddenImg() {
-  containerDom.value!.classList.remove('showImg')
+  containerDom.value!.classList.remove("showImg")
 }
 
 let initMove = 0 // 恢复初始move
@@ -66,7 +66,6 @@ function mousemoveFunc(e) {
 }
 
 function mouseupFunc(e) {
-
   const offset = computedDragSpace()
   console.log(offset)
   // 校验成功，样式隐藏。
@@ -137,7 +136,7 @@ function isInRange(value) {
     }
   }
 
-  &:hover{
+  &:hover {
     .img-area {
       display: block;
     }
@@ -149,7 +148,7 @@ function isInRange(value) {
     width: var(--image-w);
     height: 300px;
     display: none;
-    transition: all .5s;
+    transition: all 0.5s;
 
     background-image: url("@/assets/verify.jpg");
     background-size: cover;

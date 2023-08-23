@@ -141,7 +141,9 @@ export function request(item: RequestItem): Promise<string> {
         xml.abort()
         xml = null
       }
-      option.signal.aborted ? onCanceled(undefined) : option.signal.addEventListener("abort", onCanceled)
+      option.signal.aborted
+        ? onCanceled(undefined)
+        : option.signal.addEventListener("abort", onCanceled)
     }
 
     //清除副作用
