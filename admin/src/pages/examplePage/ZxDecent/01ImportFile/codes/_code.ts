@@ -1,4 +1,4 @@
-const modules = import.meta.globEager("../codes/*.ts")
+const modules = import.meta.glob("../codes/*.ts", { eager: true })
 export const codeOptions = parseModules(modules)
 // console.log(modules)
 

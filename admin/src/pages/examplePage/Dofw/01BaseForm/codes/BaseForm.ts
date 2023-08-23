@@ -43,7 +43,7 @@ const emits = defineEmits(["close", "update-list"])
 const ruleFormRef = ref<FormInstance>({} as FormInstance)
 
 // 隔离外部数据。
-const { ruleForm, resetData } = useFormInit(props, "formData", defaultFormValue)
+const { ruleForm } = useFormInit(props, "formData", defaultFormValue)
 
 // 验证规则：async-validator, 传值的方式必须使用blur的验证方式。
 const rules = reactive<FormRules>({
@@ -75,7 +75,7 @@ const submit = async (): Promise<void> => {
 
 const cancel = (): void => {
   ruleFormRef.value.clearValidate()
-  ruleForm.value = _clone(resetData.value)
+  ruleForm.value = { ...props.formData }
 }
 
 function finishOperate() {
