@@ -11,10 +11,11 @@
 </template>
 
 <script setup lang="ts">
-import {ref} from 'vue'
+import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
+import ImportForm from './ImportForm.vue'
 import download from '@/utils/download'
-
+import { type UploadRequestHandler } from 'element-plus'
 
 const importFormRef = ref()
 const handleImport = () => {
@@ -28,7 +29,7 @@ const downloadTemplate = async () => {
 }
 
 // 导入上传接口
-const uploadFile = async (option) => {
+const uploadFile : UploadRequestHandler = async (option) => {
   var formData = new FormData()
   formData.append('file', option.file)
   await Promise.resolve('formData->result')

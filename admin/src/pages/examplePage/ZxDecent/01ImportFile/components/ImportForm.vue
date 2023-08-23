@@ -39,7 +39,8 @@
 <script lang="ts" setup>
 import {ref} from 'vue'
 // import { getAccessToken, getTenantId } from '@/utils/auth'
-import { UploadRequestHandler,ElMessage } from 'element-plus'
+import { type UploadRequestHandler,ElMessage } from 'element-plus'
+import Dialog from './Dialog.vue'
 
 interface Props {
   // uploadUrl: string
