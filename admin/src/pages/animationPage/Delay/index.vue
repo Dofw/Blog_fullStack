@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <h1>解决问题: 初始状态、终止状态，中间环节的复杂状态交给浏览器处理。就要用到延迟动画。</h1>
-    <input type="range" @input="onChange" min="0" max="2" step="0.01">
+    <input type="range" @input="onChange" min="0" max="2" step="0.01" />
     <div class="ball" ref="ballRef"></div>
   </div>
 </template>
@@ -11,15 +11,13 @@ export default {
 }
 </script>
 <script setup lang="ts">
-import {ref} from 'vue'
-const ballRef:any = ref()
+import { ref } from "vue"
+const ballRef: any = ref()
 const delay = ref(0)
 const onChange = (e) => {
-  ballRef.value.style.setProperty('--delay', '-'+e.target.value + 's')
-  console.log(ballRef.value.style.getPropertyValue('--delay'))
+  ballRef.value.style.setProperty("--delay", "-" + e.target.value + "s")
+  console.log(ballRef.value.style.getPropertyValue("--delay"))
 }
-
-
 </script>
 
 <style scoped lang="scss">
@@ -32,7 +30,7 @@ const onChange = (e) => {
   h1 {
     position: absolute;
   }
-  input{
+  input {
     position: absolute;
     top: 50px;
     left: 50%;

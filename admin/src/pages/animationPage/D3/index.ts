@@ -268,7 +268,7 @@ export default class D3Model {
 
   // TODO:生成折线
   generalBrokenLine = (d) => {
-    let { boxSize } = this.option
+    const { boxSize } = this.option
 
     let { source, target } = d
 

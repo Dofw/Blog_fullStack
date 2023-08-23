@@ -4,7 +4,12 @@
     <el-row>
       <el-col :span="4">
         <el-form-item label="测试:">
-          <el-input :disabled="true" size="default" v-model="conditions.field" placeholder="请输入企业名称" />
+          <el-input
+            :disabled="true"
+            size="default"
+            v-model="conditions.field"
+            placeholder="请输入企业名称"
+          />
         </el-form-item>
       </el-col>
 

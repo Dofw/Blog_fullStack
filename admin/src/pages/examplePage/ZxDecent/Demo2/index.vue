@@ -1,10 +1,17 @@
 <template>
   <div class="demo1-container">
-    <div class="description">简介: vue-compiler-sfc 实现编译效果。全局引入ElementPlus、Vue3的CDN。</div>
+    <div class="description">
+      简介: vue-compiler-sfc 实现编译效果。全局引入ElementPlus、Vue3的CDN。
+    </div>
     <div class="preview-wrapper">
       <!-- 组件集合 -->
       <el-tabs class="view" type="border-card">
-        <el-tab-pane lazy :label="itemCode.componentName" v-for="itemCode in codeOptions" :key="itemCode.componentName">
+        <el-tab-pane
+          lazy
+          :label="itemCode.componentName"
+          v-for="itemCode in codeOptions"
+          :key="itemCode.componentName"
+        >
           <MonacoEditor :tempCode="itemCode.code"></MonacoEditor>
         </el-tab-pane>
       </el-tabs>
@@ -14,7 +21,10 @@
         <el-tab-pane label="demo">
           <div class="view-dome__wrapper"></div>
         </el-tab-pane>
-        <el-tab-pane label="summary"> 总结： 1.基于compiler-sfc，实现Vue模板编译例子。2. 了解monaco-editor的基本使用。zx cehigggggggggggg </el-tab-pane>
+        <el-tab-pane label="summary">
+          总结： 1.基于compiler-sfc，实现Vue模板编译例子。2. 了解monaco-editor的基本使用。zx
+          cehigggggggggggg
+        </el-tab-pane>
       </el-tabs>
     </div>
   </div>

@@ -5,7 +5,13 @@
       <div>LOLLAPALOOZA</div>
     </el-col>
     <el-col :span="4">
-      <el-switch v-model="isCollapse" @change="onChangeCollapse" inline-prompt active-text="展开" inactive-text="隐藏" />
+      <el-switch
+        v-model="isCollapse"
+        @change="onChangeCollapse"
+        inline-prompt
+        active-text="展开"
+        inactive-text="隐藏"
+      />
       用户信息
     </el-col>
   </el-row>

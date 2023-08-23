@@ -17,10 +17,10 @@ const io = new Io(
   } as CustomConfig
 )
 
-let requestList = [] // 请求队列
-let isRefreshToken = false // 是否正在刷新中
+const requestList = [] // 请求队列
+const isRefreshToken = false // 是否正在刷新中
 const maxReqCount = 5 // 最大重新请求数
-let reqCount = 0 // 重新请求数
+const reqCount = 0 // 重新请求数
 
 export async function refreshToken() {
   return io.instance("xxxx", {
