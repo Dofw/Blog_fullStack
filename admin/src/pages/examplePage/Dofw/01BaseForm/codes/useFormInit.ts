@@ -4,8 +4,6 @@ export const code = `
 
   // 对数据进行组合：baseData、newAddData
   export default function useFormInit(props: any, propKey: string, defaultFormData: any) {
-    // reset使用
-    const resetData = ref({ ...defaultFormData })
     // 全部表单数据，包括id(否则回填不到id)
     const ruleForm = ref({ ...defaultFormData })
   
@@ -19,12 +17,6 @@ export const code = `
     watch(
       () => props[propKey],
       () => {
-        // 默认值回填
-        const _resetData = props[propKey] || defaultFormData
-        Object.keys(defaultFormData).forEach((key) => {
-          jsonField2Parse(resetData, _resetData, key)
-        })
-  
         // 表单数据监听
         if (!props[propKey]) return
         Object.keys(defaultFormData).forEach((key) => {
@@ -59,8 +51,7 @@ export const code = `
     }
   
     return {
-      ruleForm,
-      resetData
+      ruleForm
     }
   }
   
