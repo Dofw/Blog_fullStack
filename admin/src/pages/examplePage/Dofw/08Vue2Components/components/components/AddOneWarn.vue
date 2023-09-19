@@ -7,26 +7,23 @@
 </template>
 
 <script>
-import { compConfigs, COMP_NAME_KEY } from './utils.js'
+import { compConfigs, COMP_NAME_KEY } from "./utils.js"
 const curConfig = compConfigs[COMP_NAME_KEY.ADD_WARN]
 
 export default {
   name: curConfig.name,
   data() {
-    return {
-    }
+    return {}
   },
   methods: {
     onPrev() {
-      this.$emit('changeComponent', curConfig.prevCompName)
+      this.$emit("changeComponent", curConfig.prevCompName)
     },
     onNext() {
-      this.$emit('changeComponent', curConfig.nextCompName)
+      this.$emit("changeComponent", curConfig.nextCompName)
     }
   }
 }
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

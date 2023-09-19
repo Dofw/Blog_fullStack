@@ -11,11 +11,7 @@
       </div>
       <div class="code">
         <div class="multi-sql" :style="{ width: '100%' }">
-          <code-ui
-            :ref="'codeui'"
-            :sql="sqlText"
-            @appendCm="appendCm"
-          />
+          <code-ui :ref="'codeui'" :sql="sqlText" @appendCm="appendCm" />
         </div>
       </div>
     </div>
@@ -23,8 +19,8 @@
 </template>
 
 <script>
-import codeUi from './codeUI'
-import { format } from 'sql-formatter'
+import codeUi from "./codeUI.vue"
+import { format } from "sql-formatter"
 export default {
   components: {
     codeUi
@@ -33,7 +29,7 @@ export default {
     // 从父组件传过来的属性
     sqlText: {
       type: String,
-      default: ''
+      default: ""
     }
   },
   data() {
@@ -47,47 +43,42 @@ export default {
       this.cmInstance = cm
     },
     formatSql() {
-      var sql = format(
-        this.cmInstance.getValue()
-      )
-        .replace(/# /g, '#')
-        .replace(/{ /g, '{')
-        .replace(/ }/g, '}')
-        .replace(/< foreach/g, '\n<foreach\n')
-        .replace(/< \/ foreach >/g, '\n</foreach>\n')
-        .replace(/< if/g, '\n<if')
-        .replace(/< \/ if >/g, '\n</if>\n')
-        .replace(/<\nwhere\n {2}>/g, '\n<where>\n')
-        .replace(/< \/\nwhere\n {2}>/g, '\n</where>\n')
-        .replace(/< trim/g, '\n<trim')
-        .replace(/< \/ trim >/g, '\n</trim>\n')
+      var sql = format(this.cmInstance.getValue())
+        .replace(/# /g, "#")
+        .replace(/{ /g, "{")
+        .replace(/ }/g, "}")
+        .replace(/< foreach/g, "\n<foreach\n")
+        .replace(/< \/ foreach >/g, "\n</foreach>\n")
+        .replace(/< if/g, "\n<if")
+        .replace(/< \/ if >/g, "\n</if>\n")
+        .replace(/<\nwhere\n {2}>/g, "\n<where>\n")
+        .replace(/< \/\nwhere\n {2}>/g, "\n</where>\n")
+        .replace(/< trim/g, "\n<trim")
+        .replace(/< \/ trim >/g, "\n</trim>\n")
 
       this.cmInstance.setValue(sql)
     },
     tag(item) {
-      let val = ''
-      if (item === 'foreach') {
+      let val = ""
+      if (item === "foreach") {
         val =
           '\n<foreach open="(" close=")" collection="" separator="," item="item" index="index">#{item}</foreach>'
-      } else if (item === 'if') {
+      } else if (item === "if") {
         val = '\n<if test="" ></if>'
-      } else if (item === 'where') {
-        val = '\n<where></where>'
-      } else if (item === 'trim') {
-        val =
-          '\n<trim prefix="" suffix="" suffixesToOverride="" prefixesToOverride=""></trim>'
+      } else if (item === "where") {
+        val = "\n<where></where>"
+      } else if (item === "trim") {
+        val = '\n<trim prefix="" suffix="" suffixesToOverride="" prefixesToOverride=""></trim>'
       }
 
-      this.cmInstance.setValue(
-        this.cmInstance.getValue() + val
-      )
+      this.cmInstance.setValue(this.cmInstance.getValue() + val)
     }
   }
 }
 </script>
 <style scoped lang="scss">
-.sqlcode-container{
-  ::v-deep .el-input__inner{
+.sqlcode-container {
+  ::v-deep .el-input__inner {
     height: 27px;
     line-height: 27px;
   }

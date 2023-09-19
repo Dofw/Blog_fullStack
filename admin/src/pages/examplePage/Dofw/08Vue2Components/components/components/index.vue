@@ -14,13 +14,8 @@
 
 <script>
 import AddOneAnalysis from "./AddOneAnalysis.vue"
-import List from "./List.vue"
 import AddOneWarn from "./AddOneWarn.vue"
-import AddLast from "./AddLast.vue"
 import { COMP_NAME_KEY } from "./utils.js"
-
-import { getCreategoriesList } from "@/api/catalogue/catakogueManager"
-import { tranListToTreeData } from "@/utils/toTree"
 
 export default {
   data() {
@@ -42,21 +37,7 @@ export default {
       return this.dynamicComps[this.curCompName]
     }
   },
-  created() {
-    this.getCreategories()
-  },
   methods: {
-    // 刷新页面左侧获取数据
-    async getCreategories() {
-      const { data: res } = await getCreategoriesList({ name: this.name })
-      if (!this.name) {
-        // 如果有关键词,转成树形数据
-        this.allCategories = tranListToTreeData(res, 0)
-      } else {
-        // 平行数据
-        this.allCategories = res
-      }
-    },
     _changeComponent(compName) {
       this.curCompName = compName || COMP_NAME_KEY.LIST
     }
