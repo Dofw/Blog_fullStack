@@ -19,10 +19,10 @@ export const code = `
 
 <script setup lang="ts">
 import { ref, reactive, defineProps, withDefaults, defineExpose } from "vue"
-import type { FormInstance, FormRules } from "element-plus"
-import type { FormData } from "./type"
-import { defaultFormValue, _clone } from "./constant"
+import { defaultFormValue, _clone } from "./useFormInit"
 import useFormInit from "./useFormInit"
+import type { FormInstance, FormRules } from "element-plus"
+import type { FormData } from "./useFormInit"
 
 export interface Props {
   formData?: FormData
@@ -32,7 +32,7 @@ export interface Props {
 // props 默认值
 const props = withDefaults(defineProps<Props>(), {
   formData() {
-    return _clone(defaultFormValue)
+    return _clone(defaultFormValue) // 这样就可以将 add/同edit 按相同的思路处理了
   },
   model: "add"
 })
@@ -43,8 +43,16 @@ const emits = defineEmits(["close", "update-list"])
 const ruleFormRef = ref<FormInstance>({} as FormInstance)
 
 // 隔离外部数据。
-const { ruleForm } = useFormInit(props, "formData", defaultFormValue)
-
+// const ruleForm = useFormInit(props, "formData", defaultFormValue)
+const ruleForm = useFormInit(
+  props,
+  "formData",
+  { pass: "1231", checkPass: "", age: "" },
+  (key, value) => {
+    console.log(key, value)
+    return value
+  }
+)
 // 验证规则：async-validator, 传值的方式必须使用blur的验证方式。
 const rules = reactive<FormRules>({
   pass: [{ required: true, trigger: "blur", message: "pass错误" }],
@@ -75,13 +83,7 @@ const submit = async (): Promise<void> => {
 
 const cancel = (): void => {
   ruleFormRef.value.clearValidate()
-  ruleForm.value = { ...props.formData }
-}
-
-function finishOperate() {
-  emits("close", false)
-  emits("update-list")
-  cancel()
+  ruleForm.value = _clone(props["formData"])
 }
 
 // 取消功能暴露, 为dialog x 提供。
@@ -90,8 +92,12 @@ defineExpose({
   cancel
 })
 
+function finishOperate() {
+  emits("close", false)
+  emits("update-list")
+  cancel()
+}
 </script>
 
 <style scoped></style>
-
 `
