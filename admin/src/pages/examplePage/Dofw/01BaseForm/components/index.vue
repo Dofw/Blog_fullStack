@@ -14,7 +14,7 @@
 </template>
 
 <script setup lang="ts">
-import type { FormData, ComponentsAddRest } from "./type"
+import type { FormData, ComponentsAddRest } from "./useFormInit"
 
 import { ref } from "vue"
 import BaseFormNew from "./BaseForm.vue"

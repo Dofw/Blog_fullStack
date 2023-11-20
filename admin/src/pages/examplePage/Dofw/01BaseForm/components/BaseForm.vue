@@ -18,10 +18,10 @@
 
 <script setup lang="ts">
 import { ref, reactive, defineProps, withDefaults, defineExpose } from "vue"
-import type { FormInstance, FormRules } from "element-plus"
-import type { FormData } from "./type"
-import { defaultFormValue, _clone } from "./constant"
+import { defaultFormValue, _clone } from "./useFormInit"
 import useFormInit from "./useFormInit"
+import type { FormInstance, FormRules } from "element-plus"
+import type { FormData } from "./useFormInit"
 
 export interface Props {
   formData?: FormData
@@ -49,6 +49,7 @@ const ruleForm = useFormInit(
   { pass: "1231", checkPass: "", age: "" },
   (key, value) => {
     console.log(key, value)
+    return value
   }
 )
 // 验证规则：async-validator, 传值的方式必须使用blur的验证方式。
