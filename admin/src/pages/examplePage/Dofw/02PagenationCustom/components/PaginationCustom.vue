@@ -1,38 +1,26 @@
 <template>
   <div class="custom-pagination-container">
-    <div
-      class="content-wrapper"
-      :style="contentStyle"
-      v-loading="loading"
-      element-loading-text="Loading..."
-    >
+    <div class="content-wrapper" v-loading="loading" element-loading-text="Loading...">
       <!-- 空数据外侧提供 -->
       <slot name="content" :data="list"></slot>
     </div>
 
-    <div class="page-wrapper" :style="pageStyle" v-show="isEmpty">
+    <div class="page-wrapper" v-show="isEmpty">
       <el-pagination
         layout="sizes, prev, pager, next"
         :page-sizes="[10, 20, 40, 50, 100]"
         background
         :total="total"
-        v-model:current-page="pageParams[fields.noPage]"
-        v-model:page-size="pageParams[fields.pageSize]"
+        v-model:current-page="pageParams[pageFields.pageNo]"
+        v-model:page-size="pageParams[pageFields.pageSize]"
         v-bind="$attrs"
       >
       </el-pagination>
     </div>
   </div>
 </template>
-<script lang="ts">
-const defauldFields = {
-  noPage: "noPage",
-  pageSize: "pageSize"
-}
-</script>
 
 <script setup lang="ts">
-import type { ArrListType, Params, PageParams, ConditionsParams, ExposeType } from "./type"
 import type { Ref, ComponentInternalInstance } from "vue"
 import {
   defineProps,
@@ -45,52 +33,60 @@ import {
   getCurrentInstance
 } from "vue"
 
-interface PageFieldsType {
-  noPage?: string
-  pageSize?: string
+export type PageFieldsType = {
+  pageNo: string
+  pageSize: string
 }
 
-interface Props {
-  conditions?: ConditionsParams
-  pageFields?: PageFieldsType
-  defaultPageSize?: number
-  getList: (params: Params, exposed: ExposeType) => Promise<void>
-  pageStyle?: any
-  contentStyle?: any
+//暴露属性
+export interface ExposeType {
+  loading: Ref<boolean>
+  total: Ref<number>
+  list: Ref<any[]>
+  updateList: () => void
 }
+export interface Props {
+  conditions: object
+  pageFields: PageFieldsType
+  defaultPageSize?: number
+  mountedRun?: boolean
+  getList: GetListType
+}
+
+export type GetListType<T extends object = { [K in string]: any }> = (
+  params: T,
+  exposed: { [K in keyof ExposeType]: ExposeType[K] }
+) => void
 
 const props = withDefaults(defineProps<Props>(), {
   conditions: () => {
     return {}
   },
   pageFields: () => {
-    return { ...defauldFields }
+    return {
+      pageNo: "pageNo",
+      pageSize: "pageSize"
+    }
   },
-  pageStyle: {},
-  contentStyle: {},
+  mountedRun: true,
   defaultPageSize: 10
 })
 
-const fields = computed(() => {
-  return {
-    ...defauldFields,
-    ...props.pageFields
-  }
+const pageParams = ref({
+  [props.pageFields.pageNo]: 1,
+  [props.pageFields.pageSize]: props.defaultPageSize
 })
-const pageParams: Ref<PageParams> = ref({
-  [fields.value.noPage]: 1,
-  [fields.value.pageSize]: props.defaultPageSize
-})
+
+// 正常逻辑
 const total: Ref<number> = ref(0)
 const loading: Ref<boolean> = ref(false)
-
-const list: Ref<ArrListType> = ref([] as ArrListType)
+const list: Ref<any[]> = ref([] as any[])
 const isEmpty = computed(() => {
   return list.value && list.value.length > 0
 })
 
 onMounted(() => {
-  wrapperGetList()
+  props.mountedRun && wrapperGetList()
 })
 watch(
   () => pageParams.value,
@@ -124,8 +120,8 @@ function wrapperGetList() {
 function updateList() {
   // 改变 pageParams 触发 watch
   pageParams.value = {
-    [fields.value.noPage]: 1,
-    [fields.value.pageSize]: props.defaultPageSize
+    [props.pageFields.pageNo]: 1,
+    [props.pageFields.pageSize]: props.defaultPageSize
   }
 }
 </script>

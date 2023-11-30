@@ -14,6 +14,7 @@ module.exports = {
     "vue/setup-compiler-macros": true
   },
   rules: {
-    "@typescript-eslint/no-this-alias": ["error"]
+    "@typescript-eslint/no-this-alias": ["error"],
+    "@typescript-eslint/no-explicit-any": ["off"]
   }
 }
