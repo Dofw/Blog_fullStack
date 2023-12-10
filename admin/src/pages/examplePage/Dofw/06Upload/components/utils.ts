@@ -1,38 +1,29 @@
-import { reactive } from "vue"
-import type { Ref, UnwrapNestedRefs } from "vue"
-
-export interface UploadRequestHeaders {
-  [k: string]: string
-}
-
 export interface Option {
   url: string
-  signal?: AbortSignal
-  headers?: UploadRequestHeaders
   body: Document | XMLHttpRequestBodyInit | null | FormData
+
+  signal?: AbortSignal
+  headers?: { [key: string]: string }
 }
 
-export interface RequestItem {
-  filename?: string
-  fileSize?: number
+export interface UploadItemOption {
+  filename: string
+  fileSize: number
 
   percent: number
   option: Option
   cancel: (() => void) | null
   callAgain: (() => void) | null
-  result: null | any
+  result: any
   success: boolean
 }
 
-export function executeQueues(allItems: RequestItem[], max: number) {
-  // 将用户传入对象设置为响应式
-  const newAllItems: UnwrapNestedRefs<RequestItem[]> = reactive(allItems)
-
+export function executeQueues(allItems: UploadItemOption[], max: number) {
   let curNum = 0
   let finishNum = 0
 
   // 先生成同步的信息: 名称等等。
-  newAllItems.forEach((item) => {
+  allItems.forEach((item) => {
     expandRequestItem(item)
   })
 
@@ -41,14 +32,14 @@ export function executeQueues(allItems: RequestItem[], max: number) {
     run() //每次的请求
   }
 
-  return newAllItems
+  return allItems
 
   async function run() {
     // 控制请求上线
-    if (curNum >= newAllItems.length) {
+    if (curNum >= allItems.length) {
       return
     }
-    const item = newAllItems[curNum]
+    const item = allItems[curNum]
     curNum++
 
     try {
@@ -65,7 +56,7 @@ export function executeQueues(allItems: RequestItem[], max: number) {
       finishNum++
 
       // 异步等待所有请求完成后，resolve
-      if (finishNum === newAllItems.length) {
+      if (finishNum === allItems.length) {
         console.log("over")
       }
 
@@ -77,7 +68,7 @@ export function executeQueues(allItems: RequestItem[], max: number) {
    * 扩展一个请求对象，属性。
    * @param option 请求配置
    */
-  function expandRequestItem(item: RequestItem): void {
+  function expandRequestItem(item: UploadItemOption): void {
     const controller = new AbortController()
     item.option.signal = controller.signal
     item.cancel = controller.abort.bind(controller)
@@ -111,70 +102,70 @@ const CONTENT_TYPES = {
   blob: "application/octet-stream"
 }
 
-export function request(item: RequestItem): Promise<string> {
+export function request(item: UploadItemOption): Promise<string> {
   return new Promise((resolve, reject) => {
     const option = item.option
-    const headers = option.headers || ({} as UploadRequestHeaders)
+    const headers = option.headers || {}
 
     let xml = new XMLHttpRequest()
     xml.open("POST", option.url)
-    // 设置header
-    if (!headers.contentType) {
-      headers.contentType = CONTENT_TYPES.default
-    }
-    for (const key in headers) {
-      const value = headers[key]
-      if (value === CONTENT_TYPES.blob) {
-        // xml.setRequestHeader("X-Ext", file.extension) // 二进制格式,看后端需要。
-      }
-      xml.setRequestHeader(key, value)
-    }
+
+    setHeaders(xml, headers)
 
     //signal: 添加事件
     let onCanceled: (cancel: any) => void
     if (option.signal) {
       onCanceled = function onCanceled(cancel: any) {
-        if (!xml) {
-          return
-        }
-        reject(!cancel ? "abort" : cancel) // reject
+        if (!xml) return
+        reject(cancel)
         xml.abort()
         xml = null
       }
       option.signal.aborted
-        ? onCanceled(undefined)
+        ? reject("aborted")
         : option.signal.addEventListener("abort", onCanceled)
     }
 
     //清除副作用
     function clean() {
-      if (!xml) {
-        return
-      }
+      if (!xml) return
       option.signal && option.signal.removeEventListener("abort", onCanceled)
       xml = null
     }
 
     // state: 完成清空 xml = null, 垃圾回收掉。
     xml.onreadystatechange = (e) => {
-      if (!xml || xml.readyState !== 4) {
-        return
-      }
+      if (xml.readyState !== 4) return
 
-      if (xml.status === 0 && !(xml.responseURL && xml.responseURL.indexOf("file:") === 0)) {
-        return
+      const { status } = xml
+      if (200 <= status && status < 210) {
+        resolve(xml.response)
+      } else {
+        reject(xml.response)
       }
-
-      resolve(xml.response)
       setTimeout(clean, 0)
     }
 
     xml.onerror = (error) => {
-      reject(error) // reject
+      reject(error)
+      setTimeout(clean, 0)
     }
     xml.upload.onprogress = (e) => {
       item.percent = Number((e.loaded / e.total).toFixed(2))
     }
     xml.send(option.body)
   })
+}
+
+// 设置headers
+function setHeaders(xml, headers) {
+  headers.contentType = headers.contentType || CONTENT_TYPES.default
+
+  for (const key in headers) {
+    const value = headers[key]
+    if (value === CONTENT_TYPES.blob) {
+      // xml.setRequestHeader("X-Ext", file.extension) // 二进制格式,看后端需要。
+    }
+    xml.setRequestHeader(key, value)
+  }
 }

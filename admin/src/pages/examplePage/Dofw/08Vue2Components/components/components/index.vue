@@ -24,9 +24,7 @@ export default {
       dynamicComps: {
         // 父组件手动，配置compName <==> component, 和 uitls同步更新。
         [COMP_NAME_KEY.ADD_ANALYSIS]: AddOneAnalysis,
-        [COMP_NAME_KEY.ADD_WARN]: AddOneWarn,
-        [COMP_NAME_KEY.LIST]: List,
-        [COMP_NAME_KEY.ADD_LAST]: AddLast
+        [COMP_NAME_KEY.ADD_WARN]: AddOneWarn
       },
       curCompName: COMP_NAME_KEY.LIST,
       algorithmType: "" // 区分左侧列表点击的类型。
