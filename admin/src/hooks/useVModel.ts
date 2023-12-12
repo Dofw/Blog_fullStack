@@ -1,6 +1,7 @@
 import { computed } from "vue"
 
 type EmitFunc = (event: any, ...arg: any[]) => void
+const cacheProxy = new WeakMap()
 
 /**
  * 使用场景：传入子组件，子组件通过 v-model改变父组件的方式违背了单项数据流。
@@ -15,7 +16,10 @@ export default function useVmodel(props: any, propName: string, $emits: EmitFunc
     get() {
       if (typeof props[propName] !== "object") return props[propName]
 
-      return new Proxy(props[propName], {
+      // 相同引用，取缓冲。
+      if (cacheProxy.has(props[propName])) return cacheProxy.get(props[propName])
+
+      const proxyObj = new Proxy(props[propName], {
         // 修改自身之内的属性值。奇招
         set(target, name, val) {
           $emits(`update:${propName}`, {
@@ -25,6 +29,10 @@ export default function useVmodel(props: any, propName: string, $emits: EmitFunc
           return true
         }
       })
+
+      cacheProxy.set(props[propName], proxyObj)
+
+      return proxyObj
     },
     // 修改本身
     set(val) {

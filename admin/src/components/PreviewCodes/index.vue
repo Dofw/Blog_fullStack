@@ -4,17 +4,6 @@
 
     <div class="content">
       <el-tabs class="view" type="border-card">
-        <el-tab-pane
-          lazy
-          :label="itemCode.componentName"
-          v-for="itemCode in codeOptions"
-          :key="itemCode.componentName"
-        >
-          <MonacoEditor :tempCode="itemCode.code"></MonacoEditor>
-        </el-tab-pane>
-      </el-tabs>
-
-      <el-tabs class="view" type="border-card">
         <el-tab-pane label="demo">
           <div class="view-dome__wrapper">
             <slot name="demo"></slot>
@@ -24,6 +13,17 @@
           <div class="view-summary__wrapper">
             <slot name="summary"></slot>
           </div>
+        </el-tab-pane>
+      </el-tabs>
+
+      <el-tabs class="view" type="border-card">
+        <el-tab-pane
+          lazy
+          :label="itemCode.componentName"
+          v-for="itemCode in codeOptions"
+          :key="itemCode.componentName"
+        >
+          <MonacoEditor :tempCode="itemCode.code"></MonacoEditor>
         </el-tab-pane>
       </el-tabs>
     </div>

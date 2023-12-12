@@ -2,36 +2,36 @@
   <div class="upload-container">
     <!-- 上传控件 -->
     <div class="upload-wrapper">
-      <Upload />
+      <!-- <Upload /> -->
+      <span>选择上传的文件</span>
       <input ref="inputRef" type="file" @change="onChange1" accept="image/*, .mp4" multiple />
     </div>
-
-    <el-button @click="onStart">开始上传</el-button>
 
     <el-table :data="data">
       <el-table-column prop="filename" label="文件名" />
       <el-table-column prop="success" label="上传状态">
         <template #default="{ row }">
           <div>
-            {{ row.success ? "成功" : "失败" }}
+            {{ row.success ? "成功" : "-" }}
           </div>
         </template>
       </el-table-column>
       <el-table-column prop="percent" label="进度" />
       <el-table-column label="操作">
         <template #default="{ row }">
-          <el-button type="info" @click="row.cancle && row.cancle()">取消</el-button>
-          <el-button type="success" @click="row.callAgain && row.callAgain()">重新开始</el-button>
+          <el-button type="info" @click="row.cancel && row.cancel()">取消</el-button>
+          <el-button type="success" @click="row.callAgain && row.callAgain()">重新</el-button>
         </template>
       </el-table-column>
     </el-table>
+
+    <el-button @click="onStart">开始上传</el-button>
   </div>
 </template>
 
 <script setup lang="ts">
 import { executeQueues } from "./utils"
 import type { UploadItemOption } from "./utils"
-import { Upload } from "@element-plus/icons-vue"
 import { ref } from "vue"
 import type { Ref } from "vue"
 
@@ -75,8 +75,8 @@ const onStart = () => {
   width: 100%;
   .upload-wrapper {
     position: relative;
-    width: 100px;
-    height: 100px;
+    height: 50px;
+    margin: 20px 0;
 
     display: flex;
     justify-content: center;
