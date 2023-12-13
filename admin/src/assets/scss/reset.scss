@@ -1,6 +1,4 @@
 /* color palette from <https://github.com/vuejs/theme> */
-@use "adapter" as adapter;
-$border: 0px solid green;
 
 *,
 *::before,
@@ -23,11 +21,11 @@ html {
   background-size: cover;
   transition: background 0.5s;
 
-  @include adapter.adapt-to("pc") {
+  @include adapt-to("pc") {
     // background-image: url("@/assets/imgs/杀生丸.jpeg");
   }
 
-  @include adapter.adapt-to("mobile") {
+  @include adapt-to("mobile") {
     // background-image: url("@/assets/imgs/地铁线路.jpg");
   }
 }

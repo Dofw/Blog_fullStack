@@ -15,7 +15,7 @@ export default {
 </script>
 <script setup lang="ts">
 import PreviewCodes from "@/components/PreviewCodes/index.vue"
-import Example from "./components/index.vue"
+import Example from "./components/Map.vue"
 import { ref } from "vue"
 
 const mdCode = ref(`

@@ -1,4 +1,4 @@
-@use "theme";
-@use "adapter";
+@use "theme"; // 安装
 
-$border: 0px solid green;
+@forward "adapter"; // 这部分是要导出，供外界使用的。
+@forward "mixinvar"; // 这部分是要导出，供外界使用的。

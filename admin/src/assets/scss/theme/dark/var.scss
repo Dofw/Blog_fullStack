@@ -61,7 +61,6 @@ $color-info: map.get($colors, "info", "base") !default;
   }
 }
 
-// --el-color-primary-dark-2
 @each $type in $types {
   @include set-color-mix-level($type, 2, "dark", $color-black);
 }

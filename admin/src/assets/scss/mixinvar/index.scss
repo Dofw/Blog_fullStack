@@ -1,0 +1,8 @@
+$border: 0px solid green;
+
+// 1.玻璃磨砂 样式
+@mixin glass-blur($blur: 5px) {
+  backdrop-filter: blur($blur);
+  background: var(--el-bg-color);
+  box-shadow: 5px 5px $blur var(--el-bg-color-overlay), 0px 0px $blur var(--el-bg-color);
+}

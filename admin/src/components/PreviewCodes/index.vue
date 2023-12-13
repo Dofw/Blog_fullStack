@@ -99,10 +99,7 @@ withDefaults(defineProps<Props>(), {
           height: 100%;
           // 新拟态
           border-radius: 10px;
-          // background: linear-gradient(145deg, #cacaca, #f0f0f0);
-          // box-shadow: 5px 5px 40px #9d9d9d, 0px 0px 40px #ffffff;
-          box-shadow: 5px 5px 40px var(--el-bg-color-overlay), 0px 0px 40px var(--el-bg-color);
-          background: linear-gradient(145deg, var(--el-bg-color-overlay), var(--el-bg-color));
+          @include glass-blur();
         }
         .view-summary__wrapper {
           height: 100%;

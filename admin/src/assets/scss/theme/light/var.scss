@@ -47,7 +47,8 @@ $color-info: map.get($colors, "info", "base") !default;
   $colors: map.deep-merge(
     (
       $type: (
-        "#{$mode}-#{$number}": mix($mix-color, map.get($colors, $type, "base"), math.percentage(math.div($number, 10)))
+        "#{$mode}-#{$number}":
+          mix($mix-color, map.get($colors, $type, "base"), math.percentage(math.div($number, 10)))
       )
     ),
     $colors
@@ -60,7 +61,7 @@ $color-info: map.get($colors, "info", "base") !default;
   }
 }
 
-// --el-color-primary-dark-2
+// --el-color-primary-dark-2 element-ui 底层在使用这个dark-2
 @each $type in $types {
   @include set-color-mix-level($type, 2, "dark", $color-black);
 }
@@ -69,10 +70,9 @@ $color-info: map.get($colors, "info", "base") !default;
 $bg-color: () !default;
 $bg-color: map.merge(
   (
+    "": #ffffff,
     "page": #f2f3f5,
-    "": #aeaeae,
-    // #8e8e8e #c7c7c7
-    "overlay": #ffffff
+    "overlay": #f2f3f5
   ),
   $bg-color
 );
@@ -246,4 +246,3 @@ $mask-color: map.merge(
   ),
   $mask-color
 );
-

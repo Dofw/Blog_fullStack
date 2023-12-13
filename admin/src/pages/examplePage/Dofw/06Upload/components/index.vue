@@ -2,9 +2,19 @@
   <div class="upload-container">
     <!-- 上传控件 -->
     <div class="upload-wrapper">
-      <!-- <Upload /> -->
       <span>选择上传的文件</span>
-      <input ref="inputRef" type="file" @change="onChange1" accept="image/*, .mp4" multiple />
+      <input ref="inputRef" type="file" @change="onChange" accept="image/*, .mp4" multiple />
+    </div>
+
+    <div
+      class="upload-drag-wrapper"
+      @dragenter="onDragEnter"
+      @dragover="onDragEnter"
+      @drop="onDrop"
+    >
+      <span>拖拽上传的文件</span>
+      <!-- input 本身默认就支持拖拽，这里只使用点击打开文件框的功能 -->
+      <input ref="inputRef" type="file" accept="image/*, .mp4" multiple />
     </div>
 
     <el-table :data="data">
@@ -19,8 +29,10 @@
       <el-table-column prop="percent" label="进度" />
       <el-table-column label="操作">
         <template #default="{ row }">
-          <el-button type="info" @click="row.cancel && row.cancel()">取消</el-button>
-          <el-button type="success" @click="row.callAgain && row.callAgain()">重新</el-button>
+          <el-button size="small" type="info" @click="row.cancel && row.cancel()">取消</el-button>
+          <el-button size="small" type="success" @click="row.callAgain && row.callAgain()"
+            >重新</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -38,7 +50,19 @@ import type { Ref } from "vue"
 const inputRef: Ref<HTMLInputElement> = ref({} as Ref<HTMLInputElement>)
 
 const data = ref<UploadItemOption[]>([])
-const onChange1 = async (e: Event) => {
+const onDragEnter = (e) => {
+  e.preventDefault()
+}
+const onDrop = (e) => {
+  e.preventDefault()
+  console.log(e.dataTransfer.files)
+  // 处理文件夹逻辑。
+  inputRef.value.files = e.dataTransfer.files
+
+  // 走后续的上传流程
+  onChange()
+}
+const onChange = async () => {
   const files = inputRef.value.files
   if (files) {
     for (let file of files) {
@@ -84,8 +108,8 @@ const onStart = () => {
 
     // 新拟态
     border-radius: 10px;
-    background: linear-gradient(145deg, #cacaca, #f0f0f0);
-    box-shadow: 5px 5px 40px #9d9d9d, 0px 0px 40px #ffffff;
+    @include glass-blur();
+    border: 1px solid var(--el-color-primary-dark-2);
 
     > svg {
       width: 80%;
@@ -96,6 +120,27 @@ const onStart = () => {
       position: absolute;
       left: 0;
       right: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+    }
+  }
+
+  .upload-drag-wrapper {
+    width: 100%;
+    height: 100px;
+    border-radius: 10px;
+    @include glass-blur();
+    border: 1px solid var(--el-color-primary-dark-2);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+
+    > input {
+      position: absolute;
       width: 100%;
       height: 100%;
       opacity: 0;
