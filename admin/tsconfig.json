@@ -10,9 +10,11 @@
   ],
   "exclude": ["@dofw/*"],
   "compilerOptions": {
+    "jsxImportSource": "vue",
     "noImplicitAny": false, // 关闭any的警告提示。
     "preserveValueImports": true,
     "isolatedModules": true,
+    "types": ["vue"],
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],

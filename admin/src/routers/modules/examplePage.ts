@@ -1,7 +1,10 @@
 import type { RouteRecordRaw } from "vue-router"
 import ExampleLayout from "@/layouts/ExampleLayout.vue"
+let modules = {}
+const modulesVue = import.meta.glob("/src/pages/examplePage/**/*.vue", { eager: true })
+const modulesJsx = import.meta.glob("/src/pages/examplePage/**/*.tsx", { eager: true })
+modules = { ...modules, ...modulesVue, ...modulesJsx }
 
-const modules = import.meta.globEager("/src/pages/examplePage/**/*.vue")
 // const modules = import.meta.glob("/src/pages/examplePage/**/*.vue")
 // console.log(modules)
 const VueRoutes = parseModules(modules)
