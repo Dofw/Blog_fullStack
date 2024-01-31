@@ -89,17 +89,17 @@ const uploadHeaders = ref({
 })
 
 // 初始回填
-const newList: any = ref([])
-let oldNum = ref(0) // 记录每次更新成功后的数量
+let newList: any = ref([])
+let oldNum = 0 // 记录每次更新成功后的数量
 watchEffect(() => {
   newList.value = [...props.modelValue]
-  oldNum.value = newList.value.length
+  oldNum = props.modelValue.length // 记录每次更新成功后的数量
 })
 // 文件上传成功
 let countRef = ref(0) // 成功数
 let failCountRef = ref(0) // 失败数
 /**
- * 成功回调、失败回调都要执行，因为不确定那个最后执行。
+ * 成功回调、失败回调都要执行，因为不确定那个最后执行完。
  * @param filesLen 传入，每次上传的文件总数；非累计数
  */
 const triggerEmit = (filesLen) => {
@@ -137,12 +137,12 @@ const handleFileSuccess: UploadProps["onSuccess"] = (res: any, file, files): voi
 
   countRef.value++
   newList.value.push(newItem)
-  triggerEmit(files.length - oldNum.value)
+  triggerEmit(files.length - oldNum)
 }
 // 上传错误提示
 const excelUploadError: UploadProps["onError"] = (error, file, files): void => {
   failCountRef.value++
-  triggerEmit(files.length - oldNum.value)
+  triggerEmit(files.length - oldNum)
 }
 // 文件数超出提示
 const handleExceed: UploadProps["onExceed"] = (): void => {
