@@ -1,3 +1,4 @@
+export const code = `
 <template>
   <el-upload
     ref="uploadRef"
@@ -25,14 +26,6 @@
         ><Icon class="mr-1" icon="ep:upload-filled" />上传文件</el-tag
       >
     </slot>
-    <!-- <slot name="fileList">
-      <div class="file-list">
-        <div v-for="file in modelValue" :key="file.uid" class="file-item">
-          <i class="icon" :class="getFileIcon(file)"></i>
-          <span class="file-name">{{ file.name }}</span>
-        </div>
-      </div>
-    </slot> -->
     <template v-if="isShowTip" #tip>
       <slot name="tip" :fileConfig="fileConfig">
         <div style="font-size: 12px">
@@ -48,7 +41,6 @@
 <script setup lang="ts" name="UploadFile">
 import { PropType } from "vue"
 import { propTypes } from "@/utils/propTypes"
-import { getAccessToken, getTenantId } from "@/utils/auth"
 import type { UploadInstance, UploadUserFile, UploadProps, UploadRawFile } from "element-plus"
 
 const message = useMessage() // 消息弹窗
@@ -84,8 +76,8 @@ const fileConfig: any = ref({
 const uploadRef = ref<UploadInstance>()
 
 const uploadHeaders = ref({
-  Authorization: "Bearer " + getAccessToken(),
-  "tenant-id": getTenantId()
+  Authorization: "Bearer ",
+  "tenant-id": 1
 })
 
 // 初始回填
@@ -112,7 +104,7 @@ const triggerEmit = (filesLen) => {
     failCountRef.value = 0
     emit("update:modelValue", newList.value)
     if (failCount > 0) {
-      message.warning(`上传成功 ${count} 个, 提醒:上传失败 ${failCount} 个`)
+      message.warning(\`上传成功 \${count} 个, 提醒:上传失败 \${failCount} 个\`)
     } else {
       message.success("上传成功")
     }
@@ -146,7 +138,7 @@ const excelUploadError: UploadProps["onError"] = (error, file, files): void => {
 }
 // 文件数超出提示
 const handleExceed: UploadProps["onExceed"] = (): void => {
-  message.error(`上传文件数量不能超过${props.limit}个!`)
+  message.error(\`上传文件数量不能超过\${props.limit}个!\`)
 }
 // 文件上传之前判断
 const beforeUpload: UploadProps["beforeUpload"] = (file: UploadRawFile) => {
@@ -160,11 +152,11 @@ const beforeUpload: UploadProps["beforeUpload"] = (file: UploadRawFile) => {
   })
   const isLimit = file.size < props.fileSize * 1024 * 1024
   if (!isImg) {
-    message.error(`文件格式不正确, 请上传${props.fileType.join("/")}格式!`)
+    message.error(\`文件格式不正确, 请上传\${props.fileType.join("/")}格式!\`)
     return false
   }
   if (!isLimit) {
-    message.error(`上传文件大小不能超过${props.fileSize}MB!`)
+    message.error(\`上传文件大小不能超过\${props.fileSize}MB!\`)
     return false
   }
 }
@@ -194,46 +186,6 @@ const handlePreview: UploadProps["onPreview"] = (file) => {
       window.URL.revokeObjectURL(blobUrl)
     })
 }
-// const getFileIcon = (file) => {
-//   console.log(file)
-//   // 根据文件类型返回对应的图标class
-//   if (file.name.includes('JPG')) {
-//     return 'icon-image'
-//   } else if (file.name.includes('video/')) {
-//     return 'icon-video'
-//   } else if (file.name.includes('audio/')) {
-//     return 'icon-audio'
-//   } else {
-//     return 'icon-file'
-//   }
-// }
 </script>
-<style scoped lang="scss">
-.me-upload-files-uploader {
-  margin-top: 5px;
-  :deep() {
-    .el-tag__content {
-      display: flex;
-      align-items: center;
-    }
-  }
-}
-:deep(.upload-file-list .el-upload-list__item) {
-  border: 1px solid #e4e7ed;
-  line-height: 2;
-  margin-bottom: 10px;
-  position: relative;
-}
-:deep(.el-upload-list__item-file-name) {
-  max-width: 250px;
-}
-:deep(.upload-file-list .ele-upload-list__item-content) {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  color: inherit;
-}
-:deep(.ele-upload-list__item-content-action .el-link) {
-  margin-right: 10px;
-}
-</style>
+
+`
