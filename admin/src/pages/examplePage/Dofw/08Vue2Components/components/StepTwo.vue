@@ -7,34 +7,17 @@
 
 <script>
   import {OPERATE_TYPE} from './DynamicComponent.vue'
+  import stateCloneMixin from './stateMixin.js'
+
   export default {
     name: "StepTwo",
-    props: {
-      state: {
-        type: [Object, Array, String],
-        default: () => {}
-      }
-    },
-    watch: {
-      state: {
-        handler(newValue) {
-          this.inState = JSON.parse(JSON.stringify(newValue));
-        },
-        immediate: true
-      }
-    },
-    data() {
-      return {
-        inState: 'StepTwo'
-      }
-    },
+    mixins: [stateCloneMixin], // 将外界state克隆到组件内部inState状态。
     methods: {
       onSubmit() {
         this.inState = 'StepTwo'
-
         this.$emit('onOperate', {
           compId: 2,
-          operate: OPERATE_TYPE.CANCEL,
+          operate: OPERATE_TYPE.UPDATE_STATE,
           data: this.inState
         })
       }

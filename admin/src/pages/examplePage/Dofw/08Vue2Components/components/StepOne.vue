@@ -7,28 +7,10 @@
 
 <script>
   import {OPERATE_TYPE} from './DynamicComponent.vue'
+  import stateCloneMixin from './stateMixin.js'
   export default {
     name: "StepOne",
-    props: {
-      state: {
-        required: true,
-        type: [Object, Array, String],
-      }
-    },
-    watch: {
-      state: {
-        handler(newValue) {
-          this.inState = JSON.parse(JSON.stringify(newValue));
-        },
-        immediate: true,
-        deep: true
-      }
-    },
-    data() {
-      return {
-        inState: {}
-      }
-    },
+    mixins: [stateCloneMixin], // 将外界state克隆到组件内部inState状态。
     methods: {
       onSubmit() {
         this.inState.b = 2;
