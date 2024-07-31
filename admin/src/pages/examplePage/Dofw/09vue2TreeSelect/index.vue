@@ -74,6 +74,7 @@ export default {
         this.$emit("change", val)
       }
     },
+    // 必须保证有一个值。
     selectedOption() {
       const curNode = this.treeNode
       const val = this.value
@@ -82,7 +83,16 @@ export default {
 
       // 不存在，则根据value获取. 如果 value 给了默认id。就需要找到默认的node。
       const findNode = this.findNode(val, this.data)
-      return findNode ? [findNode] : [{ label: "全部", id: null }]
+      return findNode ? [findNode] : [{ label: "", id: undefined }]
+    }
+  },
+  watch: {
+    value: {
+      handler(val) {
+        if (!val) return
+        this.expandKeys = [val] // 编辑回显
+      },
+      immediate: true
     }
   },
   methods: {
@@ -108,14 +118,20 @@ export default {
       if (!value && value !== 0) {
         const prevNodeValue = this.expandKeys[0]
         this.expandNode(prevNodeValue, false)
-      } else {
-        this.expandKeys = [value]
       }
     },
     expandNode(prevNodeValue, expand) {
-      const node = this.$refs.selectTree.getNode(prevNodeValue) // 获取根节点
-      if (node) {
-        node.expanded = expand // 设置展开属性
+      let node = this.$refs.selectTree.getNode(prevNodeValue) // 获取根节点
+
+      while (node && node.level > 1) {
+        node = node.parent
+      }
+
+      // 找 level 为 1 ，root
+      const levelOneNode = node
+
+      if (levelOneNode) {
+        levelOneNode.expanded = expand // 设置展开属性
         this.$forceUpdate() // 强制更新以反映状态变化
       }
     },
@@ -129,6 +145,10 @@ export default {
       const value = val[this.props.value]
       this.innerValue = value
       this.$refs.select.blur()
+    },
+    reset() {
+      this.expandKeys = []
+      this.treeNode = null
     }
   }
 }
