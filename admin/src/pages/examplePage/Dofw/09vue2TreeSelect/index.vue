@@ -60,7 +60,7 @@ export default {
   },
   data() {
     return {
-      expandKeys: [],
+      expandKeys: [], // 与value值也有关系
       treeNode: null
     }
   },
@@ -74,7 +74,7 @@ export default {
         this.$emit("change", val)
       }
     },
-    // 必须保证有一个值。
+    // 必须保证有一个值, 与value值有关系
     selectedOption() {
       const curNode = this.treeNode
       const val = this.value
@@ -83,7 +83,8 @@ export default {
 
       // 不存在，则根据value获取. 如果 value 给了默认id。就需要找到默认的node。
       const findNode = this.findNode(val, this.data)
-      return findNode ? [findNode] : [{ label: "", id: undefined }]
+      const options = findNode ? [findNode] : [{ label: "", id: undefined }]
+      return options
     }
   },
   watch: {
